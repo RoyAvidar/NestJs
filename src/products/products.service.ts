@@ -4,6 +4,7 @@ import { User } from 'src/users/models/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateProductInput } from './dto/input/create-product.input';
+import { UpdateProductInput } from './dto/input/update-product.input';
 import { Product } from './models/product.entity';
 
 @Injectable()
@@ -33,12 +34,15 @@ export class ProductsService {
         return this.productsRepository.find();
     }
 
-    updateProduct(): Product {
+    async updateProduct(updateProductInput: UpdateProductInput): Promise<Product> {
+        const oldProductInput = null;
+        await this.productsRepository.update(oldProductInput, updateProductInput);
         return null;
     }
 
-    deleteProduct() {
-
+    async deleteProduct(productId: string): Promise<void> {
+        await this.productsRepository.delete(productId);
+        return;
     }
 
     getUser(userId: string): Promise<User>{

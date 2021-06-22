@@ -3,6 +3,7 @@ import { User } from './models/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/input/create-user.input';
+import { validate } from 'class-validator';
 
 @Injectable()
 export class UsersService {
@@ -14,7 +15,13 @@ export class UsersService {
 
     async createUser(createUserInput: CreateUserInput): Promise<User> {
         const newUser = this.usersRepository.create(createUserInput);
-        return await this.usersRepository.save(newUser);
+        const errors = await validate(newUser);
+        if (errors.length > 0) {
+            throw new Error(`Validation failed!`); 
+        } else {
+            await this.usersRepository.save(newUser);
+        }
+        return;
     }
 
     updateUser(): User {
@@ -22,11 +29,11 @@ export class UsersService {
     }
 
     getUser(userId: string): Promise<User> {
-        return this.usersRepository.findOneOrFail(userId);
+        return this.usersRepository.findOneOrFail(userId); 
     }
 
     getUsers(): Promise<User[]> {
-        return this.usersRepository.find();
+        return this.usersRepository.find({relations: ['products']}); //SELECT * from user JOIN products.
     }
 
     async deleteUser(userId: string): Promise<void> {

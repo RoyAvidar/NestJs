@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Mutation, Parent } from "@nestjs/graphql";
+import { Resolver, Query, Args, Mutation, Parent, ResolveField } from "@nestjs/graphql";
 import { User } from "src/users/models/user.entity";
 import { GetProductArgs } from "./dto/args/get-product.args";
 import { CreateProductInput } from "./dto/input/create-product.input";
@@ -19,7 +19,7 @@ export class ProductsResolver {
         return this.productsService.getProucts();
     }
 
-    @Query()
+    @ResolveField(() => User)
     getUser(@Parent() product: Product) {
         return this.productsService.getUser(product.userId);
     }

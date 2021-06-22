@@ -1,13 +1,13 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class users1624019622613 implements MigrationInterface {
+export class orders1624355980410 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
-            name: "users",
+            name: "orders",
             columns: [
                 {
-                    name: "userId",
+                    name: "orderId",
                     type: "bigInt",
                     isGenerated: true,
                     generationStrategy: "increment",
@@ -15,23 +15,21 @@ export class users1624019622613 implements MigrationInterface {
                     unsigned: true,
                 },
                 {
-                    name: "userName",
-                    type: "varchar",
+                    name: "orderName",
+                    type: "varchar"
                 },
                 {
-                    name: "userPassword",
-                    type: "varchar",
+                    name: "orderPrice",
+                    type: "float"
                 },
                 {
-                    name: "userPhone",
-                    type: "varchar",
-                    isUnique: true
+                    name: "createdAt",
+                    type: "date"
                 },
                 {
-                    name: "isAdmin",
-                    type: "tinyint",
-                    length: "1",
-                    default: "0"
+                    name: "userId",
+                    type: "bigint",
+                    unsigned: true
                 },
                 {
                     name: "productId",
@@ -41,17 +39,24 @@ export class users1624019622613 implements MigrationInterface {
             ],
             foreignKeys: [
                 {
+                    columnNames: ['userId'],
+                    referencedColumnNames: ['id'],
+                    referencedTableName: 'users',
+                    onDelete: "CASCADE"
+                },
+                {
                     columnNames: ['productId'],
                     referencedColumnNames: ['id'],
                     referencedTableName: 'users',
                     onDelete: "CASCADE"
                 }
             ]
-        }));
+        }))
+    
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('users');
+        await queryRunner.dropTable('orders');
     }
 
 }
