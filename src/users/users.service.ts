@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { validate } from 'class-validator';
+import { UpdateUserInput } from './dto/input/update-user.input';
 
 @Injectable()
 export class UsersService {
@@ -24,7 +25,9 @@ export class UsersService {
         return;
     }
 
-    updateUser(): User {
+    async updateUser(updateUserInput: UpdateUserInput): Promise<User> {
+        const oldUserData = null;
+        await this.usersRepository.update(oldUserData, updateUserInput);
         return null;
     }
 

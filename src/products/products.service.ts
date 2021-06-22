@@ -35,8 +35,8 @@ export class ProductsService {
     }
 
     async updateProduct(updateProductInput: UpdateProductInput): Promise<Product> {
-        const oldProductInput = null;
-        await this.productsRepository.update(oldProductInput, updateProductInput);
+        const oldProductData = null;
+        await this.productsRepository.update(oldProductData, updateProductInput);
         return null;
     }
 
