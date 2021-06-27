@@ -3,7 +3,7 @@ import { GetOrderArgs } from "./dto/args/get-order.args";
 import { Order } from "./models/order.entity";
 import { OrdersService } from "./orders.service";
 
-@Resolver()
+@Resolver(() => Order)
 export class OrdersResolver {
     constructor(private readonly ordersService: OrdersService) {}
 

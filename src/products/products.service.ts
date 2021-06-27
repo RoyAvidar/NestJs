@@ -34,10 +34,10 @@ export class ProductsService {
         return this.productsRepository.find();
     }
 
-    async updateProduct(updateProductInput: UpdateProductInput): Promise<Product> {
-        const oldProductData = null;
-        await this.productsRepository.update(oldProductData, updateProductInput);
-        return null;
+    async updateProduct(updateProductInput: UpdateProductInput, ): Promise<Product> {
+        const product = await this.productsRepository.findOneOrFail(updateProductInput.productId);
+        await this.productsRepository.update(product, updateProductInput);
+        return product;
     }
 
     async deleteProduct(productId: string): Promise<void> {

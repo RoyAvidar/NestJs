@@ -14,7 +14,7 @@ export class User {
     @Column()
     userName: string;
 
-    @Field()
+    @Field({nullable: true})
     @Column()
     userPassword: string;
 
@@ -22,7 +22,7 @@ export class User {
     @Column()
     userPhone: string;
 
-    @Field()
+    @Field({nullable: true})
     @Column({default: false})
     isAdmin: boolean;
 

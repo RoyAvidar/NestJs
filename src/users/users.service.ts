@@ -26,13 +26,17 @@ export class UsersService {
     }
 
     async updateUser(updateUserInput: UpdateUserInput): Promise<User> {
-        const oldUserData = null;
-        await this.usersRepository.update(oldUserData, updateUserInput);
-        return null;
+        const user = await this.usersRepository.findOneOrFail(updateUserInput.userId);
+        await this.usersRepository.update(user, updateUserInput);
+        return user;
     }
 
     getUser(userId: string): Promise<User> {
         return this.usersRepository.findOneOrFail(userId); 
+    }
+
+    public async getUserByName(userName: string): Promise<User> {
+        return await this.usersRepository.findOneOrFail(userName);
     }
 
     getUsers(): Promise<User[]> {
