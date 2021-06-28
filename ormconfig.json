@@ -9,7 +9,7 @@
         "./../**/models.entity{.ts,.js}"
     ],
     "synchronize": false,
-    "migrations": ["src/migration/*.js"],
+    "migrations": ["dist/migration/*.js"],
     "cli": {
         "migrationsDir": "src/migration"
     }

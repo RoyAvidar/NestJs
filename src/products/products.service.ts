@@ -22,8 +22,14 @@ export class ProductsService {
         return this.productsRepository.save(newProduct);
     }
 
-    addProduct(): Product {
-        return null;
+    async addProduct(userId: string, product: Product): Promise<Product[]> {
+        const user = await this.usersService.getUser(userId);
+        if (!user) {
+            throw new Error('Could not find a user.');
+        }
+        user.products.push(product);
+        await user.save();
+        return user.products;
     }
 
     getProduct(productId: string): Promise<Product> {

@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: true,
+      playground: true
     }),
     UsersModule,
     ProductsModule,

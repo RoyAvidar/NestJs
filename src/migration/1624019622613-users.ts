@@ -33,20 +33,9 @@ export class users1624019622613 implements MigrationInterface {
                     length: "1",
                     default: "0"
                 },
-                {
-                    name: "productId",
-                    type: "bigint",
-                    unsigned: true
-                },
+                
             ],
-            foreignKeys: [
-                {
-                    columnNames: ['productId'],
-                    referencedColumnNames: ['id'],
-                    referencedTableName: 'users',
-                    onDelete: "CASCADE"
-                }
-            ]
+            
         }));
     }
 

@@ -22,20 +22,9 @@ export class products1624022131515 implements MigrationInterface {
                     name: "productPrice",
                     type: "float"
                 },
-                {
-                    name: "userId",
-                    type: "bigint",
-                    unsigned: true
-                },
+                
             ],
-            foreignKeys: [
-                {
-                    columnNames: ['userId'],
-                    referencedColumnNames: ['id'],
-                    referencedTableName: 'users',
-                    onDelete: "CASCADE"
-                },
-            ]
+            
         }))
     }
 
