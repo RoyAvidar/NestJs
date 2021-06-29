@@ -40,14 +40,14 @@ export class orders1624355980410 implements MigrationInterface {
             foreignKeys: [
                 {
                     columnNames: ['userId'],
-                    referencedColumnNames: ['id'],
+                    referencedColumnNames: ['userId'],
                     referencedTableName: 'users',
                     onDelete: "CASCADE"
                 },
                 {
                     columnNames: ['productId'],
-                    referencedColumnNames: ['id'],
-                    referencedTableName: 'users',
+                    referencedColumnNames: ['productId'],
+                    referencedTableName: 'products',
                     onDelete: "CASCADE"
                 }
             ]
