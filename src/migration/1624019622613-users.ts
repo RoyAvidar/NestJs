@@ -32,10 +32,8 @@ export class users1624019622613 implements MigrationInterface {
                     type: "tinyint",
                     length: "1",
                     default: "0"
-                },
-                
-            ],
-            
+                }
+            ]
         }));
     }
 

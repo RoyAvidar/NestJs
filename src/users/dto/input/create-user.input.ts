@@ -1,12 +1,11 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsAlpha, IsNotEmpty, IsOptional } from "class-validator";
-import { Product } from "src/products/models/product.entity";
+import { IsNotEmpty, IsOptional } from "class-validator";
+import { Product } from "src/products/models/product";
 
 @InputType()
 export class CreateUserInput {
     @Field()
     @IsNotEmpty()
-    @IsAlpha()
     userName: string;
 
     @Field()
@@ -24,5 +23,5 @@ export class CreateUserInput {
 
     @Field()
     @IsOptional()
-    products: Product[] = [];
+    products: Product[];
 }

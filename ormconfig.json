@@ -6,11 +6,11 @@
     "password": "",
     "database": "nestjs-start",
     "entities": [
-        "dist/*/models/*.entity{.ts,.js}"
+        "__dirname + '/../**/*.entity{.ts,.js}'"
     ],
-    "synchronize": false,
-    "migrations": ["dist/migration/*.js"],
+    "synchronize": true,
+    "migrations": ["src/migration/*.js"],
     "cli": {
         "migrationsDir": "src/migration"
     }
-}
+  }
