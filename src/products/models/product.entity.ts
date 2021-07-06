@@ -24,6 +24,10 @@ export class Product {
 
     @Column()
     @Field()
+    imageUrl: string;
+
+    @Column()
+    @Field()
     userId: string;
     
     @ManyToOne(() => User, user => user.products)
