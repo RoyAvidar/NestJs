@@ -18,7 +18,15 @@ export class categories1625559913181 implements MigrationInterface {
                     name: "categoryName",
                     type: "varchar"
                 }
-            ]
+            ],
+            foreignKeys: [
+                {
+                    columnNames: ['productId'],
+                    referencedColumnNames: ['productId'],
+                    referencedTableName: 'products',
+                    onDelete: "CASCADE"
+                },
+            ],
         }))
     }
 
