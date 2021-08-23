@@ -36,4 +36,8 @@ export class UsersService {
     async deleteUser(userId: string): Promise<void> {
         await this.usersRepository.delete(userId);
     }
+
+    public getUserByName(userName: string) {
+        return this.usersRepository.findOne(userName);
+    }
 }

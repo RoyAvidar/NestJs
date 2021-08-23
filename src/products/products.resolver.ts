@@ -9,7 +9,7 @@ export class ProductsResolver {
 
     @Query(() => Product)
     getSingleProduct(@Args() getProductArgs: GetProductArgs) {
-        return this.productsService.getProduct(getProductArgs.productId);
+        return this.productsService.getProduct(getProductArgs);
     }
 
     @Query(() => [Product], {name: 'products', nullable: 'items'})

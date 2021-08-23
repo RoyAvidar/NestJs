@@ -1,38 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { Product } from './models/product';
+import { GetProductArgs } from './dto/args/get-product.args';
+import { CreateProductInput } from './dto/input/create-product.input';
+import { UpdateProductInput } from './dto/input/update-product.input';
 
 @Injectable()
 export class ProductsService {
     constructor(
         @InjectRepository(Product)
-        private usersRepository: Repository<Product>,
+        private productsRepository: Repository<Product>,
     ) { }
 
-    // private products: Product[] = [];
-
-    public createProduct(): Product {
+    public getProduct(getProductData: GetProductArgs): Promise<Product> {
+        return this.productsRepository.findOne(getProductData);
+    }
+    
+    public getProucts(): Promise<Product[]> {
+        return this.productsRepository.find();
+    }
+    
+    public createProduct(createProductInput: CreateProductInput): Product {
+        return null;
+    }
+    
+    public updateProduct(updateProductInput: UpdateProductInput): Product {
         return null;
     }
 
-    public addProduct(): Product {
-        return null;
-    }
-
-    public getProduct(productId: string): Product {
-        return null;
-    }
-
-    public getProucts(): Product[] {
-        return null;
-    }
-
-    public updateProduct(): Product {
-        return null;
-    }
-
-    public deleteProduct() {
-
+    public deleteProduct(productId: string) {
+        return this.productsRepository.delete(productId);
     }
 }
