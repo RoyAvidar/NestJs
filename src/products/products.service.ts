@@ -10,6 +10,7 @@ import { DeleteProductInput } from './dto/input/delete-product.input';
 
 @Injectable()
 export class ProductsService {
+    private products: Product[] = [];
     constructor(
         @InjectRepository(Product)
         private productsRepository: Repository<Product>,
@@ -24,6 +25,12 @@ export class ProductsService {
     }
     
     public createProduct(createProductInput: CreateProductInput): Product {
+        // const product: Product = {
+        //     productId: '1',
+        //     ...createProductInput
+        // }
+        // this.products.push(product);
+        // return product;
         return null;
     }
 
