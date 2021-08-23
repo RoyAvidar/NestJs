@@ -6,6 +6,7 @@ import { Product } from './models/product';
 import { GetProductArgs } from './dto/args/get-product.args';
 import { CreateProductInput } from './dto/input/create-product.input';
 import { UpdateProductInput } from './dto/input/update-product.input';
+import { DeleteProductInput } from './dto/input/delete-product.input';
 
 @Injectable()
 export class ProductsService {
@@ -25,12 +26,12 @@ export class ProductsService {
     public createProduct(createProductInput: CreateProductInput): Product {
         return null;
     }
-    
+
     public updateProduct(updateProductInput: UpdateProductInput): Product {
         return null;
     }
 
-    public deleteProduct(productId: string) {
-        return this.productsRepository.delete(productId);
+    public deleteProduct(deleteProductInput: DeleteProductInput) {
+        return this.productsRepository.delete(deleteProductInput);
     }
 }
