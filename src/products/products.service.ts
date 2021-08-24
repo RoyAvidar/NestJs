@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Product } from './models/product';
+import { Product } from './models/product.entity';
 import { GetProductArgs } from './dto/args/get-product.args';
 import { CreateProductInput } from './dto/input/create-product.input';
 import { UpdateProductInput } from './dto/input/update-product.input';
@@ -35,7 +35,9 @@ export class ProductsService {
     }
 
     public updateProduct(updateProductInput: UpdateProductInput): Product {
-        return null;
+        const product = this.products.find(prod => prod.productId === updateProductInput.productId);
+        Object.assign(product, updateProductInput);
+        return product;
     }
 
     public deleteProduct(deleteProductInput: DeleteProductInput) {

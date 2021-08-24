@@ -4,6 +4,7 @@ import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Connection } from 'typeorm';
 
 @Module({
   imports: [
@@ -17,5 +18,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   ],
   controllers: [],
   providers: [],
+  exports: [],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private connection: Connection) {}
+}
