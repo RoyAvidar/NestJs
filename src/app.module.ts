@@ -5,6 +5,7 @@ import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { Connection } from 'typeorm';
     UsersModule,
     ProductsModule,
     OrdersModule,
+    CategoriesModule,
     TypeOrmModule.forRoot(),
   ],
   controllers: [],

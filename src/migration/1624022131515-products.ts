@@ -24,16 +24,17 @@ export class products1624022131515 implements MigrationInterface {
                 },
                 {
                     name: "categoryId",
-                    type: "BigInt",
+                    type: "bigInt",
+                    unsigned: true
                 }
                 
             ],
             foreignKeys: [
                 {
-                    columnNames: ['categoryId'],
-                    referencedColumnNames: ['categoryId'],
-                    referencedTableName: 'categories',
-                    onDelete: "CASCADE"
+                    columnNames: ["categoryId"],
+                    referencedColumnNames: ["categoryId"],
+                    referencedTableName: "categories",
+                    onDelete: "CASCADE",
                 },
             ],
         }))

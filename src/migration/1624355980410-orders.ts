@@ -28,26 +28,26 @@ export class orders1624355980410 implements MigrationInterface {
                 },
                 {
                     name: "userId",
-                    type: "bigint",
+                    type: "bigInt",
                     unsigned: true
                 },
                 {
                     name: "productId",
-                    type: "bigint",
+                    type: "bigInt",
                     unsigned: true
                 },
             ],
             foreignKeys: [
                 {
-                    columnNames: ['userId'],
-                    referencedColumnNames: ['userId'],
-                    referencedTableName: 'users',
+                    columnNames: ["userId"],
+                    referencedColumnNames: ["userId"],
+                    referencedTableName: "users",
                     onDelete: "CASCADE"
                 },
                 {
-                    columnNames: ['productId'],
-                    referencedColumnNames: ['productId'],
-                    referencedTableName: 'products',
+                    columnNames: ["productId"],
+                    referencedColumnNames: ["productId"],
+                    referencedTableName: "products",
                     onDelete: "CASCADE"
                 }
             ]
