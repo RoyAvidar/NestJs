@@ -6,7 +6,7 @@
     "password": "",
     "database": "nestjs-start",
     "entities": [
-        "src/*/*/*.entity{.ts,.js}"
+        "__dirname + '/**/*.entity{.ts,.js}'"
     ],
     "synchronize": false,
     "migrations": ["src/migration/*.ts"],
