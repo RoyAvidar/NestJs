@@ -4,7 +4,7 @@ import { GetUsersArgs } from "./dto/args/get-users.args";
 import { CreateUserInput } from "./dto/input/create-user.input";
 import { DeleteUserInput } from "./dto/input/delete-user.input";
 import { UpdateUserInput } from "./dto/input/update-user.input";
-import { User } from "./models/user.entity";
+import { User } from "../entity/user.entity";
 import { UsersService } from "./users.service";
 
 @Resolver(() => User)

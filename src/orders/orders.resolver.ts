@@ -1,6 +1,6 @@
 import { Resolver,  Query, Args} from "@nestjs/graphql";
 import { GetOrderArgs } from "./dto/args/get-order.args";
-import { Order } from "./models/order.entity";
+import { Order } from "../entity/order.entity";
 import { OrdersService } from "./orders.service";
 
 @Resolver(() => Order)

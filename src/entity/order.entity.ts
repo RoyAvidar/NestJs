@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { IsDate } from "class-validator";
-import { Product } from "src/products/models/product.entity";
-import { User } from "src/users/models/user.entity";
+import { Product } from "src/entity/product.entity";
+import { User } from "src/entity/user.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('orders')

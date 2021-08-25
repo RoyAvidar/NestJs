@@ -3,7 +3,7 @@ import { GetProductArgs } from "./dto/args/get-product.args";
 import { CreateProductInput } from "./dto/input/create-product.input";
 import { DeleteProductInput } from "./dto/input/delete-product.input";
 import { UpdateProductInput } from "./dto/input/update-product.input";
-import {Product} from "./models/product.entity";
+import {Product} from "../entity/product.entity";
 import {ProductsService} from "./products.service";
 
 @Resolver(() => Product)
