@@ -10,7 +10,6 @@ import { DeleteProductInput } from './dto/input/delete-product.input';
 
 @Injectable()
 export class ProductsService {
-    private products: Product[] = [];
     constructor(
         @InjectRepository(Product)
         private productsRepository: Repository<Product>,
@@ -20,24 +19,19 @@ export class ProductsService {
         return this.productsRepository.findOne(getProductData);
     }
     
-    public getProucts(): Promise<Product[]> {
-        return this.productsRepository.find();
+    async getProucts(): Promise<Product[]> {
+        return this.productsRepository.find(); //SELECT * products
     }
     
-    public createProduct(createProductInput: CreateProductInput): Product {
-        // const product: Product = {
-        //     productId: '1',
-        //     ...createProductInput
-        // }
-        // this.products.push(product);
-        // return product;
-        return null;
+    async createProduct(createProductInput: CreateProductInput): Promise<Product> {
+        const newProd = this.productsRepository.create(createProductInput);
+        return this.productsRepository.save(newProd); //insert
     }
 
     public updateProduct(updateProductInput: UpdateProductInput): Product {
-        const product = this.products.find(prod => prod.productId === updateProductInput.productId);
-        Object.assign(product, updateProductInput);
-        return product;
+        // const product = this.products.find(prod => prod.productId === updateProductInput.productId);
+        // Object.assign(product, updateProductInput);
+        return null;
     }
 
     public deleteProduct(deleteProductInput: DeleteProductInput) {

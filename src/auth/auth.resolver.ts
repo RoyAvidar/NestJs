@@ -13,5 +13,6 @@ export class AuthResolver {
     @Query(() => String)
     login():string {
         return 'test';//this.authService.login(req.user as User);
+        // return this.authService.login();
     } // written like a regular controller in expressJs.
 }

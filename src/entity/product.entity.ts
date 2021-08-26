@@ -14,30 +14,26 @@ export class Product {
     @Column()
     @Field()
     productName: string;
-
-    @Column()
-    @Field()
-    productDescription: string;
-
+  
     @Column()
     @Field(type => Int)
     productPrice: number;
 
     @Column()
     @Field()
-    imageUrl: string;
-
+    productDesc: string;
+    
     @Column()
     @Field()
-    userId: string;
-    
+    imageUrl: string;
+
     @ManyToOne(() => User, user => user.products)
     @Field(type => User)
-    user: User;
+    user?: User;
 
     @ManyToOne(() => Order, order => order.products)
     @Field(type => Order)
-    order: Order;
+    order?: Order;
 
     @ManyToOne(() => Category, category => category.products)
     @Field(type => Category)

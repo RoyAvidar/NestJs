@@ -23,8 +23,26 @@ export class products1624022131515 implements MigrationInterface {
                     type: "float"
                 },
                 {
+                    name: "productDesc",
+                    type: "varchar"
+                },
+                {
+                    name: "imageUrl",
+                    type: "varchar"
+                },
+                {
                     name: "categoryId",
                     type: "bigInt",
+                    unsigned: true
+                },
+                {
+                    name: "user",
+                    type: "user",
+                    unsigned: true
+                },
+                {
+                    name: "order",
+                    type: "order",
                     unsigned: true
                 }
                 
@@ -36,6 +54,18 @@ export class products1624022131515 implements MigrationInterface {
                     referencedTableName: "categories",
                     onDelete: "CASCADE",
                 },
+                {
+                    columnNames: ["user"],
+                    referencedColumnNames: ["user"],
+                    referencedTableName: "users",
+                    onDelete: "CASCADE"
+                },
+                {
+                    columnNames: ["order"],
+                    referencedColumnNames: ["order"],
+                    referencedTableName: "orders",
+                    onDelete: "CASCADE"
+                }
             ],
         }))
     }

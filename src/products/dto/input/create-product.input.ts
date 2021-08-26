@@ -17,6 +17,14 @@ export class CreateProductInput {
     @IsNotEmpty()
     productDesc: string;
 
+    @Field()
+    @IsNotEmpty()
+    imageUrl: string;
+
+    // @Field()
+    // @IsNotEmpty()
+    // category: string;
+
     @Field({nullable: true})
     @IsNotEmpty()
     @IsOptional()

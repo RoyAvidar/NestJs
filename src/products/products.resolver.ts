@@ -16,7 +16,7 @@ export class ProductsResolver {
     }
 
     @Query(() => [Product], {name: 'products', nullable: 'items'})
-    getProducts(@Args() getProductsArgs: GetProductArgs) {
+    getProducts(): Promise<Product[]> {
         return this.productsService.getProucts();
     }
 
