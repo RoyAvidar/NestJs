@@ -6,7 +6,7 @@ export class CreateProductInput {
 
     @Field()
     @IsNotEmpty()
-    @IsAlpha()
+    @IsAlpha() //validator.
     productName: string;
 
     @Field(type => Int)
