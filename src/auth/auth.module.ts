@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from 'src/users/users.module';
+
+import { UsersModule } from '../users/users.module';
+import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { jwtSecret } from './constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
@@ -18,6 +20,6 @@ import { LocalStrategy } from './strategies/local.strategy';
     }),
     TypeOrmModule.forFeature(),
   ],
-  providers: [AuthService, JwtStrategy, LocalStrategy]
+  providers: [AuthService, JwtStrategy, LocalStrategy, AuthResolver]
 })
 export class AuthModule {}

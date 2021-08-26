@@ -6,12 +6,14 @@ import { OrdersModule } from './orders/orders.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { CategoriesModule } from './categories/categories.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: true,
     }),
+    AuthModule,
     UsersModule,
     ProductsModule,
     OrdersModule,
