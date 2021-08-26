@@ -27,15 +27,15 @@ export class Product {
     @Field()
     imageUrl: string;
 
-    @ManyToOne(() => User, user => user.products)
-    @Field(type => User)
-    user?: User;
+    // @ManyToOne(() => User, user => user.products)
+    // @Field(type => User)
+    // user?: User;
 
-    @ManyToOne(() => Order, order => order.products)
-    @Field(type => Order)
-    order?: Order;
+    // @ManyToOne(() => Order, order => order.products)
+    // @Field(type => Order)
+    // order?: Order;
 
-    @ManyToOne(() => Category, category => category.products)
-    @Field(type => Category)
-    category: Category;
+    // @ManyToOne(() => Category, category => category.products)
+    // @Field(type => Category)
+    // category: Category;
 }

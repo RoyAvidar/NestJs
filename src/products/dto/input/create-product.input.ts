@@ -21,9 +21,9 @@ export class CreateProductInput {
     @IsNotEmpty()
     imageUrl: string;
 
-    // @Field()
-    // @IsNotEmpty()
-    // category: string;
+    @Field(type => Int ,{nullable: true})
+    @IsNotEmpty()
+    categoryId?: number;
 
     @Field({nullable: true})
     @IsNotEmpty()

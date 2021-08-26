@@ -15,9 +15,9 @@ export class Order {
     @Field()
     productId: string;
 
-    @Field(type => [Product], {nullable: true})
-    @OneToMany(type => Product, product => product.order)
-    products: Product[];
+    // @Field(type => [Product], {nullable: true})
+    // @OneToMany(type => Product, product => product.order)
+    // products: Product[];
 
     @Column()
     @Field()
@@ -28,11 +28,7 @@ export class Order {
     @Field(type => Int)
     orderPrice: number;
 
-    @Column()
-    @Field()
-    userId: string;
-
-    @ManyToOne(() => User, user => user.products)
-    @Field(type => User)
-    user: User;
+    // @ManyToOne(() => User, user => user.products)
+    // @Field(type => User)
+    // user: User;
 }

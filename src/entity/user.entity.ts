@@ -25,11 +25,11 @@ export class User extends BaseEntity{
     @Column({default: false})
     isAdmin: boolean;
 
-    @Field(type => [Product], {nullable: true})
-    @OneToMany(type => Product, product => product.user)
-    products?: Product[];
+    // @Field(type => [Product], {nullable: true})
+    // @OneToMany(type => Product, product => product.user)
+    // products?: Product[];
 
-    @Field(type => [Order], {nullable: true})
-    @OneToMany(type => Order, order => order.user)
-    orders?: Order[];
+    // @Field(type => [Order], {nullable: true})
+    // @OneToMany(type => Order, order => order.user)
+    // orders?: Order[];
 }
