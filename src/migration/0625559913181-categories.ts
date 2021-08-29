@@ -12,7 +12,7 @@ export class categories0625559913181 implements MigrationInterface {
                     isGenerated: true,
                     generationStrategy: "increment",
                     isPrimary: true,
-                    unsigned: true,
+                    unsigned: true
                 },
                 {
                     name: "categoryName",

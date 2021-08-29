@@ -31,41 +31,18 @@ export class products1624022131515 implements MigrationInterface {
                     type: "varchar"
                 },
                 {
-                    name: "categoryName",
-                    type: "varchar",
+                    name: "categoryId",
+                    type: "bigInt", 
                     unsigned: true
                 },
-                // {
-                //     name: "user",
-                //     type: "user",
-                //     unsigned: true
-                // },
-                // {
-                //     name: "order",
-                //     type: "order",
-                //     unsigned: true
-                // }
-                
             ],
             foreignKeys: [
                 {
-                    columnNames: ["categoryName"],
-                    referencedColumnNames: ["categoryName"],
+                    columnNames: ["categoryId"],
+                    referencedColumnNames: ["categoryId"],
                     referencedTableName: "categories",
                     onDelete: "CASCADE",
                 },
-                // {
-                //     columnNames: ["userId"],
-                //     referencedColumnNames: ["userId"],
-                //     referencedTableName: "users",
-                //     onDelete: "CASCADE"
-                // },
-                // {
-                //     columnNames: ["order"],
-                //     referencedColumnNames: ["order"],
-                //     referencedTableName: "orders",
-                //     onDelete: "CASCADE"
-                // }
             ],
         }))
     }

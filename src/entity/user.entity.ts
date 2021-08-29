@@ -8,7 +8,7 @@ import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "t
 export class User extends BaseEntity{
     @Field()
     @PrimaryGeneratedColumn()
-    userId: string;
+    userId: number;
 
     @Field()
     @Column()

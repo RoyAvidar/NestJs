@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { Category } from "src/entity/category.entity";
-import { Order } from "src/entity/order.entity";
-import { User } from "src/entity/user.entity";
+// import { Category } from "src/entity/category.entity";
+// import { Order } from "src/entity/order.entity";
+// import { User } from "src/entity/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('products')
@@ -9,7 +9,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 export class Product {
     @Field()
     @PrimaryGeneratedColumn()
-    productId: string;
+    productId: number;
 
     @Column()
     @Field()
@@ -37,5 +37,5 @@ export class Product {
 
     @Column()
     @Field()
-    categoryName: string;
+    categoryId: number;
 }

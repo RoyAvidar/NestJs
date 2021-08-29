@@ -9,7 +9,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 export class Order {
     @Field()
     @PrimaryGeneratedColumn()
-    orderId: string;
+    orderId: number;
 
     @Column()
     @Field()
