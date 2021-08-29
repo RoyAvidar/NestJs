@@ -31,41 +31,41 @@ export class products1624022131515 implements MigrationInterface {
                     type: "varchar"
                 },
                 {
-                    name: "categoryId",
-                    type: "bigInt",
+                    name: "categoryName",
+                    type: "varchar",
                     unsigned: true
                 },
-                {
-                    name: "user",
-                    type: "user",
-                    unsigned: true
-                },
-                {
-                    name: "order",
-                    type: "order",
-                    unsigned: true
-                }
+                // {
+                //     name: "user",
+                //     type: "user",
+                //     unsigned: true
+                // },
+                // {
+                //     name: "order",
+                //     type: "order",
+                //     unsigned: true
+                // }
                 
             ],
             foreignKeys: [
                 {
-                    columnNames: ["categoryId"],
-                    referencedColumnNames: ["categoryId"],
+                    columnNames: ["categoryName"],
+                    referencedColumnNames: ["categoryName"],
                     referencedTableName: "categories",
                     onDelete: "CASCADE",
                 },
-                {
-                    columnNames: ["user"],
-                    referencedColumnNames: ["user"],
-                    referencedTableName: "users",
-                    onDelete: "CASCADE"
-                },
-                {
-                    columnNames: ["order"],
-                    referencedColumnNames: ["order"],
-                    referencedTableName: "orders",
-                    onDelete: "CASCADE"
-                }
+                // {
+                //     columnNames: ["userId"],
+                //     referencedColumnNames: ["userId"],
+                //     referencedTableName: "users",
+                //     onDelete: "CASCADE"
+                // },
+                // {
+                //     columnNames: ["order"],
+                //     referencedColumnNames: ["order"],
+                //     referencedTableName: "orders",
+                //     onDelete: "CASCADE"
+                // }
             ],
         }))
     }

@@ -12,8 +12,4 @@ export class Category {
     @Column()
     @Field()
     categoryName: string;
-
-    // @Field(type => [Product], {nullable: true})
-    // @OneToMany(type => Product, product => product.category)
-    // products: Product[];
 }

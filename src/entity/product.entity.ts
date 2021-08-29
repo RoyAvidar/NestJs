@@ -29,13 +29,13 @@ export class Product {
 
     // @ManyToOne(() => User, user => user.products)
     // @Field(type => User)
-    // user?: User;
+    // userId?: string;
 
     // @ManyToOne(() => Order, order => order.products)
     // @Field(type => Order)
-    // order?: Order;
+    // orderId?: Order;
 
-    // @ManyToOne(() => Category, category => category.products)
-    // @Field(type => Category)
-    // category: Category;
+    @Column()
+    @Field()
+    categoryName: string;
 }
