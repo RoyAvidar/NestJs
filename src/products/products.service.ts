@@ -41,7 +41,8 @@ export class ProductsService {
         return null;
     }
 
-    public deleteProduct(deleteProductInput: DeleteProductInput) {
-        return this.productsRepository.delete(deleteProductInput);
+    async deleteProduct(deleteProductInput: DeleteProductInput) {
+        var oldProd = await this.productsRepository.findOneOrFail(deleteProductInput.productId);
+        return this.productsRepository.delete(oldProd);
     }
 }
