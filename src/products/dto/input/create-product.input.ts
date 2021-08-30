@@ -21,7 +21,7 @@ export class CreateProductInput {
     @IsNotEmpty()
     imageUrl: string;
 
-    @Field()
+    @Field(type => Int)
     @IsNotEmpty()
     categoryId: number;
 

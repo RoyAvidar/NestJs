@@ -12,7 +12,7 @@ export class AuthResolver {
     // @UseGuards(LocalAuthGuard) //calls validate in the local strategy.
     @Query(() => String)
     login():string {
-        return 'test';//this.authService.login(req.user as User);
-        // return this.authService.login();
-    } // written like a regular controller in expressJs.
+        return 'test';
+        //this.authService.login(req.user as User);
+    }  //written like a regular controller in expressJs.
 }
