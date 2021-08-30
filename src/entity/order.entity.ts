@@ -10,25 +10,21 @@ export class Order {
     @Field()
     @PrimaryGeneratedColumn()
     orderId: number;
-
-    @Column()
-    @Field()
-    productId: string;
-
-    // @Field(type => [Product], {nullable: true})
-    // @OneToMany(type => Product, product => product.order)
-    // products: Product[];
-
+    
     @Column()
     @Field()
     @IsDate()
     createdAt: Date;
-
+    
     @Column()
     @Field(type => Int)
     orderPrice: number;
 
-    // @ManyToOne(() => User, user => user.products)
-    // @Field(type => User)
-    // user: User;
+    @OneToMany(type => Product, product => product.orderId)
+    @Field(type => Int)
+    productId: number;
+
+    @ManyToOne(type => User, user => user.products)
+    @Field(type => Int)
+    userId: number;
 }
