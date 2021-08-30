@@ -26,8 +26,8 @@ export class ProductsResolver {
     }
 
     @Mutation(() => Product)
-    updateProduct(@Args('updateProductData') updateProductData: UpdateProductInput) {
-        return this.productsService.updateProduct(updateProductData);
+    updateProduct(@Args('updateProductData') updateProductData: UpdateProductInput, @Args('prodId') prodId: number) {
+        return this.productsService.updateProduct(updateProductData, prodId);
     }
 
     @Mutation(() => Product)

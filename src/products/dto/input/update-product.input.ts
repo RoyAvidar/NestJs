@@ -3,22 +3,25 @@ import { IsAlpha, IsNotEmpty, IsOptional } from "class-validator";
 
 @InputType()
 export class UpdateProductInput {
-    @Field()
-    @IsNotEmpty()
-    productId: string;
 
     @Field()
-    @IsOptional()
     @IsNotEmpty()
+    @IsAlpha() //validator.
     productName: string;
 
-    @Field()
-    @IsOptional()
-    @IsNotEmpty()
-    productDescription: string;
-
     @Field(type => Int)
-    @IsOptional()
     @IsNotEmpty()
     productPrice: number;
+
+    @Field()
+    @IsNotEmpty()
+    productDesc: string;
+
+    @Field()
+    @IsNotEmpty()
+    imageUrl: string;
+
+    @Field(type => Int)
+    @IsNotEmpty()
+    categoryId: number;
 }

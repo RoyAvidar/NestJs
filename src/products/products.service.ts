@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 
 import { Product } from '../entity/product.entity';
 import { GetProductArgs } from './dto/args/get-product.args';
@@ -28,9 +28,16 @@ export class ProductsService {
         return this.productsRepository.save(newProd); //insert
     }
 
-    public updateProduct(updateProductInput: UpdateProductInput): Product {
-        // const product = this.products.find(prod => prod.productId === updateProductInput.productId);
-        // Object.assign(product, updateProductInput);
+    async updateProduct(updateProductInput: UpdateProductInput, prodId: number): Promise<Product> {
+        var oldProd = await this.productsRepository.findOneOrFail(prodId);
+        if (oldProd.productId == prodId || oldProd) {
+            oldProd.categoryId = updateProductInput.categoryId;
+            oldProd.productName = updateProductInput.productName;
+            oldProd.productPrice = updateProductInput.productPrice;
+            oldProd.productDesc = updateProductInput.productDesc;
+            oldProd.imageUrl = updateProductInput.imageUrl;
+            return await oldProd.save();
+        }
         return null;
     }
 
