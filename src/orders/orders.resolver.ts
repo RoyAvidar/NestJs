@@ -9,11 +9,11 @@ export class OrdersResolver {
 
     @Query(() => Order)
     getSingleOrder(@Args('getOrderArgs') getOrderArgs: GetOrderArgs) {
-        return this.ordersService.getOrder(getOrderArgs.orderId);
+        return this.ordersService.getSingleOrder(getOrderArgs);
     }
 
     @Query(() => [Order], {name: 'orders', nullable: 'items'})
-    getOrders() {
+    getOrders(): Promise<Order[]> {
         return this.ordersService.getOrders();
     }
 }

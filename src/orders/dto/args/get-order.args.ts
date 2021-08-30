@@ -5,5 +5,5 @@ import { IsNotEmpty } from "class-validator";
 export class GetOrderArgs {
     @Field()
     @IsNotEmpty()
-    orderId: string;
+    orderId: number;
 }

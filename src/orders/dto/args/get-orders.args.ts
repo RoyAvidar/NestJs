@@ -5,5 +5,5 @@ import { IsArray } from "class-validator";
 export class GetOrdersArgs {
     @Field()
     @IsArray()
-    ordersId: string[];
+    orderId: string[];
 }
