@@ -28,7 +28,7 @@ export class Product extends BaseEntity{
     imageUrl: string;
     
     @Column()
-    @Field()
+    @Field(type => Int)
     categoryId: number;
 
     @ManyToOne(() => User, user => user.products)

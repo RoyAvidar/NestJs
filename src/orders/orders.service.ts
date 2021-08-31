@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from '../entity/order.entity';
 import { GetOrderArgs } from './dto/args/get-order.args';
+import { CreateOrderInput } from './dto/input/create-order.input';
 
 @Injectable()
 export class OrdersService {
@@ -17,5 +18,9 @@ export class OrdersService {
 
     async getOrders(): Promise<Order[]> {
         return this.orderRepository.find();
+    }
+
+    async createOrder(createOrderInput: CreateOrderInput): Promise<Order> {
+        return null;
     }
 }
