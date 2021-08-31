@@ -15,10 +15,6 @@ export class orders1624355980410 implements MigrationInterface {
                     unsigned: true,
                 },
                 {
-                    name: "orderName",
-                    type: "varchar"
-                },
-                {
                     name: "orderPrice",
                     type: "float"
                 },
@@ -39,15 +35,15 @@ export class orders1624355980410 implements MigrationInterface {
             ],
             foreignKeys: [
                 {
-                    columnNames: ["userId"],
-                    referencedColumnNames: ["userId"],
-                    referencedTableName: "users",
-                    onDelete: "CASCADE"
-                },
-                {
                     columnNames: ["productId"],
                     referencedColumnNames: ["productId"],
                     referencedTableName: "products",
+                    onDelete: "CASCADE"
+                },
+                {
+                    columnNames: ["userId"],
+                    referencedColumnNames: ["userId"],
+                    referencedTableName: "users",
                     onDelete: "CASCADE"
                 }
             ]

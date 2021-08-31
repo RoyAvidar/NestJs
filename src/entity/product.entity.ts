@@ -32,10 +32,10 @@ export class Product extends BaseEntity{
     categoryId: number;
 
     @ManyToOne(() => User, user => user.products)
-    @Field(type => User)
-    userId?: string;
+    @Field(type => Int)
+    userId?: number;
     
     @ManyToOne(() => Order, order => order.productId)
-    @Field(type => Order)
-    orderId?: Order;
+    @Field(type => Int)
+    orderId?: number;
 }

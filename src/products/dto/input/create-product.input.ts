@@ -28,5 +28,5 @@ export class CreateProductInput {
     @Field({nullable: true})
     @IsNotEmpty()
     @IsOptional()
-    userId?: string;  
+    userId?: number;  
 }
