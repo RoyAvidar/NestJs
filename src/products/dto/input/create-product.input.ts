@@ -25,8 +25,4 @@ export class CreateProductInput {
     @IsNotEmpty()
     categoryId: number;
 
-    @Field({nullable: true})
-    @IsNotEmpty()
-    @IsOptional()
-    userId?: number;  
 }
