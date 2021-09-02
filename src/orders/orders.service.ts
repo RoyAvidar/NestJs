@@ -21,6 +21,7 @@ export class OrdersService {
     }
 
     async createOrder(createOrderInput: CreateOrderInput): Promise<Order> {
-        return null;
+        const newOrder = this.orderRepository.create(createOrderInput);
+        return this.orderRepository.save(newOrder);
     }
 }

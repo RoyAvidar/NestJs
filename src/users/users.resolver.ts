@@ -11,11 +11,6 @@ import { UsersService } from "./users.service";
 export class UsersResolver{
     constructor(private readonly usersService: UsersService) {}
 
-    // @Query(() => User)
-    // createUser(@Args() {}) {
-    //     return this.usersService.createUser();
-    // }
-
     @Query(() => User)
     getSingleUser(@Args() getUserArgs: GetUserArgs) {
         return this.usersService.getUser(getUserArgs.userId);
@@ -32,8 +27,8 @@ export class UsersResolver{
     }
 
     @Mutation(() => User)
-    updateUser(@Args('updateUserData') updateUserData: UpdateUserInput) {
-        return this.usersService.updateUser();
+    updateUser(@Args('updateUserData') updateUserData: UpdateUserInput, @Args('userId') userId: number) {
+        return this.usersService.updateUser(updateUserData, userId);
     }
 
     @Mutation(() => User)

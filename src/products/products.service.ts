@@ -26,7 +26,7 @@ export class ProductsService {
     }
     
     async createProduct(createProductInput: CreateProductInput): Promise<Product> {
-        console.log(createProductInput.categoryId);
+        // console.log(createProductInput.categoryId);
         const newProd = this.productsRepository.create(createProductInput);
         return this.productsRepository.save(newProd); //insert
     }
@@ -38,6 +38,7 @@ export class ProductsService {
             oldProd.productPrice = updateProductInput.productPrice;
             oldProd.productDesc = updateProductInput.productDesc;
             oldProd.imageUrl = updateProductInput.imageUrl;
+            oldProd.categoryId = updateProductInput.categoryId;
             return await oldProd.save();
         }
         return null;

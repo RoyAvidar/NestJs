@@ -3,25 +3,29 @@ import { User } from '../entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/input/create-user.input';
+import { UpdateUserInput } from './dto/input/update-user.input';
 
 @Injectable()
 export class UsersService {
-    // private users: User[] = [];
     constructor(
         @InjectRepository(User)
         private usersRepository: Repository<User>,
     ) { }
 
-    public createUser(createUserData: CreateUserInput) {
-        // this.usersRepository.create();
-        // const user: User = {
-        //     userId: 'elad',
-        //     ...createUserData
-        // };
-        // return user;
+    async createUser(createUserData: CreateUserInput): Promise<User> {
+        const user = this.usersRepository.create(createUserData);
+        return this.usersRepository.save(user);
     }
 
-    public updateUser(): User {
+    async updateUser(updateUserData: UpdateUserInput, userId: number): Promise<User> {
+        var oldUser = await this.usersRepository.findOneOrFail(userId);
+        if (oldUser.userId == userId || oldUser) {
+            oldUser.userName = updateUserData.userName;
+            oldUser.userPassword = updateUserData.userPassword;
+            oldUser.userPhone = updateUserData.userPhone;
+            oldUser.isAdmin = updateUserData.isAdmin;
+            return await oldUser.save();
+        }
         return null;
     }
 
