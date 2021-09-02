@@ -29,5 +29,5 @@ export class Product extends BaseEntity{
     @ManyToOne(type => Category)
     @Field(type => Int)
     @JoinColumn({ name: 'categoryId' })
-    category: Category;
+    categoryId: number;
 }

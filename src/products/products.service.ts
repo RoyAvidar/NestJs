@@ -21,13 +21,13 @@ export class ProductsService {
     }
     
     async getProucts(getProductsData: GetProductsArgs): Promise<Product[]> {
-        console.log(getProductsData.productIds);
+        // console.log(getProductsData.productIds);
         return this.productsRepository.findByIds(getProductsData.productIds); //SELECT * products
     }
     
     async createProduct(createProductInput: CreateProductInput): Promise<Product> {
+        console.log(createProductInput.categoryId);
         const newProd = this.productsRepository.create(createProductInput);
-        console.log(newProd.category.categoryId);
         return this.productsRepository.save(newProd); //insert
     }
 
