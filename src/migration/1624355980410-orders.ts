@@ -35,12 +35,6 @@ export class orders1624355980410 implements MigrationInterface {
             ],
             foreignKeys: [
                 {
-                    columnNames: ["productId"],
-                    referencedColumnNames: ["productId"],
-                    referencedTableName: "products",
-                    onDelete: "CASCADE"
-                },
-                {
                     columnNames: ["userId"],
                     referencedColumnNames: ["userId"],
                     referencedTableName: "users",

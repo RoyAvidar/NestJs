@@ -1,9 +1,10 @@
-import { ArgsType, Field } from "@nestjs/graphql";
-import { IsArray } from "class-validator";
+import { ArgsType, Field, InputType } from "@nestjs/graphql";
+import { IsArray, IsNotEmpty } from "class-validator";
 
-@ArgsType()
+@InputType()
 export class GetProductsArgs {
-    @Field()
+    @Field(() => [String], {})
+    @IsNotEmpty()
     @IsArray()
-    productId: string[];
+    productIds: string[];
 }

@@ -3,8 +3,9 @@ import { GetProductArgs } from "./dto/args/get-product.args";
 import { CreateProductInput } from "./dto/input/create-product.input";
 import { DeleteProductInput } from "./dto/input/delete-product.input";
 import { UpdateProductInput } from "./dto/input/update-product.input";
-import {Product} from "../entity/product.entity";
-import {ProductsService} from "./products.service";
+import { Product } from "../entity/product.entity";
+import { ProductsService } from "./products.service";
+import { GetProductsArgs } from "./dto/args/get-products.args";
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -15,9 +16,9 @@ export class ProductsResolver {
         return this.productsService.getProduct(getProductArgs);
     }
 
-    @Query(() => [Product], {name: 'products', nullable: 'items'})
-    getProducts(): Promise<Product[]> {
-        return this.productsService.getProucts();
+    @Query(() => [Product])
+    getProducts(@Args('getProductsArgs') getProductsData: GetProductsArgs) {
+        return this.productsService.getProucts(getProductsData);
     }
 
     @Mutation(() => Product)

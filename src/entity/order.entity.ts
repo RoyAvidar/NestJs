@@ -2,7 +2,7 @@ import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { IsDate } from "class-validator";
 import { Product } from "src/entity/product.entity";
 import { User } from "src/entity/user.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('orders')
 @ObjectType()
@@ -20,11 +20,17 @@ export class Order {
     @Field(type => Int)
     orderPrice: number;
 
-    @OneToMany(type => Product, product => product.orderId)
-    @Field(type => Int)
-    productId: number;
+    @ManyToMany(type => Product)
+    @Field(type => Product)
+    @JoinTable({
+        name: 'product-orders',
+        joinColumn: { name: 'orderId' },
+        inverseJoinColumn: {name: 'productId'}
+    })
+    product: Product;
 
     @ManyToOne(type => User, user => user.products)
-    @Field(type => Int)
-    userId: number;
+    @Field(type => User)
+    @JoinColumn({ name: 'userId' })
+    user: User;
 }

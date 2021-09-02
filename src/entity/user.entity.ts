@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Order } from "src/entity/order.entity";
 import { Product } from "src/entity/product.entity";
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 @ObjectType()
@@ -26,10 +26,15 @@ export class User extends BaseEntity{
     isAdmin: boolean;
 
     @Field(type => [Product], {nullable: true})
-    @OneToMany(type => Product, product => product.userId)
+    @ManyToMany(type => Product)
+    @JoinTable({
+        name: 'product-orders',
+        joinColumn: { name: 'userId' },
+        inverseJoinColumn: {name: 'productId'}
+    })
     products?: Product[];
 
     @Field(type => [Order], {nullable: true})
-    @OneToMany(type => Order, order => order.userId)
+    @OneToMany(type => Order, order => order.user)
     orders?: Order[];
 }
