@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsAlpha, IsNotEmpty, IsOptional } from "class-validator";
+import { IsAlpha, IsNotEmpty } from "class-validator";
 
 @InputType()
 export class UpdateUserInput {
@@ -19,6 +19,5 @@ export class UpdateUserInput {
 
     @Field()
     @IsNotEmpty()
-    @IsOptional()
     isAdmin: boolean;
 }

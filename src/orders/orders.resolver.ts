@@ -19,7 +19,7 @@ export class OrdersResolver {
     }
 
     // @Mutation(() => Order)
-    // createOrder(@Args('createOrderData') createOrderInput: CreateOrderInput) {
-    //     return this.ordersService.createOrder(createOrderInput);
+    // createOrder(@Args('createOrderData') createOrderData: CreateOrderInput) {
+    //     return this.ordersService.createOrder(createOrderData);
     // }
 }
