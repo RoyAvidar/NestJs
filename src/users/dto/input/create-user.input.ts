@@ -1,7 +1,5 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
 import { IsAlpha, IsNotEmpty, IsOptional } from "class-validator";
-import { Order } from "src/entity/order.entity";
-import { Product } from "src/entity/product.entity";
 
 @InputType()
 export class CreateUserInput {

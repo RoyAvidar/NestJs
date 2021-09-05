@@ -1,6 +1,5 @@
 import { Field, InputType, Int } from "@nestjs/graphql";
 import { IsNotEmpty } from "class-validator";
-import { Product } from "src/entity/product.entity";
 
 @InputType()
 export class CreateOrderInput {
@@ -12,11 +11,8 @@ export class CreateOrderInput {
     @IsNotEmpty()
     orderPrice: number;
 
-    @Field(type => Int)
+    @Field()
     @IsNotEmpty()
-    userId: number;
+    userId: string;
 
-    // @Field(type => [Product], {nullable: true})
-    // @IsNotEmpty()
-    // products: Product[];
 }
