@@ -8,12 +8,15 @@ import { CreateProductInput } from './dto/input/create-product.input';
 import { UpdateProductInput } from './dto/input/update-product.input';
 import { DeleteProductInput } from './dto/input/delete-product.input';
 import { GetProductsArgs } from './dto/args/get-products.args';
+import { UsersService } from 'src/users/users.service';
+import { User } from 'src/entity/user.entity';
 
 @Injectable()
 export class ProductsService {
     constructor(
         @InjectRepository(Product)
         private productsRepository: Repository<Product>,
+        private usersService: UsersService
     ) { }
 
     public getProduct(getProductData: GetProductArgs): Promise<Product> {
@@ -47,5 +50,9 @@ export class ProductsService {
     async deleteProduct(deleteProductInput: DeleteProductInput) {
         var oldProd = await this.productsRepository.findOneOrFail(deleteProductInput.productId);
         return this.productsRepository.delete(oldProd);
+    }
+
+    getUser(userId: string): Promise<User> {
+        return this.usersService.getUser(userId);
     }
 }

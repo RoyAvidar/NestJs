@@ -5,12 +5,14 @@ import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { DeleteUserInput } from './dto/input/delete-user.input';
+import { Product } from 'src/entity/product.entity';
+import { ProductsService } from 'src/products/products.service';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User)
-        private usersRepository: Repository<User>,
+        private usersRepository: Repository<User>, 
     ) { }
 
     async createUser(createUserData: CreateUserInput): Promise<User> {
@@ -44,5 +46,11 @@ export class UsersService {
 
     public getUserByName(userName: string) {
         return this.usersRepository.findOne(userName);
+    }
+
+    async addProductToUser(userId: string, productId: string) {
+        const user = await this.usersRepository.findOne(userId);
+        await this.usersRepository.createQueryBuilder().relation("products").of(user).add(productId);
+        return true;
     }
 }

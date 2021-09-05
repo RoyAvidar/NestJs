@@ -34,4 +34,9 @@ export class UsersResolver{
     deleteUser(@Args('deleteUserData') deleteUserData: DeleteUserInput) {
         return this.usersService.deleteUser(deleteUserData);
     }
+
+    @Mutation(() => Boolean)
+    addProductToUser(@Args('userId') userId: string, @Args('prodId') prodId: string) {
+        return this.usersService.addProductToUser(userId, prodId);
+    }
 }
