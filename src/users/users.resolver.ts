@@ -39,4 +39,9 @@ export class UsersResolver{
     addProductToUser(@Args('userId') userId: string, @Args('prodId') prodId: string) {
         return this.usersService.addProductToUser(userId, prodId);
     }
+
+    @Mutation(() => Boolean)
+    addOrderToUser(@Args('userId') userId: string, @Args('orderId') orderId: string) {
+        return this.usersService.addOrderToUser(userId, orderId);
+    }
 }

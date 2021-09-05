@@ -22,4 +22,9 @@ export class OrdersResolver {
     createOrder(@Args('createOrderData') createOrderData: CreateOrderInput) {
         return this.ordersService.createOrder(createOrderData);
     }
+
+    @Mutation(() => Boolean)
+    addProductToOrder(@Args('orderId') orderId: string, @Args('prodId') prodId: string) {
+        return this.ordersService.addProductToOrder(orderId, prodId);
+    }
 }

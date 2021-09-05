@@ -24,4 +24,10 @@ export class OrdersService {
         const newOrder = this.orderRepository.create(createOrderInput);
         return this.orderRepository.save(newOrder);
     }
+
+    async addProductToOrder(orderId: string, productId: string) {
+        const order = this.orderRepository.findOne(orderId);
+        await this.orderRepository.createQueryBuilder().relation("products").of(order).add(productId);
+        return true;
+    }
 }

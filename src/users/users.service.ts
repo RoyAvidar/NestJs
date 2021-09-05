@@ -53,4 +53,10 @@ export class UsersService {
         await this.usersRepository.createQueryBuilder().relation("products").of(user).add(productId);
         return true;
     }
+
+    async addOrderToUser(userId: string, orderId: string) {
+        const user = await this.usersRepository.findOne(userId);
+        await this.usersRepository.createQueryBuilder().relation("orders").of(user).add(orderId);
+        return true;
+    }
 }
