@@ -22,11 +22,11 @@ export class CreateUserInput {
     @IsNotEmpty()
     isAdmin: boolean;
     
-    @Field(type => [Product], {nullable: true})
-    @IsOptional()
-    products?: Product[];
+    // @Field(type => [Product], {nullable: true})
+    // @IsOptional()
+    // products?: Product[];
 
-    @Field(type => [Order], {nullable: true})
-    @IsOptional()
-    orders?: Order[];
+    // @Field(type => [Order], {nullable: true})
+    // @IsOptional()
+    // orders?: Order[];
 }

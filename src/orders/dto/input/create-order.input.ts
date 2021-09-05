@@ -16,7 +16,7 @@ export class CreateOrderInput {
     @IsNotEmpty()
     userId: number;
 
-    @Field(type => [Product], {nullable: true})
-    @IsNotEmpty()
-    products: Product[];
+    // @Field(type => [Product], {nullable: true})
+    // @IsNotEmpty()
+    // products: Product[];
 }

@@ -18,8 +18,8 @@ export class OrdersResolver {
         return this.ordersService.getOrders();
     }
 
-    // @Mutation(() => Order)
-    // createOrder(@Args('createOrderData') createOrderData: CreateOrderInput) {
-    //     return this.ordersService.createOrder(createOrderData);
-    // }
+    @Mutation(() => Order)
+    createOrder(@Args('createOrderData') createOrderData: CreateOrderInput) {
+        return this.ordersService.createOrder(createOrderData);
+    }
 }
