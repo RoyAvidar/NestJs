@@ -30,7 +30,7 @@ export class OrdersService {
         return this.orderRepository.save(newOrder);
     }
 
-    async addProductToOrder(orderId: string, productId: string) {
+    async addProductToOrder(orderId: number, productId: number) {
         const order = this.orderRepository.findOne(orderId);
         await this.orderRepository.createQueryBuilder().relation("products").of(order).add(productId);
         return true;
