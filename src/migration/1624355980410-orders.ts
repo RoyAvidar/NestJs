@@ -20,15 +20,11 @@ export class orders1624355980410 implements MigrationInterface {
                 },
                 {
                     name: "createdAt",
-                    type: "date"
+                    type: "date",
+                    default: "CURRENT_TIMESTAMP"
                 },
                 {
                     name: "userId",
-                    type: "bigInt",
-                    unsigned: true
-                },
-                {
-                    name: "productId",
                     type: "bigInt",
                     unsigned: true
                 },
@@ -39,7 +35,8 @@ export class orders1624355980410 implements MigrationInterface {
                     referencedColumnNames: ["userId"],
                     referencedTableName: "users",
                     onDelete: "CASCADE"
-                }
+                },
+                
             ]
         }))
     

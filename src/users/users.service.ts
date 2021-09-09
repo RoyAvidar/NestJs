@@ -37,7 +37,7 @@ export class UsersService {
     }
 
     public getUsers(): Promise<User[]> {
-        return this.usersRepository.find();
+        return this.usersRepository.find({relations: ["products"]});
     }
 
     async deleteUser(deleteUserData: DeleteUserInput): Promise<void> {

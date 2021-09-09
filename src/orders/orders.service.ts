@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { Order } from '../entity/order.entity';
 import { GetOrderArgs } from './dto/args/get-order.args';
@@ -10,6 +11,8 @@ export class OrdersService {
     constructor(
         @InjectRepository(Order)
         private orderRepository: Repository<Order>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>
     ) {}
     
     async getSingleOrder(getOrderData: GetOrderArgs): Promise<Order> {
@@ -21,7 +24,9 @@ export class OrdersService {
     }
 
     async createOrder(createOrderInput: CreateOrderInput): Promise<Order> {
-        const newOrder = this.orderRepository.create(createOrderInput);
+        const user = await this.userRepository.findOne(createOrderInput.userId);
+        const newOrder = this.orderRepository.create();
+        newOrder.user = user;
         return this.orderRepository.save(newOrder);
     }
 

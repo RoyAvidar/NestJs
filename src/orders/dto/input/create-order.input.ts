@@ -3,9 +3,9 @@ import { IsNotEmpty } from "class-validator";
 
 @InputType()
 export class CreateOrderInput {
-    @Field()
-    @IsNotEmpty()
-    createdAt: Date;
+    // @Field()
+    // @IsNotEmpty()
+    // createdAt: Date;
 
     @Field(type => Int)
     @IsNotEmpty()
