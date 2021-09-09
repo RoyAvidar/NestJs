@@ -27,6 +27,7 @@ export class OrdersService {
         const user = await this.userRepository.findOne(createOrderInput.userId);
         const newOrder = this.orderRepository.create();
         newOrder.user = user;
+        newOrder.orderPrice = createOrderInput.orderPrice;
         return this.orderRepository.save(newOrder);
     }
 
