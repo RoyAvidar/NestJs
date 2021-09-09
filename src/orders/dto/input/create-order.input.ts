@@ -11,8 +11,8 @@ export class CreateOrderInput {
     @IsNotEmpty()
     orderPrice: number;
 
-    @Field()
+    @Field(type => Int)
     @IsNotEmpty()
-    userId: string;
+    userId: number;
 
 }

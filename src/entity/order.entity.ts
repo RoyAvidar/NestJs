@@ -21,13 +21,13 @@ export class Order {
     orderPrice: number;
 
     @ManyToMany(type => Product)
-    @Field(type => Product)
+    @Field(type => [Product])
     @JoinTable({
         name: 'product-orders',
         joinColumn: { name: 'orderId' },
         inverseJoinColumn: {name: 'productId'}
     })
-    product: Product;
+    products: Product[];
 
     @ManyToOne(type => User, user => user.products)
     @Field(type => User)
