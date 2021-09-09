@@ -27,7 +27,7 @@ export class Order {
         joinColumn: { name: 'orderId' },
         inverseJoinColumn: {name: 'productId'}
     })
-    product: Product;
+    products: Product;
 
     @ManyToOne(type => User, user => user.products)
     @Field(type => User)

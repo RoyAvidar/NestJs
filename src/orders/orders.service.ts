@@ -20,7 +20,7 @@ export class OrdersService {
     }
 
     async getOrders(): Promise<Order[]> {
-        return this.orderRepository.find();
+        return this.orderRepository.find({relations: ["products"]});
     }
 
     async createOrder(createOrderInput: CreateOrderInput): Promise<Order> {
