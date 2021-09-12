@@ -20,6 +20,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     }),
     TypeOrmModule.forFeature(),
   ],
-  providers: [AuthService, JwtStrategy, LocalStrategy, AuthResolver]
+  providers: [AuthService, JwtStrategy, LocalStrategy, AuthResolver],
+  exports: [AuthService]
 })
 export class AuthModule {}

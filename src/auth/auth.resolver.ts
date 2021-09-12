@@ -1,5 +1,4 @@
-import { Post, Req, UseGuards } from "@nestjs/common";
-import {Request} from 'express';
+import { Post, Req, Request, UseGuards } from "@nestjs/common";
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
@@ -10,11 +9,10 @@ import { CreateUserInput } from "src/users/dto/input/create-user.input";
 export class AuthResolver {
     constructor(private readonly authService: AuthService) {}
 
-    // @UseGuards(LocalAuthGuard) //calls validate in the local strategy.
-    @Query(() => String)
-    login(user: User): string {
-        const token = this.authService.login(user as User);
-        return token.access_token;
+    @UseGuards(LocalAuthGuard) //calls validate in the local strategy.
+    @Mutation(() => String)
+    async login(@Request() req) {
+        return await this.authService.login(req.user);
     }  //written like a regular controller in expressJs.
 
     @Mutation(() => User)
