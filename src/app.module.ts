@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: true,
+      context: ({req}) => ({headers: req.headers}) //graphql context has access to http req
     }),
     AuthModule,
     UsersModule,
