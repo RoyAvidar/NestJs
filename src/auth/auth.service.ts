@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { User } from 'src/entity/user.entity';
+import { CreateUserInput } from 'src/users/dto/input/create-user.input';
 import { UsersService } from 'src/users/users.service';
 import { jwtSecret } from './constants';
 
@@ -43,6 +44,11 @@ export class AuthService {
             throw new Error('Unable to get the user from decoded token.');
         }
 
+        return user;
+    }
+
+    async signUp(createUserInput: CreateUserInput): Promise<User> {
+        const user = await this.usersService.createUser(createUserInput);
         return user;
     }
 }
