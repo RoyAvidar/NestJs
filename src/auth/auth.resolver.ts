@@ -23,4 +23,9 @@ export class AuthResolver {
     validate(@Args('userName') userName: string, @Args('userPassword') userPassword: string) {
         return this.authService.validate(userName, userPassword);
     }
+
+    @Query(() => User)
+    verifyToken(@Args('token') token: string) {
+        return this.authService.verifyToken(token);
+    }
 }
