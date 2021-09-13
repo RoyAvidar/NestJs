@@ -12,7 +12,7 @@ export class AuthResolver {
     @UseGuards(LocalAuthGuard) //calls validate in the local strategy.
     @Mutation(() => String)
     async login(@Request() req) {
-        return await this.authService.login(req.user);
+        return this.authService.login(req.user);
     }  //written like a regular controller in expressJs.
 
     @Mutation(() => User)
