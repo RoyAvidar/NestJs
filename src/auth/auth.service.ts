@@ -24,10 +24,10 @@ export class AuthService {
         
     }
 
-    login(user: User): {access_token: string} {
+    login(userName: string, userPassword: string): {access_token: string} {
         const payload = {
-            name: user.userName,
-            sub: user.userId
+            name: userName,
+            sub: userPassword,
         };
         return {
             access_token: this.jwtService.sign(payload),
