@@ -18,4 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     async validate(validationPayload: {name: string, sub: string}): Promise<User> {
         return await this.usersService.getUserByName(validationPayload.name);
     }
+
+    //  we could do a database lookup in our validate() method to extract more information about the user,
+    // resulting in a more enriched user object being available in our Request.
 }

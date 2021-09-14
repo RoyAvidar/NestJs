@@ -24,14 +24,13 @@ export class AuthService {
         
     }
 
-    login(userName: string, userPassword: string): {access_token: string} {
+    async login(userName: string, userPassword: string) {
         const payload = {
             name: userName,
             sub: userPassword,
         };
-        return {
-            access_token: this.jwtService.sign(payload),
-        };
+        return this.jwtService.sign(payload);
+        
     }
 
     async verifyToken(token: string): Promise<User> {
@@ -39,7 +38,7 @@ export class AuthService {
             secret: jwtSecret
         })
         //reach out to db to get the user.
-        const user = this.usersService.getUserByName(decoodedPayload.userName);
+        const user = this.usersService.getUserByName(decoodedPayload.name);
         if (!user) {
             throw new Error('Unable to get the user from decoded token.');
         }

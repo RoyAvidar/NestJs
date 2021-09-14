@@ -45,7 +45,7 @@ export class UsersService {
     }
 
     public getUserByName(userName: string) {
-        return this.usersRepository.findOne(userName);
+        return this.usersRepository.findOne({where: {userName}});
     }
 
     async addProductToUser(userId: string, productId: string) {
