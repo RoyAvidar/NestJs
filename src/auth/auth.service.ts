@@ -50,4 +50,12 @@ export class AuthService {
         const user = await this.usersService.createUser(createUserInput);
         return user;
     }
+
+    async getProfile(userName: string, userPassword: string): Promise<String> {
+        const user = await this.usersService.getUserByName(userName);
+        if (!user) {
+            throw new Error('Unable to find user.');
+        }
+        return null;
+    }
 }
