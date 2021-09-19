@@ -16,8 +16,8 @@ export class CategoriesService {
         return this.categoryRepository.insert(newCategory);
     }
 
-    async getCategory(categoryId: string): Promise<String> {
+    async getCategory(categoryId: string): Promise<Category> {
         const cat = await this.categoryRepository.findOneOrFail(categoryId);
-        return cat.categoryName;
+        return cat;
     }
 }

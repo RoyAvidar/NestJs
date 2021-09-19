@@ -26,7 +26,7 @@ export class ProductsService {
     }
     
     public getProucts(): Promise<Product[]> {
-        return this.productsRepository.find(); //SELECT * products
+        return this.productsRepository.find({relations: ["category"]}); //SELECT * products
     }
     
     async createProduct(createProductInput: CreateProductInput): Promise<Product> {
@@ -42,7 +42,8 @@ export class ProductsService {
             oldProd.productPrice = updateProductInput.productPrice;
             oldProd.productDesc = updateProductInput.productDesc;
             oldProd.imageUrl = updateProductInput.imageUrl;
-            oldProd.categoryId = updateProductInput.categoryId;
+            const cat = await this.categoriesService.getCategory(updateProductInput.categoryId.toString());
+            oldProd.category = cat;
             return await oldProd.save();
         }
         return null;
@@ -58,7 +59,8 @@ export class ProductsService {
     }
 
     // get categoryName that is linked to a product.
-    getCategoryName(categoryId: string): Promise<String> {
-        return this.categoriesService.getCategory(categoryId);
+    async getCategoryName(categoryId: string): Promise<String> {
+        const cat = await this.categoriesService.getCategory(categoryId);
+        return cat.categoryName;
     }
 }
