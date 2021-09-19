@@ -51,11 +51,11 @@ export class AuthService {
         return user;
     }
 
-    async getProfile(userName: string, userPassword: string): Promise<String> {
-        const user = await this.usersService.getUserByName(userName);
-        if (!user) {
-            throw new Error('Unable to find user.');
-        }
-        return null;
-    }
+    // async getProfile(userName: string): Promise<String> {
+    //     const user = await this.usersService.getUserByName(userName);
+    //     if (!user) {
+    //         throw new Error('Unable to find user.');
+    //     }
+    //     return null;
+    // }
 }

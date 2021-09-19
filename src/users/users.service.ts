@@ -5,8 +5,8 @@ import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { DeleteUserInput } from './dto/input/delete-user.input';
-import { Product } from 'src/entity/product.entity';
-import { ProductsService } from 'src/products/products.service';
+// import { Product } from 'src/entity/product.entity';
+// import { ProductsService } from 'src/products/products.service';
 
 @Injectable()
 export class UsersService {
@@ -37,7 +37,7 @@ export class UsersService {
     }
 
     public getUsers(): Promise<User[]> {
-        return this.usersRepository.find({relations: ["products"]});
+        return this.usersRepository.find({relations: ["products", "orders"]});
     }
 
     async deleteUser(deleteUserData: DeleteUserInput): Promise<void> {

@@ -16,9 +16,9 @@ export class ProductsResolver {
         return this.productsService.getProduct(getProductArgs);
     }
 
-    @Query(() => [Product])
-    getProducts(@Args('getProductsArgs') getProductsData: GetProductsArgs) {
-        return this.productsService.getProucts(getProductsData);
+    @Query(() => [Product], {name: 'products', nullable: 'items'})
+    getProducts() {
+        return this.productsService.getProucts();
     }
 
     @Mutation(() => Product)

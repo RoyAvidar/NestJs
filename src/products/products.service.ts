@@ -10,22 +10,23 @@ import { DeleteProductInput } from './dto/input/delete-product.input';
 import { GetProductsArgs } from './dto/args/get-products.args';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/entity/user.entity';
+import { CategoriesService } from 'src/categories/categories.service';
 
 @Injectable()
 export class ProductsService {
     constructor(
         @InjectRepository(Product)
         private productsRepository: Repository<Product>,
-        private usersService: UsersService
+        private categoriesService: CategoriesService,
+        private usersService: UsersService,
     ) { }
 
     public getProduct(getProductData: GetProductArgs): Promise<Product> {
         return this.productsRepository.findOne(getProductData);
     }
     
-    async getProucts(getProductsData: GetProductsArgs): Promise<Product[]> {
-        // console.log(getProductsData.productIds);
-        return this.productsRepository.findByIds(getProductsData.productIds); //SELECT * products
+    public getProucts(): Promise<Product[]> {
+        return this.productsRepository.find(); //SELECT * products
     }
     
     async createProduct(createProductInput: CreateProductInput): Promise<Product> {
@@ -54,5 +55,10 @@ export class ProductsService {
 
     getUser(userId: string): Promise<User> {
         return this.usersService.getUser(userId);
+    }
+
+    // get categoryName that is linked to a product.
+    getCategoryName(categoryId: string): Promise<String> {
+        return this.categoriesService.getCategory(categoryId);
     }
 }
