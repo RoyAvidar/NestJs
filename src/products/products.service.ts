@@ -7,7 +7,6 @@ import { GetProductArgs } from './dto/args/get-product.args';
 import { CreateProductInput } from './dto/input/create-product.input';
 import { UpdateProductInput } from './dto/input/update-product.input';
 import { DeleteProductInput } from './dto/input/delete-product.input';
-import { GetProductsArgs } from './dto/args/get-products.args';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/entity/user.entity';
 import { CategoriesService } from 'src/categories/categories.service';
