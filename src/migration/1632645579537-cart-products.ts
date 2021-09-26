@@ -25,7 +25,7 @@ export class cartProducts1632645579537 implements MigrationInterface {
                     unsigned: true,
                 },
             ]
-        }))
+        }));
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

@@ -19,7 +19,7 @@ export class CartResolver {
     }
 
     @Mutation(() => Boolean)
-    addProductToCart(@Args('cartId') cartId: number, @Args('productsId') productsId: string[]) {
-        return this.cartService.addProductToCart(cartId, productsId);
+    addProductToCart(@Args('cartId') cartId: number, @Args('productId') productId: number) {
+        return this.cartService.addProductToCart(cartId, productId);
     }
 }
