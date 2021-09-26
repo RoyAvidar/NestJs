@@ -27,9 +27,9 @@ export class CartService {
         return this.cartRepository.save(newCart);
     }
 
-    async addProductsToCart(cartId: number, products: Product[]) {
+    async addProductToCart(cartId: number, productsId: string[]) {
         const cart = await this.cartRepository.findOne(cartId);
-        await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(products);
+        await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(productsId);
         return true;
     }
 }
