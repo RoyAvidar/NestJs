@@ -14,7 +14,25 @@ export class cart1632404258237 implements MigrationInterface {
                     isPrimary: true,
                     unsigned: true
                 },
+                {
+                    name: "totalPrice",
+                    type: "bigInt",
+                },
+                {
+                    name: "userId",
+                    type: "bigInt",
+                    unsigned: true
+                },
             ],
+            foreignKeys: [
+                {
+                    columnNames: ["userId"],
+                    referencedColumnNames: ["userId"],
+                    referencedTableName: "users",
+                    onDelete: "CASCADE"
+                },
+                
+            ]
         }))
     }
 
