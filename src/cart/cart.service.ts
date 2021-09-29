@@ -4,6 +4,7 @@ import { Cart } from 'src/entity/cart.entity';
 import { Product } from 'src/entity/product.entity';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
+import { AddToCartInput } from './dto/input/add-cart.input';
 import { CreateCartInput } from './dto/input/create-cart.input';
 
 @Injectable()
@@ -12,7 +13,9 @@ export class CartService {
         @InjectRepository(Cart)
         private readonly cartRepository: Repository<Cart>,
         @InjectRepository(User)
-        private readonly userRepository: Repository<User>
+        private readonly userRepository: Repository<User>,
+        @InjectRepository(Product)
+        private readonly productRepository: Repository<Product>
     ) {}
 
     async getCart(cartId: number): Promise<Cart> {
@@ -27,9 +30,26 @@ export class CartService {
         return this.cartRepository.save(newCart);
     }
 
-    async addProductToCart(cartId: number, productId: number) {
-        const cart = this.cartRepository.findOne(cartId);
-        await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(productId);
+    async addProductToCart(addToCartInput: AddToCartInput) {
+        const cart = await this.cartRepository.findOne(addToCartInput.cartId);
+        await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(addToCartInput.productId);
+        return true;
+    }
+
+    async removeProductFromCart(cartId: number, productId: number) {
+        const cart = await this.cartRepository.findOne(cartId, {relations: ["products"]});
+        console.log(cart);
+        if (cart.products.some(p => p.productId == productId)) {
+            //find the product in the array of cart.products
+            await this.cartRepository.createQueryBuilder().relation("products").of(cart).remove(productId);
+            return true;
+        }
+        return false;
+    }
+
+    async cleanCart(cartId: number) {
+        const cart = await this.cartRepository.findOne(cartId);
+        await this.cartRepository.createQueryBuilder().relation("products").of(cart).delete();
         return true;
     }
 }

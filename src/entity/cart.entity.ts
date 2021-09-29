@@ -10,14 +10,14 @@ export class Cart {
     @PrimaryGeneratedColumn()
     cartId: number;
 
-    @ManyToOne(type => Product)
-    @Field(type => Product)
+    @ManyToMany(type => Product)
+    @Field(type => [Product])
     @JoinTable({
         name: 'cart-products',
         joinColumn: { name: 'cartId' },
         inverseJoinColumn: {name: 'productId'}
     })
-    products: Product;
+    products: Product[];
 
     @OneToOne(type => User)
     @Field(type => User)
