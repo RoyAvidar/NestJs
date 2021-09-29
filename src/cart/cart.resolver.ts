@@ -27,4 +27,9 @@ export class CartResolver {
     removeProductFromCart(@Args('cartId') cartId: number, @Args('productId') productId: number) {
         return this.cartService.removeProductFromCart(cartId, productId);
     }
+
+    @Mutation(() => Boolean)
+    cleanCart(@Args('cartId') cartId: number) {
+        return this.cartService.cleanCart(cartId);
+    }
 }

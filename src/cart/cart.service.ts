@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from 'src/entity/cart.entity';
-import { Product } from 'src/entity/product.entity';
+import { Order } from 'src/entity/order.entity';
 import { User } from 'src/entity/user.entity';
+import { CreateOrderInput } from 'src/orders/dto/input/create-order.input';
+import { OrdersService } from 'src/orders/orders.service';
 import { Repository } from 'typeorm';
 import { AddToCartInput } from './dto/input/add-cart.input';
 import { CreateCartInput } from './dto/input/create-cart.input';
@@ -14,8 +16,9 @@ export class CartService {
         private readonly cartRepository: Repository<Cart>,
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        @InjectRepository(Product)
-        private readonly productRepository: Repository<Product>
+        @InjectRepository(Order)
+        private readonly ordersRepository: Repository<Order>,
+        private ordersService: OrdersService
     ) {}
 
     async getCart(cartId: number): Promise<Cart> {
@@ -51,5 +54,14 @@ export class CartService {
         const cart = await this.cartRepository.findOne(cartId);
         await this.cartRepository.createQueryBuilder().relation("products").of(cart).delete();
         return true;
+    }
+
+    async submitCartToOrder(cartId: number, createOrderInput: CreateOrderInput) {
+        const cart = await this.cartRepository.findOne(cartId);
+        const newOrder = await this.ordersService.createOrder(createOrderInput);
+        newOrder.orderPrice = cart.totalPrice;
+        newOrder.user = cart.user;
+        // newOrder.products = cart.products;
+        return this.ordersRepository.save(newOrder);
     }
 }
