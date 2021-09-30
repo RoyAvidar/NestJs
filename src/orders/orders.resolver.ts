@@ -24,7 +24,7 @@ export class OrdersResolver {
     }
 
     @Mutation(() => Boolean)
-    addProductToOrder(@Args('orderId') orderId: string, @Args('prodId') prodId: string) {
+    addProductToOrder(@Args('orderId') orderId: number, @Args('prodId') prodId: number) {
         return this.ordersService.addProductToOrder(orderId, prodId);
     }
 }

@@ -61,7 +61,7 @@ export class CartService {
         const newOrder = await this.ordersService.createOrder(createOrderInput);
         newOrder.orderPrice = cart.totalPrice;
         newOrder.user = cart.user;
-        // newOrder.products = cart.products;
+        newOrder.products = cart.products;
         return this.ordersRepository.save(newOrder);
     }
 }

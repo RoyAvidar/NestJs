@@ -1,5 +1,6 @@
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import { Cart } from 'src/entity/cart.entity';
+import { CreateOrderInput } from 'src/orders/dto/input/create-order.input';
 import { CartService } from './cart.service';
 import { AddToCartInput } from './dto/input/add-cart.input';
 import { CreateCartInput } from './dto/input/create-cart.input';
@@ -31,5 +32,10 @@ export class CartResolver {
     @Mutation(() => Boolean)
     cleanCart(@Args('cartId') cartId: number) {
         return this.cartService.cleanCart(cartId);
+    }
+
+    @Mutation(() => Boolean)
+    submitCartToOrder(@Args('cartId') cartId: number, @Args('createOrderInput') createOrderInput: CreateOrderInput) {
+        return this.cartService.submitCartToOrder(cartId, createOrderInput);
     }
 }
