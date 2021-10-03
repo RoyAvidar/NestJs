@@ -62,6 +62,17 @@ export class CartService {
         return true;
     }
 
+    async removeFromCart(cartId: number, prodId: number) {
+        const cart = await this.cartRepository.findOne(cartId, {relations: ["products"]});
+        cart.products.forEach(p => {
+            if (p.productId == prodId) {
+                this.cartRepository.delete(prodId);
+                return true;
+            }
+        });
+        throw new ErrorEvent("couldn't find a product to delete");
+    }
+
     async submitCartToOrder(cartId: number, createOrderInput: CreateOrderInput) {
         const cart = await this.cartRepository.findOne(cartId, {relations: ["user", "products"]});
         const newOrder = await this.ordersService.createOrder(createOrderInput);
