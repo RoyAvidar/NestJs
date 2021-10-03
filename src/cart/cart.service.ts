@@ -19,8 +19,8 @@ export class CartService {
         private readonly userRepository: Repository<User>,
         @InjectRepository(Order)
         private readonly ordersRepository: Repository<Order>,
-        // @InjectRepository(Product)
-        // private readonly productRepository: Repository<Product>,
+        @InjectRepository(Product)
+        private readonly productRepository: Repository<Product>,
         private ordersService: OrdersService
     ) {}
 
@@ -36,11 +36,12 @@ export class CartService {
         return this.cartRepository.save(newCart);
     }
 
+    // + sign infront of an arg is the same as .toInt();
     async addProductToCart(addToCartInput: AddToCartInput) {
         const cart = await this.cartRepository.findOne(addToCartInput.cartId);
-        // const prod = await this.productRepository.findOne(addToCartInput.productId);
-        // cart.totalPrice += prod.productPrice;
+        const prod = await this.productRepository.findOne(addToCartInput.productId);
         await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(addToCartInput.productId);
+        await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice});
         return true;
     }
 
@@ -62,15 +63,14 @@ export class CartService {
     }
 
     async submitCartToOrder(cartId: number, createOrderInput: CreateOrderInput) {
-        const cart = await this.cartRepository.findOne(cartId);
+        const cart = await this.cartRepository.findOne(cartId, {relations: ["user", "products"]});
         const newOrder = await this.ordersService.createOrder(createOrderInput);
-        if (newOrder != null) {
-            newOrder.orderPrice = cart.totalPrice;
-            newOrder.user = cart.user;
-            newOrder.products = cart.products;
-            return this.ordersRepository.save(newOrder);
-        }
-        throw new NotFoundException('Could not find the order.');
+            cart.products.forEach(p => {
+                this.ordersService.addProductToOrder(newOrder.orderId, p.productId);
+            });
+            newOrder.orderPrice = createOrderInput.orderPrice;
+            this.cleanCart(cart.cartId);
+            return true;
         
     }
 }
