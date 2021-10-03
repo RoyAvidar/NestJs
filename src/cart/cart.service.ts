@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from 'src/entity/cart.entity';
-import { Order } from 'src/entity/order.entity';
+// import { Order } from 'src/entity/order.entity';
 import { Product } from 'src/entity/product.entity';
 import { User } from 'src/entity/user.entity';
 import { CreateOrderInput } from 'src/orders/dto/input/create-order.input';
@@ -17,8 +17,8 @@ export class CartService {
         private readonly cartRepository: Repository<Cart>,
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        @InjectRepository(Order)
-        private readonly ordersRepository: Repository<Order>,
+        // @InjectRepository(Order)
+        // private readonly ordersRepository: Repository<Order>,
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
         private ordersService: OrdersService
