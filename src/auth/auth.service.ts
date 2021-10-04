@@ -13,8 +13,8 @@ export class AuthService {
     constructor(
         private readonly usersService: UsersService,
         private readonly jwtService: JwtService,
-        // @InjectRepository(Auth)
-        // private readonly authRepo: Repository<Auth>
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>
     ) {}
 
     async validate(userName: string, userPassword: string): Promise<User> {
@@ -55,11 +55,11 @@ export class AuthService {
         return user;
     }
 
-    // async getProfile(userName: string): Promise<String> {
-    //     const user = await this.usersService.getUserByName(userName);
-    //     if (!user) {
-    //         throw new Error('Unable to find user.');
-    //     }
-    //     return null;
-    // }
+    async getUser(userId: string): Promise<User> {
+        const user = await this.userRepository.findOne(userId, {relations: ["orders"]});
+        if (!user) {
+            throw new Error('Unable to find user.');
+        }
+        return user;
+    }
 }

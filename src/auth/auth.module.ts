@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/entity/user.entity';
 
 import { UsersModule } from '../users/users.module';
 import { AuthResolver } from './auth.resolver';
@@ -18,7 +19,7 @@ import { LocalStrategy } from './strategies/local.strategy';
       secret: jwtSecret,
       signOptions: {expiresIn: '3600s'}
     }),
-    TypeOrmModule.forFeature(),
+    TypeOrmModule.forFeature([User]),
   ],
   providers: [AuthService, JwtStrategy, LocalStrategy, AuthResolver],
   exports: [AuthService]
