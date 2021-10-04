@@ -25,7 +25,7 @@ export class CartService {
     ) {}
 
     async getCart(cartId: number): Promise<Cart> {
-        return this.cartRepository.findOneOrFail(cartId);
+        return this.cartRepository.findOneOrFail(cartId, {relations: ["products", "user"]});
     }
 
     async createCart(createCartInput: CreateCartInput): Promise<Cart> {
@@ -62,16 +62,16 @@ export class CartService {
         return true;
     }
 
-    async removeFromCart(cartId: number, prodId: number) {
-        const cart = await this.cartRepository.findOne(cartId, {relations: ["products"]});
-        cart.products.forEach(p => {
-            if (p.productId == prodId) {
-                this.cartRepository.delete(prodId);
-                return true;
-            }
-        });
-        throw new ErrorEvent("couldn't find a product to delete");
-    }
+    // async removeFromCart(cartId: number, prodId: number) {
+    //     const cart = await this.cartRepository.findOne(cartId, {relations: ["products"]});
+    //     cart.products.forEach(p => {
+    //         if (p.productId == prodId) {
+    //             this.cartRepository.delete(prodId);
+    //             return true;
+    //         }
+    //     });
+    //     throw new ErrorEvent("couldn't find a product to delete");
+    // }
 
     async submitCartToOrder(cartId: number, createOrderInput: CreateOrderInput) {
         const cart = await this.cartRepository.findOne(cartId, {relations: ["user", "products"]});
