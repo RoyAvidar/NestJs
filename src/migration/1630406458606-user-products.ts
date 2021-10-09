@@ -16,11 +16,33 @@ export class userProducts1630406458606 implements MigrationInterface {
                 },
                 {
                     name: "userId",
-                    type: "bigInt"
+                    type: "bigInt",
+                    unsigned: true,
                 },
                 {
                     name: "productId",
-                    type: "bigInt"
+                    type: "bigInt",
+                    unsigned: true,
+                },
+                {
+                    name: "isFavorite",
+                    type: "tinyint",
+                    length: "1",
+                    default: "0"
+                }
+            ],
+            foreignKeys: [
+                {
+                    columnNames: ["userId"],
+                    referencedColumnNames: ["userId"],
+                    referencedTableName: "users",
+                    onDelete: "CASCADE"
+                },
+                {
+                    columnNames: ["productId"],
+                    referencedColumnNames: ["productId"],
+                    referencedTableName: "products",
+                    onDelete: "CASCADE"
                 }
             ]
         }));

@@ -29,11 +29,17 @@ export class AuthService {
     }
 
     async login(userName: string, userPassword: string) {
+        const user = await this.usersService.getUserByName(userName);
         const payload = {
             name: userName,
             sub: userPassword,
         };
-        return this.jwtService.sign(payload);
+        if (user.userName == userName && user.userPassword == userPassword) {
+            return this.jwtService.sign(payload);
+        } else {
+            throw new Error('user not found');
+        }
+
         
     }
 

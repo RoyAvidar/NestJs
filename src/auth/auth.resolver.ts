@@ -16,8 +16,8 @@ export class AuthResolver {
     }  //written like a regular controller in expressJs.
 
     @Mutation(() => User)
-    signUp(@Args('createUserData') createUserData: CreateUserInput) {
-        return this.authService.signUp(createUserData);
+    signUp(@Args('createUserInput') createUserInput: CreateUserInput) {
+        return this.authService.signUp(createUserInput);
     }
 
     @Query(() => User)
