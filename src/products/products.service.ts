@@ -29,8 +29,15 @@ export class ProductsService {
     }
     
     async createProduct(createProductInput: CreateProductInput): Promise<Product> {
+        const category = await this.categoriesService.getCategory(createProductInput.categoryId);
         // console.log(createProductInput.categoryId);
-        const newProd = this.productsRepository.create(createProductInput);
+        const newProd = this.productsRepository.create({
+            productName: createProductInput.productName,
+            productPrice: createProductInput.productPrice,
+            productDesc: createProductInput.productDesc,
+            imageUrl: createProductInput.imageUrl,
+            category: category
+        });
         return this.productsRepository.save(newProd); //insert
     }
 

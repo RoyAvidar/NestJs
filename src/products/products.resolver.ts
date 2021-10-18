@@ -22,8 +22,8 @@ export class ProductsResolver {
     }
 
     @Mutation(() => Product)
-    createProduct(@Args('createProductData') createProductData: CreateProductInput) {
-        return this.productsService.createProduct(createProductData);
+    createProduct(@Args('createProductInput') createProductInput: CreateProductInput) {
+        return this.productsService.createProduct(createProductInput);
     }
 
     @Mutation(() => Product)
