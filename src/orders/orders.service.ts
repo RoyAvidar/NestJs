@@ -16,11 +16,11 @@ export class OrdersService {
     ) {}
     
     async getSingleOrder(getOrderData: GetOrderArgs): Promise<Order> {
-        return this.orderRepository.findOne(getOrderData);
+        return this.orderRepository.findOne(getOrderData, {relations: ["products", "user"]});
     }
 
     async getOrders(): Promise<Order[]> {
-        return this.orderRepository.find({relations: ["products"]});
+        return this.orderRepository.find({relations: ["products", "user"]});
     }
 
     async createOrder(createOrderInput: CreateOrderInput): Promise<Order> {
