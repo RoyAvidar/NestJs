@@ -82,6 +82,5 @@ export class CartService {
             newOrder.orderPrice = createOrderInput.orderPrice;
             this.cleanCart(cart.cartId);
             return true;
-        
     }
 }
