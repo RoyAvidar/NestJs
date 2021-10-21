@@ -19,6 +19,11 @@ export class OrdersService {
         return this.orderRepository.findOne(getOrderData, {relations: ["products", "user"]});
     }
 
+    async getUserOrders(userId: string): Promise<Order[]> {
+        const user = await this.userRepository.findOne(userId, {relations: ["orders"]});
+        return user.orders;
+    };
+
     async getOrders(): Promise<Order[]> {
         return this.orderRepository.find({relations: ["products", "user"]});
     }
@@ -35,5 +40,10 @@ export class OrdersService {
         const order = this.orderRepository.findOne(orderId);
         await this.orderRepository.createQueryBuilder().relation("products").of(order).add(productId);
         return true;
+    }
+
+    async getOrderPrice(orderId: number) {
+        const order = await this.orderRepository.findOne(orderId);
+        return order.orderPrice;
     }
 }

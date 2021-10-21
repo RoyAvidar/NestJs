@@ -1,4 +1,4 @@
-import { Resolver,  Query, Args, Mutation} from "@nestjs/graphql";
+import { Resolver,  Query, Args, Mutation, Int} from "@nestjs/graphql";
 import { GetOrderArgs } from "./dto/args/get-order.args";
 import { Order } from "../entity/order.entity";
 import { OrdersService } from "./orders.service";
@@ -11,6 +11,11 @@ export class OrdersResolver {
     @Query(() => Order)
     getSingleOrder(@Args('getOrderArgs') getOrderArgs: GetOrderArgs) {
         return this.ordersService.getSingleOrder(getOrderArgs);
+    }
+
+    @Query(() => [Order])
+    getUserOrders(@Args('userId') userId: string) {
+        return this.ordersService.getUserOrders(userId);
     }
 
     @Query(() => [Order], {name: 'orders', nullable: 'items'})
@@ -26,5 +31,10 @@ export class OrdersResolver {
     @Mutation(() => Boolean)
     addProductToOrder(@Args('orderId') orderId: number, @Args('prodId') prodId: number) {
         return this.ordersService.addProductToOrder(orderId, prodId);
+    }
+
+    @Query(() => Int)
+    getOrderPrice(@Args('orderId') orderId: number) {
+        return this.ordersService.getOrderPrice(orderId);
     }
 }

@@ -58,8 +58,12 @@ export class CartService {
 
     async cleanCart(cartId: number) {
         const cart = await this.cartRepository.findOne(cartId);
-        await this.cartRepository.createQueryBuilder().relation("products").of(cart).delete();
-        return true;
+        if (cart) {
+            cart.totalPrice = 0;
+            await this.cartRepository.createQueryBuilder().relation("products").of(cart).delete();
+            return true;
+        }
+        return false;
     }
 
     // async removeFromCart(cartId: number, prodId: number) {
