@@ -8,6 +8,7 @@ import { UsersModule } from '../users/users.module';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { jwtSecret } from './constants';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 
@@ -21,7 +22,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     }),
     TypeOrmModule.forFeature([User]),
   ],
-  providers: [AuthService, JwtStrategy, LocalStrategy, AuthResolver],
+  providers: [AuthService, JwtStrategy, JwtAuthGuard, LocalStrategy, AuthResolver],
   exports: [AuthService]
 })
 export class AuthModule {}

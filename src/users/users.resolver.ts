@@ -5,6 +5,8 @@ import { DeleteUserInput } from "./dto/input/delete-user.input";
 import { UpdateUserInput } from "./dto/input/update-user.input";
 import { User } from "../entity/user.entity";
 import { UsersService } from "./users.service";
+import { UseGuards } from "@nestjs/common";
+import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 
 @Resolver(() => User)
 export class UsersResolver{
@@ -15,6 +17,8 @@ export class UsersResolver{
         return this.usersService.getUser(getUserArgs.userId);
     }
 
+    // @UseGuards(JwtAuthGuard)
+    //check if there is a valid JWT attached to our request and will also go with the strategy and add the payload to req object. 
     @Query(() => [User], {name: 'users', nullable: 'items'})
     getUsers() {
         return this.usersService.getUsers();
