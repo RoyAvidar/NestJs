@@ -83,7 +83,9 @@ export class CartService {
             cart.products.forEach(p => {
                 this.ordersService.addProductToOrder(newOrder.orderId, p.productId);
             });
-            newOrder.orderPrice = createOrderInput.orderPrice;
+            cart.products.forEach((p) => {
+                newOrder.orderPrice = p.productPrice;
+            })
             this.cleanCart(cart.cartId);
             return true;
     }

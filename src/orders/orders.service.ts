@@ -20,7 +20,7 @@ export class OrdersService {
     }
 
     async getUserOrders(userId: string): Promise<Order[]> {
-        const user = await this.userRepository.findOne(userId, {relations: ["orders"]});
+        const user = await this.userRepository.findOne(userId, {relations: ["orders", "products"]});
         return user.orders;
     };
 
@@ -33,11 +33,12 @@ export class OrdersService {
         const newOrder = this.orderRepository.create();
         newOrder.user = user;
         newOrder.orderPrice = createOrderInput.orderPrice;
+        newOrder.createdAt = new Date();
         return this.orderRepository.save(newOrder);
     }
 
     async addProductToOrder(orderId: number, productId: number) {
-        const order = this.orderRepository.findOne(orderId);
+        const order = await this.orderRepository.findOne(orderId);
         await this.orderRepository.createQueryBuilder().relation("products").of(order).add(productId);
         return true;
     }
