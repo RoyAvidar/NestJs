@@ -37,7 +37,7 @@ export class AuthService {
         if (user.userName == userName && user.userPassword == userPassword) {
             return this.jwtService.sign(payload);
         } else {
-            throw new Error('user not found');
+            throw new Error('Invalid User Name or User Password');
         }
 
         
