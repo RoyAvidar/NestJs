@@ -9,10 +9,6 @@ export class CreateOrderInput {
 
     @Field(type => Int)
     @IsNotEmpty()
-    orderPrice: number;
-
-    @Field(type => Int)
-    @IsNotEmpty()
     userId: number;
 
 }

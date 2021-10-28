@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Cart } from 'src/entity/cart.entity';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { Order } from '../entity/order.entity';
@@ -12,7 +13,9 @@ export class OrdersService {
         @InjectRepository(Order)
         private orderRepository: Repository<Order>,
         @InjectRepository(User)
-        private userRepository: Repository<User>
+        private userRepository: Repository<User>,
+        @InjectRepository(Cart)
+        private cartRepository: Repository<Cart>
     ) {}
     
     async getSingleOrder(getOrderData: GetOrderArgs): Promise<Order> {
@@ -28,11 +31,12 @@ export class OrdersService {
         return this.orderRepository.find({relations: ["products", "user"]});
     }
 
-    async createOrder(createOrderInput: CreateOrderInput): Promise<Order> {
+    async createOrder(createOrderInput: CreateOrderInput, cartId: number): Promise<Order> {
+        const cart = await this.cartRepository.findOne(cartId);
         const user = await this.userRepository.findOne(createOrderInput.userId);
         const newOrder = this.orderRepository.create();
         newOrder.user = user;
-        newOrder.orderPrice = createOrderInput.orderPrice;
+        newOrder.orderPrice = cart.totalPrice;
         newOrder.createdAt = new Date();
         return this.orderRepository.save(newOrder);
     }

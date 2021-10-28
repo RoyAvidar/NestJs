@@ -24,8 +24,8 @@ export class OrdersResolver {
     }
 
     @Mutation(() => Order)
-    createOrder(@Args('createOrderData') createOrderData: CreateOrderInput) {
-        return this.ordersService.createOrder(createOrderData);
+    createOrder(@Args('createOrderData') createOrderData: CreateOrderInput, @Args('cartId') cartId: number) {
+        return this.ordersService.createOrder(createOrderData, cartId);
     }
 
     @Mutation(() => Boolean)

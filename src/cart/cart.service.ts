@@ -79,7 +79,7 @@ export class CartService {
 
     async submitCartToOrder(cartId: number, createOrderInput: CreateOrderInput) {
         const cart = await this.cartRepository.findOne(cartId, {relations: ["user", "products"]});
-        const newOrder = await this.ordersService.createOrder(createOrderInput);
+        const newOrder = await this.ordersService.createOrder(createOrderInput, cart.cartId);
             cart.products.forEach(p => {
                 this.ordersService.addProductToOrder(newOrder.orderId, p.productId);
             });
