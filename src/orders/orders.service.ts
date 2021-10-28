@@ -31,11 +31,11 @@ export class OrdersService {
         return this.orderRepository.find({relations: ["products", "user"]});
     }
 
-    async createOrder(createOrderInput: CreateOrderInput, cartId: number): Promise<Order> {
-        const cart = await this.cartRepository.findOne(cartId);
-        const user = await this.userRepository.findOne(createOrderInput.userId);
+    async createOrder(createOrderInput: CreateOrderInput, ): Promise<Order> {
+        const cart = await this.cartRepository.findOne(createOrderInput.cartId, {relations: ['user']});
         const newOrder = this.orderRepository.create();
-        newOrder.user = user;
+        newOrder.user = cart.user;
+        newOrder.products = cart.products;
         newOrder.orderPrice = cart.totalPrice;
         newOrder.createdAt = new Date();
         return this.orderRepository.save(newOrder);

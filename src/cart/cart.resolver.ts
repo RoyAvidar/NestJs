@@ -35,7 +35,7 @@ export class CartResolver {
     }
 
     @Mutation(() => Boolean)
-    submitCartToOrder(@Args('cartId') cartId: number, @Args('createOrderInput') createOrderInput: CreateOrderInput) {
-        return this.cartService.submitCartToOrder(cartId, createOrderInput);
+    submitCartToOrder(@Args('createOrderInput') createOrderInput: CreateOrderInput) {
+        return this.cartService.submitCartToOrder(createOrderInput);
     }
 }

@@ -6,6 +6,9 @@ export class CreateOrderInput {
     // @Field()
     // @IsNotEmpty()
     // createdAt: Date;
+    @Field(type => Int)
+    @IsNotEmpty()
+    cartId: number;
 
     @Field(type => Int)
     @IsNotEmpty()

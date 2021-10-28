@@ -77,9 +77,9 @@ export class CartService {
     //     throw new ErrorEvent("couldn't find a product to delete");
     // }
 
-    async submitCartToOrder(cartId: number, createOrderInput: CreateOrderInput) {
-        const cart = await this.cartRepository.findOne(cartId, {relations: ["user", "products"]});
-        const newOrder = await this.ordersService.createOrder(createOrderInput, cart.cartId);
+    async submitCartToOrder(createOrderInput: CreateOrderInput) {
+        const cart = await this.cartRepository.findOne(createOrderInput.cartId, {relations: ["user", "products"]});
+        const newOrder = await this.ordersService.createOrder(createOrderInput);
             cart.products.forEach(p => {
                 this.ordersService.addProductToOrder(newOrder.orderId, p.productId);
             });
