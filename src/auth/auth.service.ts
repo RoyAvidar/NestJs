@@ -39,7 +39,6 @@ export class AuthService {
         } else {
             throw new Error('Invalid User Name or User Password');
         }
-
         
     }
 

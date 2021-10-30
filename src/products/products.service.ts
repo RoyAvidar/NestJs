@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 
@@ -28,7 +28,10 @@ export class ProductsService {
         return this.productsRepository.find({relations: ["category"]}); //SELECT * products
     }
     
-    async createProduct(createProductInput: CreateProductInput): Promise<Product> {
+    async createProduct(user : User, createProductInput: CreateProductInput): Promise<Product> {
+        if (!user.isAdmin) {
+            throw new UnauthorizedException();
+        }
         const category = await this.categoriesService.getCategory(createProductInput.categoryId);
         // console.log(createProductInput.categoryId);
         const newProd = this.productsRepository.create({

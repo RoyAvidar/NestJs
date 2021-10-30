@@ -28,11 +28,10 @@ export class CartService {
         return this.cartRepository.findOneOrFail(cartId, {relations: ["products", "user"]});
     }
 
-    async createCart(createCartInput: CreateCartInput): Promise<Cart> {
-        const user = await this.userRepository.findOne(createCartInput.userId);
+    async createCart(user: User): Promise<Cart> {
         const newCart = this.cartRepository.create();
         newCart.user = user;
-        newCart.totalPrice = createCartInput.totalPrice;
+        newCart.totalPrice = 0;
         return this.cartRepository.save(newCart);
     }
 
