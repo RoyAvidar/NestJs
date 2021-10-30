@@ -7,18 +7,21 @@ import { User } from "../entity/user.entity";
 import { UsersService } from "./users.service";
 import { UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { GqlAuthGuard } from "src/auth/guards/gql-auth.guard";
+import { GQLCURRENTUSER } from "src/decorators/user.decorator";
 
 @Resolver(() => User)
 export class UsersResolver{
     constructor(private readonly usersService: UsersService) {}
 
+    @UseGuards(GqlAuthGuard)
     @Query(() => User)
-    getSingleUser(@Args() getUserArgs: GetUserArgs) {
-        return this.usersService.getUser(getUserArgs.userId);
+    getSingleUser(@GQLCURRENTUSER() user) {
+        return this.usersService.getUser(user);
     }
 
     // @UseGuards(JwtAuthGuard)
-    //check if there is a valid JWT attached to our request and will also go with the strategy and add the payload to req object. 
+    //check if there is a valid JWT attached to our request and will also go with the strategy and add the payload to req object.
     @Query(() => [User], {name: 'users', nullable: 'items'})
     getUsers() {
         return this.usersService.getUsers();

@@ -44,7 +44,10 @@ export class ProductsService {
         return this.productsRepository.save(newProd); //insert
     }
 
-    async updateProduct(updateProductInput: UpdateProductInput, prodId: number): Promise<Product> {
+    async updateProduct(user: User, updateProductInput: UpdateProductInput, prodId: number): Promise<Product> {
+        if (!user.isAdmin) {
+            throw new UnauthorizedException();
+        }
         var oldProd = await this.productsRepository.findOneOrFail(prodId);
         if (oldProd.productId == prodId || oldProd) {
             oldProd.productName = updateProductInput.productName;
@@ -63,8 +66,8 @@ export class ProductsService {
         return this.productsRepository.delete(oldProd);
     }
 
-    getUser(userId: string): Promise<User> {
-        return this.usersService.getUser(userId);
+    getUser(user: User): Promise<User> {
+        return this.usersService.getUser(user);
     }
 
     // get categoryName that is linked to a product.

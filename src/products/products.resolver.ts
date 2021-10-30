@@ -36,7 +36,7 @@ export class ProductsResolver {
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Product)
     updateProduct(@GQLCURRENTUSER() user, @Args('updateProductData') updateProductData: UpdateProductInput, @Args('prodId') prodId: number) {
-        return this.productsService.updateProduct(updateProductData, prodId);
+        return this.productsService.updateProduct(user, updateProductData, prodId);
     }
 
     @UseGuards(GqlAuthGuard)

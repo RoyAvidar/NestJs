@@ -32,8 +32,8 @@ export class UsersService {
         return null;
     }
 
-    public getUser(userId: string): Promise<User> {
-        return this.usersRepository.findOne(userId, {relations: ["products", "orders"]});
+    public getUser(user: User): Promise<User> {
+        return this.usersRepository.findOne(user.userId, {relations: ["products", "orders"]});
     }
 
     public getUsers(): Promise<User[]> {
