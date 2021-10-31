@@ -12,8 +12,10 @@ import { CreateCartInput } from './dto/input/create-cart.input';
 export class CartResolver {
     constructor(private readonly cartService: CartService) {}
 
+    @UseGuards(GqlAuthGuard)
     @Query(() => Cart)
-    getCart(@Args('cartId') cartId: number) {
+    getCart(@Args('cartId') cartId: number, @GQLCURRENTUSER() user) {
+        console.log(user);
         return this.cartService.getCart(cartId);
     }
 

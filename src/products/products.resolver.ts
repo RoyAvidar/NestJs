@@ -23,7 +23,7 @@ export class ProductsResolver {
     @UseGuards(GqlAuthGuard)
     @Query(() => [Product], {name: 'products', nullable: 'items'})
     getProducts(@GQLCURRENTUSER() user) {
-        // console.log(user);
+        console.log(user);
         return this.productsService.getProucts();
     }
 
