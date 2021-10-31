@@ -5,7 +5,7 @@ import { DeleteUserInput } from "./dto/input/delete-user.input";
 import { UpdateUserInput } from "./dto/input/update-user.input";
 import { User } from "../entity/user.entity";
 import { UsersService } from "./users.service";
-import { UseGuards } from "@nestjs/common";
+import { UnauthorizedException, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { GqlAuthGuard } from "src/auth/guards/gql-auth.guard";
 import { GQLCURRENTUSER } from "src/decorators/user.decorator";
@@ -22,23 +22,30 @@ export class UsersResolver{
 
     // @UseGuards(JwtAuthGuard)
     //check if there is a valid JWT attached to our request and will also go with the strategy and add the payload to req object.
+    @UseGuards(GqlAuthGuard)
     @Query(() => [User], {name: 'users', nullable: 'items'})
-    getUsers() {
+    getUsers(@GQLCURRENTUSER() user,) {
+        if (!user) {
+            throw new UnauthorizedException();
+        }
         return this.usersService.getUsers();
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => User)
-    createUser(@Args('createUserData') createUserData: CreateUserInput) {
+    createUser(@GQLCURRENTUSER() user, @Args('createUserData') createUserData: CreateUserInput) {
         return this.usersService.createUser(createUserData);
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => User)
-    updateUser(@Args('updateUserData') updateUserData: UpdateUserInput, @Args('userId') userId: number) {
+    updateUser(@GQLCURRENTUSER() user, @Args('updateUserData') updateUserData: UpdateUserInput, @Args('userId') userId: number) {
         return this.usersService.updateUser(updateUserData, userId);
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => User)
-    deleteUser(@Args('deleteUserData') deleteUserData: DeleteUserInput) {
+    deleteUser(@GQLCURRENTUSER() user, @Args('deleteUserData') deleteUserData: DeleteUserInput) {
         return this.usersService.deleteUser(deleteUserData);
     }
 
@@ -47,8 +54,9 @@ export class UsersResolver{
         return this.usersService.addProductToUser(userId, prodId);
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    addOrderToUser(@Args('userId') userId: string, @Args('orderId') orderId: string) {
-        return this.usersService.addOrderToUser(userId, orderId);
+    addOrderToUser(@GQLCURRENTUSER() user, @Args('orderId') orderId: string) {
+        return this.usersService.addOrderToUser(user.userId, orderId);
     }
 }

@@ -51,7 +51,6 @@ export class AuthService {
         if (!user) {
             throw new Error('Unable to get the user from decoded token.');
         }
-
         return user;
     }
 

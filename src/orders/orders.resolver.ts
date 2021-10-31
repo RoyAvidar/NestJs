@@ -11,14 +11,16 @@ import { GQLCURRENTUSER } from "src/decorators/user.decorator";
 export class OrdersResolver {
     constructor(private readonly ordersService: OrdersService) {}
 
+    @UseGuards(GqlAuthGuard)
     @Query(() => Order)
-    getSingleOrder(@Args('getOrderArgs') getOrderArgs: GetOrderArgs) {
+    getSingleOrder(@GQLCURRENTUSER() user, @Args('getOrderArgs') getOrderArgs: GetOrderArgs) {
         return this.ordersService.getSingleOrder(getOrderArgs);
     }
 
-    @Query(() => [Order])
-    getUserOrders(@Args('userId') userId: string) {
-        return this.ordersService.getUserOrders(userId);
+    @UseGuards(GqlAuthGuard)
+    @Query(() => [Order], {nullable: 'items'})
+    getUserOrders(@GQLCURRENTUSER() user) {
+        return this.ordersService.getUserOrders(user);
     }
 
     @UseGuards(GqlAuthGuard)
@@ -28,13 +30,15 @@ export class OrdersResolver {
         return this.ordersService.getOrders();
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Order)
-    createOrder(@Args('createOrderData') createOrderData: CreateOrderInput) {
+    createOrder(@GQLCURRENTUSER() user, @Args('createOrderData') createOrderData: CreateOrderInput) {
         return this.ordersService.createOrder(createOrderData);
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    addProductToOrder(@Args('orderId') orderId: number, @Args('prodId') prodId: number) {
+    addProductToOrder(@GQLCURRENTUSER() user, @Args('orderId') orderId: number, @Args('prodId') prodId: number) {
         return this.ordersService.addProductToOrder(orderId, prodId);
     }
 

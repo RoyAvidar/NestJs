@@ -15,7 +15,6 @@ export class CartResolver {
     @UseGuards(GqlAuthGuard)
     @Query(() => Cart)
     getCart(@Args('cartId') cartId: number, @GQLCURRENTUSER() user) {
-        console.log(user);
         return this.cartService.getCart(cartId);
     }
 
@@ -25,18 +24,21 @@ export class CartResolver {
         return this.cartService.createCart(user);
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    addProductToCart(@Args('addToCartInput') addToCartInput: AddToCartInput) {
+    addProductToCart(@GQLCURRENTUSER() user, @Args('addToCartInput') addToCartInput: AddToCartInput) {
         return this.cartService.addProductToCart(addToCartInput);
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    removeProductFromCart(@Args('cartId') cartId: number, @Args('productId') productId: number) {
+    removeProductFromCart(@GQLCURRENTUSER() user, @Args('cartId') cartId: number, @Args('productId') productId: number) {
         return this.cartService.removeProductFromCart(cartId, productId);
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    cleanCart(@Args('cartId') cartId: number) {
+    cleanCart(@GQLCURRENTUSER() user, @Args('cartId') cartId: number) {
         return this.cartService.cleanCart(cartId);
     }
 

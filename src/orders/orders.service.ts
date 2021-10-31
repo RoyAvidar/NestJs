@@ -22,9 +22,9 @@ export class OrdersService {
         return this.orderRepository.findOne(getOrderData, {relations: ["products", "user"]});
     }
 
-    async getUserOrders(userId: string): Promise<Order[]> {
-        const user = await this.userRepository.findOne(userId, {relations: ["orders", "products"]});
-        return user.orders;
+    async getUserOrders(user: User): Promise<Order[]> {
+        const userKek = await this.userRepository.findOne(user.userId, {relations: ["orders", "products"]});
+        return userKek.orders;
     };
 
     async getOrders(): Promise<Order[]> {
