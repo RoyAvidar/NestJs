@@ -27,7 +27,7 @@ export class CartResolver {
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
     addProductToCart(@GQLCURRENTUSER() user, @Args('addToCartInput') addToCartInput: AddToCartInput) {
-        return this.cartService.addProductToCart(addToCartInput);
+        return this.cartService.addProductToCart(user, addToCartInput);
     }
 
     @UseGuards(GqlAuthGuard)
@@ -45,7 +45,6 @@ export class CartResolver {
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
     submitCartToOrder(@GQLCURRENTUSER() user, @Args('createOrderInput') createOrderInput: CreateOrderInput) {
-        console.log(user);
-        return this.cartService.submitCartToOrder(createOrderInput);
+        return this.cartService.submitCartToOrder(createOrderInput, user);
     }
 }

@@ -26,14 +26,13 @@ export class OrdersResolver {
     @UseGuards(GqlAuthGuard)
     @Query(() => [Order], {name: 'orders', nullable: 'items'})
     getOrders(@GQLCURRENTUSER() user): Promise<Order[]> {
-        console.log(user);
         return this.ordersService.getOrders();
     }
 
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Order)
     createOrder(@GQLCURRENTUSER() user, @Args('createOrderData') createOrderData: CreateOrderInput) {
-        return this.ordersService.createOrder(createOrderData);
+        return this.ordersService.createOrder(createOrderData, user);
     }
 
     @UseGuards(GqlAuthGuard)

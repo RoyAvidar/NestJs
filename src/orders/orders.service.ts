@@ -1,4 +1,4 @@
-import { Injectable, UseGuards } from '@nestjs/common';
+import { Injectable, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from 'src/entity/cart.entity';
 import { User } from 'src/entity/user.entity';
@@ -31,8 +31,11 @@ export class OrdersService {
         return this.orderRepository.find({relations: ["products", "user"]});
     }
 
-    async createOrder(createOrderInput: CreateOrderInput, ): Promise<Order> {
+    async createOrder(createOrderInput: CreateOrderInput, user: User): Promise<Order> {
         const cart = await this.cartRepository.findOne(createOrderInput.cartId, {relations: ['user']});
+        if (cart.user.userId != user.userId) {
+            throw new UnauthorizedException();
+        }
         const newOrder = this.orderRepository.create();
         newOrder.user = cart.user;
         newOrder.products = cart.products;

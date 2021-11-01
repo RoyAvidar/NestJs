@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from 'src/entity/cart.entity';
 // import { Order } from 'src/entity/order.entity';
@@ -8,7 +8,6 @@ import { CreateOrderInput } from 'src/orders/dto/input/create-order.input';
 import { OrdersService } from 'src/orders/orders.service';
 import { Repository } from 'typeorm';
 import { AddToCartInput } from './dto/input/add-cart.input';
-import { CreateCartInput } from './dto/input/create-cart.input';
 
 @Injectable()
 export class CartService {
@@ -17,8 +16,6 @@ export class CartService {
         private readonly cartRepository: Repository<Cart>,
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        // @InjectRepository(Order)
-        // private readonly ordersRepository: Repository<Order>,
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
         private ordersService: OrdersService
@@ -36,9 +33,12 @@ export class CartService {
     }
 
     // + sign infront of an arg is the same as .toInt();
-    async addProductToCart(addToCartInput: AddToCartInput) {
+    async addProductToCart(user: User, addToCartInput: AddToCartInput) {
         const cart = await this.cartRepository.findOne(addToCartInput.cartId);
         const prod = await this.productRepository.findOne(addToCartInput.productId);
+        if (!user) {
+            throw new UnauthorizedException();
+        }
         await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(addToCartInput.productId);
         await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice});
         return true;
@@ -46,9 +46,11 @@ export class CartService {
 
     async removeProductFromCart(cartId: number, productId: number) {
         const cart = await this.cartRepository.findOne(cartId, {relations: ["products"]});
-        console.log(cart);
         if (cart.products.some(p => p.productId == productId)) {
             //find the product in the array of cart.products
+            if (cart.products.length >= 2) {
+                //delete only one (quantity) prod from the cart.
+            }
             await this.cartRepository.createQueryBuilder().relation("products").of(cart).remove(productId);
             return true;
         }
@@ -65,27 +67,14 @@ export class CartService {
         return false;
     }
 
-    // async removeFromCart(cartId: number, prodId: number) {
-    //     const cart = await this.cartRepository.findOne(cartId, {relations: ["products"]});
-    //     cart.products.forEach(p => {
-    //         if (p.productId == prodId) {
-    //             this.cartRepository.delete(prodId);
-    //             return true;
-    //         }
-    //     });
-    //     throw new ErrorEvent("couldn't find a product to delete");
-    // }
-
-    async submitCartToOrder(createOrderInput: CreateOrderInput) {
-        const cart = await this.cartRepository.findOne(createOrderInput.cartId, {relations: ["user", "products"]});
-        const newOrder = await this.ordersService.createOrder(createOrderInput);
-            cart.products.forEach(p => {
-                this.ordersService.addProductToOrder(newOrder.orderId, p.productId);
-            });
-            cart.products.forEach((p) => {
-                newOrder.orderPrice = p.productPrice;
-            })
-            this.cleanCart(cart.cartId);
+    async submitCartToOrder(createOrderInput: CreateOrderInput, user: User) {
+        if (!user) {
+            return false;
+        }
+        const newOrder = await this.ordersService.createOrder(createOrderInput, user);
+        if (this.cleanCart(createOrderInput.cartId)) {
             return true;
+        }
+        return false;
     }
 }
