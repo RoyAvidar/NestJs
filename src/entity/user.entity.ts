@@ -1,7 +1,8 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Order } from "src/entity/order.entity";
 import { Product } from "src/entity/product.entity";
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Cart } from "./cart.entity";
 
 @Entity('users')
 @ObjectType()
@@ -37,4 +38,9 @@ export class User extends BaseEntity{
     @Field(type => [Order], {nullable: true})
     @OneToMany(type => Order, order => order.user)
     orders?: Order[];
+
+    // @OneToOne(type => Cart)
+    // @Field(type => Cart)
+    // @JoinColumn({name: 'cartId'})
+    // cart?: Cart;
 }

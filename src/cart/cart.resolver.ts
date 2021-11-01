@@ -15,7 +15,7 @@ export class CartResolver {
     @UseGuards(GqlAuthGuard)
     @Query(() => Cart)
     getCart(@Args('cartId') cartId: number, @GQLCURRENTUSER() user) {
-        return this.cartService.getCart(cartId);
+        return this.cartService.getCart(cartId, user);
     }
 
     @UseGuards(GqlAuthGuard)

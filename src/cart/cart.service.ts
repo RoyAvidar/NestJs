@@ -21,8 +21,13 @@ export class CartService {
         private ordersService: OrdersService
     ) {}
 
-    async getCart(cartId: number): Promise<Cart> {
-        return this.cartRepository.findOneOrFail(cartId, {relations: ["products", "user"]});
+    async getCart(cartId: number, user: User): Promise<Cart> {
+        const cart = await this.cartRepository.findOneOrFail(cartId, {relations: ["products", "user"]});
+        if (cart.user.userId == user.userId) {
+            return cart;
+        } else {
+            throw new UnauthorizedException();
+        }
     }
 
     async createCart(user: User): Promise<Cart> {
@@ -72,7 +77,7 @@ export class CartService {
             return false;
         }
         const newOrder = await this.ordersService.createOrder(createOrderInput, user);
-        if (this.cleanCart(createOrderInput.cartId)) {
+        if (this.cleanCart(createOrderInput.cartId) && newOrder) {
             return true;
         }
         return false;
