@@ -3,7 +3,8 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { AuthService } from "./auth.service";
 import { User } from "src/entity/user.entity";
 import { CreateUserInput } from "src/users/dto/input/create-user.input";
-import { JwtAuthGuard } from "./guards/jwt-auth.guard";
+import { GqlAuthGuard } from "./guards/gql-auth.guard";
+import { GQLCURRENTUSER } from "src/decorators/user.decorator";
 
 @Resolver()
 export class AuthResolver {

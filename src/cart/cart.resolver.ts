@@ -39,7 +39,7 @@ export class CartResolver {
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
     cleanCart(@GQLCURRENTUSER() user, @Args('cartId') cartId: number) {
-        return this.cartService.cleanCart(cartId);
+        return this.cartService.cleanCart(cartId, user);
     }
 
     @UseGuards(GqlAuthGuard)

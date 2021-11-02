@@ -23,7 +23,7 @@ export class AuthService {
             return null;
         }
         //usually compare encrypted pass in db to the pass that is passed in here(bcrypt).
-        const passwordIsValid = userPassword === (await user).userPassword;
+        const passwordIsValid = userPassword === user.userPassword;
         return passwordIsValid ? user : null;
         
     }

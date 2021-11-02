@@ -26,7 +26,10 @@ export class CartService {
         if (cart.user.userId == user.userId) {
             return cart;
         } else {
-            throw new UnauthorizedException();
+            const newCart = this.cartRepository.create()
+            newCart.user = user;
+            newCart.totalPrice = 0;
+            return this.cartRepository.save(newCart);
         }
     }
 
@@ -39,12 +42,12 @@ export class CartService {
 
     // + sign infront of an arg is the same as .toInt();
     async addProductToCart(user: User, addToCartInput: AddToCartInput) {
-        const cart = await this.cartRepository.findOne(addToCartInput.cartId);
+        const cart = await this.cartRepository.findOne(addToCartInput.cartId, {relations: ["user"]});
         const prod = await this.productRepository.findOne(addToCartInput.productId);
-        if (!user) {
+        if (cart.user.userId != user.userId) {
             throw new UnauthorizedException();
         }
-        await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(addToCartInput.productId);
+        await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(prod.productId);
         await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice});
         return true;
     }
@@ -62,22 +65,25 @@ export class CartService {
         return false;
     }
 
-    async cleanCart(cartId: number) {
-        const cart = await this.cartRepository.findOne(cartId);
-        if (cart) {
+    async cleanCart(cartId: number, user: User) {
+        const cart = await this.cartRepository.findOne(cartId, {relations: ["user"]});
+        if (cart.user.userId != user.userId) {
+            throw new UnauthorizedException();
+        }
+        else {
             cart.totalPrice = 0;
+            cart.products = [];
             await this.cartRepository.createQueryBuilder().relation("products").of(cart).delete();
             return true;
         }
-        return false;
     }
 
     async submitCartToOrder(createOrderInput: CreateOrderInput, user: User) {
         if (!user) {
-            return false;
+            throw new UnauthorizedException();
         }
         const newOrder = await this.ordersService.createOrder(createOrderInput, user);
-        if (this.cleanCart(createOrderInput.cartId) && newOrder) {
+        if (this.cleanCart(createOrderInput.cartId, user) && newOrder) {
             return true;
         }
         return false;
