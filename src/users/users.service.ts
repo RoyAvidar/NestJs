@@ -33,7 +33,7 @@ export class UsersService {
     }
 
     public getUser(user: User): Promise<User> {
-        return this.usersRepository.findOne(user.userId, {relations: ["products", "orders"]});
+        return this.usersRepository.findOne(user.userId, {relations: ["products", "orders", "cart"]});
     }
 
     public getUsers(): Promise<User[]> {

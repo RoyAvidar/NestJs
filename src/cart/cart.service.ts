@@ -1,7 +1,6 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from 'src/entity/cart.entity';
-// import { Order } from 'src/entity/order.entity';
 import { Product } from 'src/entity/product.entity';
 import { User } from 'src/entity/user.entity';
 import { CreateOrderInput } from 'src/orders/dto/input/create-order.input';
@@ -21,15 +20,16 @@ export class CartService {
         private ordersService: OrdersService
     ) {}
 
-    async getCart(cartId: number, user: User): Promise<Cart> {
-        const cart = await this.cartRepository.findOneOrFail(cartId, {relations: ["products", "user"]});
-        if (cart.user.userId == user.userId) {
-            return cart;
-        } else {
+    async getCart(user: User): Promise<Cart> {
+        const cart = await this.cartRepository.findOneOrFail({relations: ["products"], where: {user}});
+        if (cart == null) {
             const newCart = this.cartRepository.create()
             newCart.user = user;
             newCart.totalPrice = 0;
             return this.cartRepository.save(newCart);
+        }
+        else {
+            return cart;
         }
     }
 
@@ -66,14 +66,14 @@ export class CartService {
     }
 
     async cleanCart(cartId: number, user: User) {
-        const cart = await this.cartRepository.findOne(cartId, {relations: ["user"]});
+        const cart = await this.cartRepository.findOne(cartId, {relations: ["user", "products"]});
         if (cart.user.userId != user.userId) {
             throw new UnauthorizedException();
         }
         else {
+            await this.cartRepository.createQueryBuilder().relation("products").of(cart).delete();
             cart.totalPrice = 0;
             cart.products = [];
-            await this.cartRepository.createQueryBuilder().relation("products").of(cart).delete();
             return true;
         }
     }
