@@ -21,7 +21,7 @@ export class CartService {
     ) {}
 
     async getCart(user: User): Promise<Cart> {
-        const cart = await this.cartRepository.findOneOrFail({relations: ["products"], where: {user}});
+        const cart = await this.cartRepository.findOne({relations: ["products"], where: {user}});
         if (cart == null) {
             const newCart = this.cartRepository.create()
             newCart.user = user;
@@ -48,18 +48,16 @@ export class CartService {
             throw new UnauthorizedException();
         }
         await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(prod.productId);
-        await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice});
+        await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: cart.itemCount + 1});
         return true;
     }
 
     async removeProductFromCart(cartId: number, productId: number) {
         const cart = await this.cartRepository.findOne(cartId, {relations: ["products"]});
         if (cart.products.some(p => p.productId == productId)) {
-            //find the product in the array of cart.products
-            if (cart.products.length >= 2) {
-                //delete only one (quantity) prod from the cart.
-            }
+            const prod = await this.productRepository.findOne(productId);
             await this.cartRepository.createQueryBuilder().relation("products").of(cart).remove(productId);
+            await this.cartRepository.update(cart.cartId, {totalPrice: cart.totalPrice - prod.productPrice, itemCount: cart.itemCount - 1});
             return true;
         }
         return false;
@@ -72,8 +70,7 @@ export class CartService {
         }
         else {
             await this.cartRepository.createQueryBuilder().relation("products").of(cart).delete();
-            cart.totalPrice = 0;
-            cart.products = [];
+            await this.cartRepository.update(cart.cartId, {totalPrice: 0, products: []});
             return true;
         }
     }

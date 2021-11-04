@@ -59,11 +59,11 @@ export class AuthService {
         return user;
     }
 
-    async getUser(userId: string): Promise<User> {
-        const user = await this.userRepository.findOne(userId, {relations: ["orders"]});
-        if (!user) {
-            throw new Error('Unable to find user.');
-        }
-        return user;
-    }
+    // async getUser(userId: string): Promise<User> {
+    //     const user = await this.userRepository.findOne(userId, {relations: ["orders"]});
+    //     if (!user) {
+    //         throw new Error('Unable to find user.');
+    //     }
+    //     return user;
+    // }
 }

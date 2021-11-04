@@ -19,6 +19,10 @@ export class cart1632404258237 implements MigrationInterface {
                     type: "bigInt",
                 },
                 {
+                    name: "itemCount",
+                    type: "bigInt",
+                },
+                {
                     name: "userId",
                     type: "bigInt",
                     unsigned: true

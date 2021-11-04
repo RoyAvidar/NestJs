@@ -31,8 +31,8 @@ export class AuthResolver {
         return this.authService.verifyToken(token);
     }
 
-    @Query (() => User)
-    getUser(@Args('userId') userId: string) {
-        return this.authService.getUser(userId);
-    }
+    // @Query (() => User)
+    // getUser(@Args('userId') userId: string) {
+    //     return this.authService.getUser(userId);
+    // }
 }

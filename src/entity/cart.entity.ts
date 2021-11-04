@@ -27,4 +27,8 @@ export class Cart {
     @Column()
     @Field(type => Int)
     totalPrice: number;
+
+    @Column()
+    @Field(type => Int)
+    itemCount: number;
 }
