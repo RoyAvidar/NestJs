@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from 'src/entity/cart.entity';
 import { Product } from 'src/entity/product.entity';
@@ -48,7 +48,7 @@ export class CartService {
             throw new UnauthorizedException();
         }
         await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(prod.productId);
-        await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: cart.itemCount + 1});
+        await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: +cart.itemCount + 1});
         return true;
     }
 
@@ -56,8 +56,8 @@ export class CartService {
         const cart = await this.cartRepository.findOne(cartId, {relations: ["products"]});
         if (cart.products.some(p => p.productId == productId)) {
             const prod = await this.productRepository.findOne(productId);
-            await this.cartRepository.createQueryBuilder().relation("products").of(cart).remove(productId);
-            await this.cartRepository.update(cart.cartId, {totalPrice: cart.totalPrice - prod.productPrice, itemCount: cart.itemCount - 1});
+            await this.cartRepository.createQueryBuilder().relation("products").of(cart).remove(prod);
+            await this.cartRepository.update(cart.cartId, {totalPrice: cart.totalPrice - prod.productPrice, itemCount: +cart.itemCount - 1});
             return true;
         }
         return false;
@@ -69,18 +69,24 @@ export class CartService {
             throw new UnauthorizedException();
         }
         else {
-            await this.cartRepository.createQueryBuilder().relation("products").of(cart).delete();
-            await this.cartRepository.update(cart.cartId, {totalPrice: 0, products: []});
+            cart.itemCount = 0;
+            cart.totalPrice = 0;
+            cart.products = [];
+            this.cartRepository.save(cart);
             return true;
         }
     }
 
     async submitCartToOrder(createOrderInput: CreateOrderInput, user: User) {
+        const cart = await this.cartRepository.findOne(createOrderInput.cartId, {relations: ["user", "products"]});
+        if (cart.products.length <= 0) {
+            throw new NotFoundException("Cart is empty, please provide products to cart.");
+        }
         if (!user) {
             throw new UnauthorizedException();
         }
-        const newOrder = await this.ordersService.createOrder(createOrderInput, user);
-        if (this.cleanCart(createOrderInput.cartId, user) && newOrder) {
+        if (this.cleanCart(createOrderInput.cartId, user)) {
+            const newOrder = await this.ordersService.createOrder(createOrderInput, user);
             return true;
         }
         return false;
