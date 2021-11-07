@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entity/user.entity';
 import { CreateUserInput } from 'src/users/dto/input/create-user.input';
 import { UsersService } from 'src/users/users.service';
-import { Repository } from 'typeorm';
+import { Double, Repository } from 'typeorm';
 import { jwtSecret } from './constants';
 
 @Injectable()
@@ -29,13 +29,18 @@ export class AuthService {
     }
 
     async login(userName: string, userPassword: string) {
+        const expireDate = new Date();
+        expireDate.setHours(18);
+        console.log(expireDate);
         const user = await this.usersService.getUserByName(userName);
         const payload = {
             name: userName,
             sub: userPassword,
+            expire: expireDate,
         };
         if (user.userName == userName && user.userPassword == userPassword) {
-            return this.jwtService.sign(payload);
+            const token = this.jwtService.sign(payload);
+            return token;
         } else {
             throw new Error('Invalid User Name or User Password');
         }
@@ -58,6 +63,17 @@ export class AuthService {
         const user = await this.usersService.createUser(createUserInput);
         return user;
     }
+
+   async getExpireDate(token: string): Promise<number> {
+    const decoodedPayload = await this.jwtService.verify(token, {
+        secret: jwtSecret
+    })
+    if (Date.parse(decoodedPayload.expire) >= Date.now()) {
+        return Date.parse(decoodedPayload.expire);
+    } else {
+        throw new Error('Tokens expirey date is over.')
+    }
+   }
 
     // async getUser(userId: string): Promise<User> {
     //     const user = await this.userRepository.findOne(userId, {relations: ["orders"]});

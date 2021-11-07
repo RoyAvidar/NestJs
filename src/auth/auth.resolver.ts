@@ -1,4 +1,3 @@
-import { UseGuards } from "@nestjs/common";
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { AuthService } from "./auth.service";
 import { User } from "src/entity/user.entity";
@@ -29,6 +28,11 @@ export class AuthResolver {
     @Query(() => User)
     verifyToken(@Args('token') token: string) {
         return this.authService.verifyToken(token);
+    }
+
+    @Query(() => Number)
+    getExpireDate(@Args('token') token: string) {
+        return this.authService.getExpireDate(token);
     }
 
     // @Query (() => User)
