@@ -37,8 +37,8 @@ export class UsersService {
         return null;
     }
 
-    public getUser(user: User): Promise<User> {
-        return this.usersRepository.findOne(user.userId, {relations: ["products", "orders", "cart"]});
+    async getUser(user: User): Promise<User> {
+        return await this.usersRepository.findOne(user.userId, {relations: ["products", "orders", "cart"]});
     }
 
     public getUsers(): Promise<User[]> {
@@ -55,6 +55,7 @@ export class UsersService {
 
     async addProductToUser(userId: string, productId: string) {
         const user = await this.usersRepository.findOne(userId);
+        // const product = await this.productRepository.findOne(productId);
         await this.usersRepository.createQueryBuilder().relation("products").of(user).add(productId);
         return true;
     }

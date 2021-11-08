@@ -66,9 +66,15 @@ export class ProductsService {
         return this.productsRepository.delete(oldProd);
     }
 
-    getUser(user: User): Promise<User> {
-        return this.usersService.getUser(user);
+    async getUserProducts(user: User): Promise<Product[]> {
+        const userPros = await this.usersService.getUser(user);
+        const products = await this.productsRepository.findByIds(userPros.products, {relations: ["category"]});
+        return products;
     }
+
+    // getUser(user: User): Promise<User> {
+    //     return this.usersService.getUser(user);
+    // }
 
     // get categoryName that is linked to a product.
     async getCategoryName(categoryId: string): Promise<String> {

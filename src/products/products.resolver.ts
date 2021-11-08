@@ -21,6 +21,12 @@ export class ProductsResolver {
     }
 
     @UseGuards(GqlAuthGuard)
+    @Query(() => [Product])
+    getUserProducts(@GQLCURRENTUSER() user) {
+        return this.productsService.getUserProducts(user);
+    }
+
+    @UseGuards(GqlAuthGuard)
     @Query(() => [Product], {name: 'products', nullable: 'items'})
     getProducts(@GQLCURRENTUSER() user) {
         return this.productsService.getProucts();
