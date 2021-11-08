@@ -31,7 +31,6 @@ export class AuthService {
     async login(userName: string, userPassword: string) {
         const expireDate = new Date();
         expireDate.setHours(18);
-        console.log(expireDate);
         const user = await this.usersService.getUserByName(userName);
         const payload = {
             name: userName,

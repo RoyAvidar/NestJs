@@ -12,7 +12,7 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 export class UsersService {
     constructor(
         @InjectRepository(User)
-        private usersRepository: Repository<User>, 
+        private usersRepository: Repository<User>,
     ) { }
 
     async createUser(createUserData: CreateUserInput): Promise<User> {

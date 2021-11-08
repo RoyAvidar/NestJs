@@ -24,12 +24,6 @@ export class userProducts1630406458606 implements MigrationInterface {
                     type: "bigInt",
                     unsigned: true,
                 },
-                {
-                    name: "isFavorite",
-                    type: "tinyint",
-                    length: "1",
-                    default: "0"
-                }
             ],
             foreignKeys: [
                 {
