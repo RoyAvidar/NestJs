@@ -60,6 +60,12 @@ export class UsersService {
         return true;
     }
 
+    async removeProductFromUser(reqUser: User, productId: string) {
+        const user = await this.usersRepository.findOneOrFail(reqUser.userId);
+        await this.usersRepository.createQueryBuilder().relation("products").of(user).remove(productId);
+        return true;
+    }
+
     async addOrderToUser(userId: string, orderId: string) {
         const user = await this.usersRepository.findOne(userId);
         await this.usersRepository.createQueryBuilder().relation("orders").of(user).add(orderId);

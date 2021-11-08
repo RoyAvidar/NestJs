@@ -56,6 +56,12 @@ export class UsersResolver{
 
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
+    removeProductFromUser(@GQLCURRENTUSER() user, @Args('productId') productId: string) {
+        return this.usersService.removeProductFromUser(user, productId);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
     addOrderToUser(@GQLCURRENTUSER() user, @Args('orderId') orderId: string) {
         return this.usersService.addOrderToUser(user.userId, orderId);
     }
