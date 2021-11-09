@@ -53,9 +53,8 @@ export class UsersService {
         return this.usersRepository.findOne({where: {userName}});
     }
 
-    async addProductToUser(userId: string, productId: string) {
-        const user = await this.usersRepository.findOne(userId);
-        // const product = await this.productRepository.findOne(productId);
+    async addProductToUser(reqUser: User, productId: string) {
+        const user = await this.usersRepository.findOne(reqUser.userId);
         await this.usersRepository.createQueryBuilder().relation("products").of(user).add(productId);
         return true;
     }

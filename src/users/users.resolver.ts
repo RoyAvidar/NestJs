@@ -49,9 +49,10 @@ export class UsersResolver{
         return this.usersService.deleteUser(deleteUserData);
     }
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    addProductToUser(@Args('userId') userId: string, @Args('prodId') prodId: string) {
-        return this.usersService.addProductToUser(userId, prodId);
+    addProductToUser(@GQLCURRENTUSER() user, @Args('prodId') prodId: string) {
+        return this.usersService.addProductToUser(user, prodId);
     }
 
     @UseGuards(GqlAuthGuard)
