@@ -20,6 +20,14 @@ export class CartService {
         private ordersService: OrdersService
     ) {}
 
+    async getCartId(user: User): Promise<number> {
+        const cart = await this.cartRepository.findOne({where: {user}});
+        if (cart == null) {
+            throw new NotFoundException("Couldn't find a cartId");
+        } 
+        return cart.cartId;
+    }
+
     async getCart(user: User): Promise<Cart> {
         const cart = await this.cartRepository.findOne({relations: ["products"], where: {user}});
         if (cart == null) {

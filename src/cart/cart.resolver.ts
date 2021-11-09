@@ -19,6 +19,12 @@ export class CartResolver {
     }
 
     @UseGuards(GqlAuthGuard)
+    @Query(() => Number)
+    getCartId(@GQLCURRENTUSER() user) {
+        return this.cartService.getCartId(user);
+    }
+
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Cart)
     createCart(@GQLCURRENTUSER() user) {
         return this.cartService.createCart(user);
