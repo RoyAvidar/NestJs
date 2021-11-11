@@ -29,7 +29,7 @@ export class CartService {
     }
 
     async getCart(user: User): Promise<Cart> {
-        const cart = await this.cartRepository.findOne({relations: ["products"], where: {user}});
+        const cart = await this.cartRepository.findOne({relations: ["products", "user"], where: {user}});
         if (cart == null) {
             const newCart = this.cartRepository.create()
             newCart.user = user;
