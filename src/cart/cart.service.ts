@@ -13,8 +13,6 @@ export class CartService {
     constructor(
         @InjectRepository(Cart)
         private readonly cartRepository: Repository<Cart>,
-        @InjectRepository(User)
-        private readonly userRepository: Repository<User>,
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
         private ordersService: OrdersService
@@ -23,7 +21,7 @@ export class CartService {
     async getCartId(user: User): Promise<number> {
         const cart = await this.cartRepository.findOne({where: {user}});
         if (cart == null) {
-            throw new NotFoundException("Couldn't find a cartId");
+            throw new NotFoundException("Couldn't find cartId");
         } 
         return cart.cartId;
     }
@@ -41,6 +39,15 @@ export class CartService {
         }
     }
 
+    async getItemCount(user: User): Promise<number> {
+        const cart = await this.cartRepository.findOne({relations: ["products", "user"], where: {user}});
+        if (cart == null) {
+            throw new Error("couldn't find a cart");
+        } else {
+            return cart.itemCount;
+        }
+    }
+
     async createCart(user: User): Promise<Cart> {
         const newCart = this.cartRepository.create();
         newCart.user = user;
@@ -50,10 +57,15 @@ export class CartService {
 
     // + sign infront of an arg is the same as .toInt();
     async addProductToCart(user: User, addToCartInput: AddToCartInput) {
-        const cart = await this.cartRepository.findOne(addToCartInput.cartId, {relations: ["user"]});
+        const cart = await this.cartRepository.findOne(addToCartInput.cartId, {relations: ["user", "products"]});
         const prod = await this.productRepository.findOne(addToCartInput.productId);
         if (cart.user.userId != user.userId) {
             throw new UnauthorizedException();
+        }
+        if (cart.products.some((p) => p.productId == prod.productId)) {
+            //prod quantity +1;
+            await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: +cart.itemCount + 1});
+            return true;
         }
         await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(prod.productId);
         await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: +cart.itemCount + 1});
@@ -64,8 +76,10 @@ export class CartService {
         const cart = await this.cartRepository.findOne(cartId, {relations: ["products"]});
         if (cart.products.some(p => p.productId == productId)) {
             const prod = await this.productRepository.findOne(productId);
-            await this.cartRepository.createQueryBuilder().relation("products").of(cart).remove(prod);
-            await this.cartRepository.update(cart.cartId, {totalPrice: cart.totalPrice - prod.productPrice, itemCount: +cart.itemCount - 1});
+                //remove all of the entries in the join table
+                await this.cartRepository.createQueryBuilder().relation("products").of(cart).remove(prod);
+                await this.cartRepository.update(cart.cartId, {totalPrice: 0, itemCount: 0});
+            
             return true;
         }
         return false;

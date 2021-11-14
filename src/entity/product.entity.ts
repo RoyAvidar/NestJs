@@ -29,4 +29,9 @@ export class Product extends BaseEntity{
     @Field(type => Category)
     @JoinColumn({ name: 'categoryId' })
     category: Category;
+
+    // @Column()
+    // @Field(type => Int)
+    // quantity: number;
+    
 }

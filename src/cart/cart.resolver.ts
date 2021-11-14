@@ -25,6 +25,12 @@ export class CartResolver {
     }
 
     @UseGuards(GqlAuthGuard)
+    @Query(() => Number)
+    getItemCount(@GQLCURRENTUSER() user) {
+        return this.cartService.getItemCount(user);
+    }
+
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Cart)
     createCart(@GQLCURRENTUSER() user) {
         return this.cartService.createCart(user);
