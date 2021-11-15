@@ -20,4 +20,9 @@ export class CategoriesService {
         const cat = await this.categoryRepository.findOneOrFail(categoryId);
         return cat;
     }
+
+    async getCategories(): Promise<Category[]> {
+        const cartlist = await this.categoryRepository.find();
+        return cartlist;
+    }
 }
