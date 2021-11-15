@@ -62,11 +62,7 @@ export class CartService {
         if (cart.user.userId != user.userId) {
             throw new UnauthorizedException();
         }
-        if (cart.products.some((p) => p.productId == prod.productId)) {
-            //prod quantity +1;
-            await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: +cart.itemCount + 1});
-            return true;
-        }
+        //if we already have this product in our cart?
         await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(prod.productId);
         await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: +cart.itemCount + 1});
         return true;

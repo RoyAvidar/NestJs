@@ -24,12 +24,12 @@ export class OrdersService {
 
     async getUserOrders(user: User): Promise<Order[]> {
         const userKek = await this.userRepository.findOne(user.userId, {relations: ["orders"]});
-        const orders = await this.orderRepository.findByIds(userKek.orders, {relations: ["products"]});
+        const orders = await this.orderRepository.findByIds(userKek.orders, {relations: ["products"], order: {createdAt: "DESC"}});
         return orders;
     };
 
     async getOrders(): Promise<Order[]> {
-        return this.orderRepository.find({relations: ["products", "user"]});
+        return this.orderRepository.find({relations: ["products", "user"], order: {createdAt: "DESC"}});
     }
 
     async createOrder(createOrderInput: CreateOrderInput, user: User): Promise<Order> {

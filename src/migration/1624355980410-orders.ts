@@ -20,7 +20,7 @@ export class orders1624355980410 implements MigrationInterface {
                 },
                 {
                     name: "createdAt",
-                    type: "date",
+                    type: "datetime",
                     default: "CURRENT_TIMESTAMP"
                 },
                 {
