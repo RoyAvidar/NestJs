@@ -26,7 +26,7 @@ export class OrdersResolver {
     @UseGuards(GqlAuthGuard)
     @Query(() => [Order], {name: 'orders', nullable: 'items'})
     getOrders(@GQLCURRENTUSER() user): Promise<Order[]> {
-        return this.ordersService.getOrders();
+        return this.ordersService.getOrders(user);
     }
 
     @UseGuards(GqlAuthGuard)

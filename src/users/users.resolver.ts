@@ -24,11 +24,9 @@ export class UsersResolver{
     //check if there is a valid JWT attached to our request and will also go with the strategy and add the payload to req object.
     @UseGuards(GqlAuthGuard)
     @Query(() => [User], {name: 'users', nullable: 'items'})
-    getUsers(@GQLCURRENTUSER() user,) {
-        if (!user) {
-            throw new UnauthorizedException();
-        }
-        return this.usersService.getUsers();
+    getUsers(@GQLCURRENTUSER() user) {
+        
+        return this.usersService.getUsers(user);
     }
 
     @UseGuards(GqlAuthGuard)

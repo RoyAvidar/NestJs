@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { User } from '../entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -41,7 +41,10 @@ export class UsersService {
         return await this.usersRepository.findOne(user.userId, {relations: ["products", "orders", "cart"]});
     }
 
-    public getUsers(): Promise<User[]> {
+    public getUsers(user: User): Promise<User[]> {
+        if (!user.isAdmin) {
+            throw new UnauthorizedException();
+        }
         return this.usersRepository.find({relations: ["products", "orders"]});
     }
 

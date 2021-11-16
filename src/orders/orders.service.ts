@@ -28,7 +28,10 @@ export class OrdersService {
         return orders;
     };
 
-    async getOrders(): Promise<Order[]> {
+    async getOrders(user: User): Promise<Order[]> {
+        if (!user.isAdmin) {
+            throw new UnauthorizedException();
+        }
         return this.orderRepository.find({relations: ["products", "user"], order: {createdAt: "DESC"}});
     }
 
