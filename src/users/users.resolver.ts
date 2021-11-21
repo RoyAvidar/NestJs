@@ -25,7 +25,6 @@ export class UsersResolver{
     @UseGuards(GqlAuthGuard)
     @Query(() => [User], {name: 'users', nullable: 'items'})
     getUsers(@GQLCURRENTUSER() user) {
-        
         return this.usersService.getUsers(user);
     }
 
@@ -37,14 +36,20 @@ export class UsersResolver{
 
     @UseGuards(GqlAuthGuard)
     @Mutation(() => User)
-    updateUser(@GQLCURRENTUSER() user, @Args('updateUserData') updateUserData: UpdateUserInput, @Args('userId') userId: number) {
-        return this.usersService.updateUser(updateUserData, userId);
+    updateUser(@GQLCURRENTUSER() user, @Args('updateUserData') updateUserData: UpdateUserInput) {
+        return this.usersService.updateUser(updateUserData, user);
     }
 
     @UseGuards(GqlAuthGuard)
-    @Mutation(() => User)
-    deleteUser(@GQLCURRENTUSER() user, @Args('deleteUserData') deleteUserData: DeleteUserInput) {
-        return this.usersService.deleteUser(deleteUserData);
+    @Mutation(() => Boolean)
+    changePassword(@GQLCURRENTUSER() user, @Args('userPassword') userPassword: string) {
+        return this.usersService.changePassword(userPassword, user);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
+    deleteUser(@GQLCURRENTUSER() user) {
+        return this.usersService.deleteUser(user);
     }
 
     @UseGuards(GqlAuthGuard)

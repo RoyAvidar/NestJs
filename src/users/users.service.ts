@@ -25,9 +25,9 @@ export class UsersService {
         }
     }
 
-    async updateUser(updateUserData: UpdateUserInput, userId: number): Promise<User> {
-        var oldUser = await this.usersRepository.findOneOrFail(userId);
-        if (oldUser.userId == userId || oldUser) {
+    async updateUser(updateUserData: UpdateUserInput, user: User): Promise<User> {
+        var oldUser = await this.usersRepository.findOneOrFail(user.userId);
+        if (oldUser.userId == user.userId || oldUser) {
             oldUser.userName = updateUserData.userName;
             oldUser.userPassword = updateUserData.userPassword;
             oldUser.userPhone = updateUserData.userPhone;
@@ -35,6 +35,16 @@ export class UsersService {
             return await oldUser.save();
         }
         return null;
+    }
+
+    async changePassword(userPassword: string, user: User): Promise<Boolean> {
+        var validUser = await this.usersRepository.findOneOrFail(user.userId);
+        if (user || validUser.userId == user.userId) {
+            validUser.userPassword = userPassword;
+            await validUser.save();
+            return true;
+        }
+        return false;
     }
 
     async getUser(user: User): Promise<User> {
@@ -48,8 +58,9 @@ export class UsersService {
         return this.usersRepository.find({relations: ["products", "orders"]});
     }
 
-    async deleteUser(deleteUserData: DeleteUserInput): Promise<void> {
-        await this.usersRepository.delete(deleteUserData.userId);
+    async deleteUser(user: User): Promise<Boolean> {
+        await this.usersRepository.delete(user.userId);
+        return true;
     }
 
     public getUserByName(userName: string) {
