@@ -27,11 +27,9 @@ export class UsersService {
 
     async updateUser(updateUserData: UpdateUserInput, user: User): Promise<User> {
         var oldUser = await this.usersRepository.findOneOrFail(user.userId);
-        if (oldUser.userId == user.userId || oldUser) {
+        if (oldUser.userId == user.userId && oldUser) {
             oldUser.userName = updateUserData.userName;
-            oldUser.userPassword = updateUserData.userPassword;
             oldUser.userPhone = updateUserData.userPhone;
-            oldUser.isAdmin = updateUserData.isAdmin;
             return await oldUser.save();
         }
         return null;

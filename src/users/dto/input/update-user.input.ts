@@ -13,11 +13,4 @@ export class UpdateUserInput {
     @IsNotEmpty()
     userPhone: string;
 
-    @Field()
-    @IsNotEmpty()
-    userPassword: string;
-
-    @Field()
-    @IsNotEmpty()
-    isAdmin: boolean;
 }
