@@ -45,8 +45,8 @@ export class ProductsResolver {
     }
 
     @UseGuards(GqlAuthGuard)
-    @Mutation(() => Product)
+    @Mutation(() => Boolean)
     deleteProduct(@GQLCURRENTUSER() user, @Args('deleteProductData') deleteProductData: DeleteProductInput) {
-        return this.productsService.deleteProduct(deleteProductData);
+        return this.productsService.deleteProduct(user, deleteProductData);
     }
 }

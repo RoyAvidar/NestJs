@@ -61,9 +61,13 @@ export class ProductsService {
         return null;
     }
 
-    async deleteProduct(deleteProductInput: DeleteProductInput) {
+    async deleteProduct(user: User, deleteProductInput: DeleteProductInput): Promise<Boolean>{
+        if (!user.isAdmin) {
+            throw new UnauthorizedException();
+        }
         var oldProd = await this.productsRepository.findOneOrFail(deleteProductInput.productId);
-        return this.productsRepository.delete(oldProd);
+        await this.productsRepository.delete(oldProd);
+        return true;
     }
 
     async getUserProducts(user: User): Promise<Product[]> {
