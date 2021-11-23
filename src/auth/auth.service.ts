@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from 'src/entity/user.entity';
 import { CreateUserInput } from 'src/users/dto/input/create-user.input';
 import { UsersService } from 'src/users/users.service';
-import { Double, Repository } from 'typeorm';
 import { jwtSecret } from './constants';
 
 @Injectable()
@@ -13,8 +11,6 @@ export class AuthService {
     constructor(
         private readonly usersService: UsersService,
         private readonly jwtService: JwtService,
-        @InjectRepository(User)
-        private readonly userRepository: Repository<User>
     ) {}
 
     async validate(userName: string, userPassword: string): Promise<User> {
@@ -33,7 +29,7 @@ export class AuthService {
         expireDate.setHours(18);
         const user = await this.usersService.getUserByName(userName);
         const payload = {
-            name: userName,
+            id: user.userId,
             sub: userPassword,
             expire: expireDate,
         };
@@ -51,7 +47,7 @@ export class AuthService {
             secret: jwtSecret
         })
         //reach out to db to get the user.
-        const user = this.usersService.getUserByName(decoodedPayload.name);
+        const user = this.usersService.getUserById(decoodedPayload.id);
         if (!user) {
             throw new Error('Unable to get the user from decoded token.');
         }
@@ -73,12 +69,4 @@ export class AuthService {
         throw new Error('Tokens expirey date is over.')
     }
    }
-
-    // async getUser(userId: string): Promise<User> {
-    //     const user = await this.userRepository.findOne(userId, {relations: ["orders"]});
-    //     if (!user) {
-    //         throw new Error('Unable to find user.');
-    //     }
-    //     return user;
-    // }
 }

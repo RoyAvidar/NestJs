@@ -11,7 +11,7 @@ export class AuthResolver {
 
     // @UseGuards(JwtAuthGuard)
     @Mutation(() => String)
-    async login(@Args('userName')userName: string, @Args('userPassword')userPassword: string) {
+    async login(@Args('userName') userName: string, @Args('userPassword') userPassword: string) {
         return this.authService.login(userName, userPassword);
     }  //written like a regular controller in expressJs.
 

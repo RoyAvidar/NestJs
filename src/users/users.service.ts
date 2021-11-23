@@ -49,6 +49,10 @@ export class UsersService {
         return await this.usersRepository.findOne(user.userId, {relations: ["products", "orders", "cart"]});
     }
 
+    async getUserById(userId: number): Promise<User> {
+        return await this.usersRepository.findOne(userId);
+    }
+
     public getUsers(user: User): Promise<User[]> {
         if (!user.isAdmin) {
             throw new UnauthorizedException();
