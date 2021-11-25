@@ -6,12 +6,42 @@ import { CreateUserInput } from 'src/users/dto/input/create-user.input';
 import { UsersService } from 'src/users/users.service';
 import { jwtSecret } from './constants';
 
+import { createDecipheriv, createCipheriv, randomBytes, scrypt } from 'crypto';
+import { promisify } from 'util'
+
 @Injectable()
 export class AuthService {
     constructor(
         private readonly usersService: UsersService,
         private readonly jwtService: JwtService,
     ) {}
+
+    async encryption(userPassword: string) {
+        const iv = randomBytes(16);
+        const password = userPassword;
+
+        const key = await promisify(scrypt)(password, 'salt', 32) as Buffer;
+        const cipher = createCipheriv('aes-256-ctr', key, iv);
+
+        const textToEncrypt = 'Nest';
+        const encryptedText = Buffer.concat([
+            cipher.update(textToEncrypt),
+            cipher.final(),
+        ]);
+        return encryptedText;
+    }
+
+    async decipher(encryptedPassword: Buffer) {
+        const iv = randomBytes(16);
+        const key = await promisify(scrypt)(encryptedPassword, 'salt', 32) as Buffer;
+
+        const decipher = createDecipheriv('aes-256-ctr', key, iv);
+        const decryptedText = Buffer.concat([
+            decipher.update(encryptedPassword),
+            decipher.final()
+        ]);
+        return decryptedText;
+    }
 
     async validate(userName: string, userPassword: string): Promise<User> {
         const user = await this.usersService.getUserByName(userName);
