@@ -7,7 +7,9 @@ import { UsersService } from 'src/users/users.service';
 import { jwtSecret } from './constants';
 
 import { createDecipheriv, createCipheriv, randomBytes, scrypt } from 'crypto';
-import { promisify } from 'util'
+import { promisify } from 'util';
+import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 export class AuthService {
@@ -63,9 +65,12 @@ export class AuthService {
             sub: userPassword,
             expire: expireDate,
         };
-        if (user.userName == userName && user.userPassword == userPassword) {
-            const token = this.jwtService.sign(payload);
-            return token;
+        const isMatch = await bcrypt.compare(userPassword, user.userPassword);
+        if (isMatch) {
+            // if (user.userName == userName && user.userPassword == userPassword) {
+                const token = this.jwtService.sign(payload);
+                return token;
+            // } 
         } else {
             throw new Error('Invalid User Name or User Password');
         }
