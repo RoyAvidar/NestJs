@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { DeleteUserInput } from './dto/input/delete-user.input';
+import * as bcrypt from 'bcrypt';
 // import { Product } from 'src/entity/product.entity';
 // import { ProductsService } from 'src/products/products.service';
 
@@ -38,7 +39,9 @@ export class UsersService {
     async changePassword(userPassword: string, user: User): Promise<Boolean> {
         var validUser = await this.usersRepository.findOneOrFail(user.userId);
         if (user || validUser.userId == user.userId) {
-            validUser.userPassword = userPassword;
+            const saltOrrounds = 10;
+            var newUserPassword = await bcrypt.hash(userPassword, saltOrrounds);
+            validUser.userPassword = newUserPassword;
             await validUser.save();
             return true;
         }
