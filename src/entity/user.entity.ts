@@ -23,9 +23,9 @@ export class User extends BaseEntity{
     @Column()
     userPhone: string;
 
-    @Field({nullable: true})
-    @Column()
-    imagePath: string;
+    // @Field({nullable: true})
+    // @Column()
+    // imagePath: string;
 
     @Field({nullable: true})
     @Column({default: false})
