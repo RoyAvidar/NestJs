@@ -24,6 +24,10 @@ export class User extends BaseEntity{
     userPhone: string;
 
     @Field({nullable: true})
+    @Column()
+    imagePath: string;
+
+    @Field({nullable: true})
     @Column({default: false})
     isAdmin: boolean;
 
