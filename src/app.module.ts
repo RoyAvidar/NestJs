@@ -8,17 +8,19 @@ import { Connection } from 'typeorm';
 import { CategoriesModule } from './categories/categories.module';
 import { AuthModule } from './auth/auth.module';
 import { CartModule } from './cart/cart.module';
+import { PhotosModule } from './photos/photos.module';
+import { GqlConfigService } from './gql-configService';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot({
-      autoSchemaFile: true,
-      context: ({req}) => ({headers: req.headers}) //graphql context has access to http req
+    GraphQLModule.forRootAsync({
+      useClass: GqlConfigService,
     }),
     AuthModule,
     UsersModule,
     ProductsModule,
     OrdersModule,
+    PhotosModule,
     CategoriesModule,
     TypeOrmModule.forRoot(),
     CartModule,
