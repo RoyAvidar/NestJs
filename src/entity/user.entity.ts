@@ -25,7 +25,7 @@ export class User extends BaseEntity{
 
     // @Field({nullable: true})
     // @Column()
-    // imagePath: string;
+    // profileImagePath: string;
 
     @Field({nullable: true})
     @Column({default: false})
