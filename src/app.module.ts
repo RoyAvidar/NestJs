@@ -22,6 +22,7 @@ import { PhotosModule } from './photos/photos.module';
     UsersModule,
     ProductsModule,
     OrdersModule,
+    PhotosModule,
     CategoriesModule,
     TypeOrmModule.forRoot(),
     CartModule,
