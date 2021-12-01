@@ -7,9 +7,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe()); //global pipe.
-  app.use(graphqlUploadExpress());
-  app.use(bodyParser.json({limit: "50mb"}));
-  app.use(bodyParser.urlencoded({limit: "50mb", extended: true}));
+  app.use(graphqlUploadExpress()); //global pipe for uploading files.
   await app.listen(8000);
 }
 bootstrap();
