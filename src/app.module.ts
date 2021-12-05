@@ -15,7 +15,7 @@ import { PhotosModule } from './photos/photos.module';
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       context: ({req}) => ({headers: req.headers}),//graphql context has access to http req
-      uploads: false
+      uploads: false //we have to disable the Apollo server’s internal file upload feature.
     }),
     AuthModule,
     PhotosModule,

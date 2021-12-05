@@ -28,6 +28,11 @@ export class users1624019622613 implements MigrationInterface {
                     isUnique: true
                 },
                 {
+                    name: "userProfilePic",
+                    type: "varchar",
+                    isUnique: true,
+                },
+                {
                     name: "isAdmin",
                     type: "tinyint",
                     length: "1",
