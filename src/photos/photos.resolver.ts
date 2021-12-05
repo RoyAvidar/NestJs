@@ -1,23 +1,23 @@
 import { Resolver, Args, Mutation } from '@nestjs/graphql';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
+import { PhotosService } from './photos.service';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
+import { GQLCURRENTUSER } from 'src/decorators/user.decorator';
 
 @Resolver()
 export class PhotosResolver {
 
-    constructor() {}
+    constructor(private readonly photosService: PhotosService) {}
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    async uploadFile(@Args({name: 'file', type: () => GraphQLUpload})
+    async uploadFile(@GQLCURRENTUSER() user, @Args({name: 'file', type: () => GraphQLUpload})
     {
         createReadStream,
         filename
-    }: FileUpload): Promise<boolean> {
-        return new Promise(async (resolve, reject) => 
-            createReadStream()
-                .pipe(createWriteStream(`./uploads/${filename}`))
-                .on('finish', () => resolve(true))
-                .on('error', () => reject(false))
-        );
+    }: FileUpload) {
+        return this.photosService.uploadFile(user, {createReadStream, filename});
     }
 }
