@@ -1,4 +1,4 @@
-import { Resolver, Args, Mutation } from '@nestjs/graphql';
+import { Resolver, Args, Mutation, Query } from '@nestjs/graphql';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
 import { PhotosService } from './photos.service';
@@ -19,5 +19,11 @@ export class PhotosResolver {
         filename
     }: FileUpload) {
         return this.photosService.uploadFile(user, {createReadStream, filename});
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => String)
+    async getUserProfilePic(@GQLCURRENTUSER() user) {
+        return this.photosService.getProfilePic(user);
     }
 }
