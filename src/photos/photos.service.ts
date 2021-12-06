@@ -16,17 +16,20 @@ export class PhotosService {
     async uploadFile(user: User, {createReadStream, filename}: FileUpload): Promise<boolean> {
         const realUser = await this.userRepository.findOneOrFail(user.userId);
         // get the fileName and split it so we have only the .png/.jpg
-        const newFileName = filename.split(".");
-        console.log(newFileName);
+        var newFileName = filename.split(".");
         // give the fileName a uuid ID so that we have a 00001.png etc
-        uuidv4();
+        newFileName = uuidv4() + '.' + newFileName[1];
+        console.log(newFileName);
         // updateUser = await this.userRepository.update(realUser); 
-        // this.userRepository.update(realUser.userProfilePic, filename);
+        realUser.userProfilePic = newFileName;
+        await realUser.save();
         return new Promise(async (resolve, reject) => 
             createReadStream()
-                .pipe(createWriteStream(`./uploads/${filename}`)) //the new file name with the uuid.png..
+                .pipe(createWriteStream(`./uploads/${newFileName}`)) //the new file name with the uuid.png..
                 .on('finish', () => resolve(true))
                 .on('error', () => reject(false))
         );
     }
+
+    async getProfilePic() {}
 }
