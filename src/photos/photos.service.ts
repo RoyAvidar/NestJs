@@ -5,12 +5,15 @@ import { Repository } from 'typeorm';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
 import {v4 as uuidv4} from 'uuid';
+import { Product } from 'src/entity/product.entity';
 
 @Injectable()
 export class PhotosService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
+        @InjectRepository(Product)
+        private readonly productRepository: Repository<Product>
     ) {}
 
     async uploadFile(user: User, {createReadStream, filename}: FileUpload): Promise<Boolean> {
@@ -30,6 +33,21 @@ export class PhotosService {
         await new Promise(async (resolve, reject) => 
             createReadStream()
                 .pipe(createWriteStream(`./uploads/${newFileName}`)) //the new file name with the uuid.png..
+                .on('finish', () => resolve(true))
+                .on('error', () => reject(false))
+        );
+        return true;
+    }
+
+    async uploadProductImage(productId: number, {createReadStream, filename}: FileUpload): Promise<Boolean> {
+        const prod = await this.productRepository.findOneOrFail(productId);
+        var newProdImageUrl = filename.split(".");
+        newProdImageUrl = uuidv4() + '.' + newProdImageUrl[1];
+        prod.imageUrl = newProdImageUrl;
+        await prod.save();
+        await new Promise(async (resolve, reject) => 
+            createReadStream()
+                .pipe(createWriteStream(`./product-uploads/${newProdImageUrl}`))
                 .on('finish', () => resolve(true))
                 .on('error', () => reject(false))
         );
