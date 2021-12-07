@@ -13,25 +13,27 @@ export class PhotosService {
         private readonly userRepository: Repository<User>,
     ) {}
 
-    async uploadFile(user: User, {createReadStream, filename}: FileUpload): Promise<boolean> {
+    async uploadFile(user: User, {createReadStream, filename}: FileUpload): Promise<Boolean> {
         const realUser = await this.userRepository.findOneOrFail(user.userId);
         // get the fileName and split it so we have only the .png/.jpg
         var newFileName = filename.split(".");
         // give the fileName a uuid ID so that we have a 00001.png name etc..
         newFileName = uuidv4() + '.' + newFileName[1];
         // make sure that the user doesn't have a profilePic
-        if (realUser.userProfilePic != null) {
-            return;
-        }
+        // if (realUser.userProfilePic != null ) {
+        //     return false;
+        // // }
+        // console.log("test");
         // set the userProfilePic to the new fileName
         realUser.userProfilePic = newFileName;
         await realUser.save();
-        return new Promise(async (resolve, reject) => 
+        await new Promise(async (resolve, reject) => 
             createReadStream()
                 .pipe(createWriteStream(`./uploads/${newFileName}`)) //the new file name with the uuid.png..
                 .on('finish', () => resolve(true))
                 .on('error', () => reject(false))
         );
+        return true;
     }
 
     async getProfilePic(user: User): Promise<string> {
