@@ -7,7 +7,7 @@ import { PhotosService } from './photos.service';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, Product]),
+        TypeOrmModule.forFeature([User]),
     ],
     providers: [PhotosResolver, PhotosService]
 })

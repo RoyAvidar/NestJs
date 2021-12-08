@@ -9,14 +9,9 @@ import { CategoriesModule } from './categories/categories.module';
 import { AuthModule } from './auth/auth.module';
 import { CartModule } from './cart/cart.module';
 import { PhotosModule } from './photos/photos.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
-    }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       context: ({req}) => ({headers: req.headers}),//graphql context has access to http req

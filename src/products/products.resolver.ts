@@ -9,6 +9,7 @@ import { GetProductsArgs } from "./dto/args/get-products.args";
 import { UseGuards } from "@nestjs/common";
 import { GqlAuthGuard } from "src/auth/guards/gql-auth.guard";
 import { GQLCURRENTUSER } from "src/decorators/user.decorator";
+import { GraphQLUpload, FileUpload } from 'graphql-upload';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -34,8 +35,12 @@ export class ProductsResolver {
 
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Product)
-    createProduct(@GQLCURRENTUSER() user, @Args('createProductInput') createProductInput: CreateProductInput) {
-        return this.productsService.createProduct(user, createProductInput);
+    createProduct(@GQLCURRENTUSER() user, @Args('createProductInput') createProductInput: CreateProductInput, @Args({name: 'file', type: () => GraphQLUpload})
+    {
+        createReadStream,
+        filename
+    }: FileUpload) {
+        return this.productsService.createProduct(user, createProductInput, { createReadStream, filename });
     }
 
     @UseGuards(GqlAuthGuard)

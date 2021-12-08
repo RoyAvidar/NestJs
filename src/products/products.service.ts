@@ -1,7 +1,7 @@
 import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
-
+import { Repository } from 'typeorm';
+import { FileUpload } from 'graphql-upload';
 import { Product } from '../entity/product.entity';
 import { GetProductArgs } from './dto/args/get-product.args';
 import { CreateProductInput } from './dto/input/create-product.input';
@@ -28,7 +28,7 @@ export class ProductsService {
         return this.productsRepository.find({relations: ["category"]}); //SELECT * products
     }
     
-    async createProduct(user : User, createProductInput: CreateProductInput): Promise<Product> {
+    async createProduct(user : User, createProductInput: CreateProductInput, {createReadStream, filename}: FileUpload): Promise<Product> {
         if (!user.isAdmin) {
             throw new UnauthorizedException();
         }

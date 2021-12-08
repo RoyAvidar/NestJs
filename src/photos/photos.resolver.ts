@@ -22,15 +22,15 @@ export class PhotosResolver {
         return this.photosService.uploadFile(user, {createReadStream, filename});
     }
 
-    @UseGuards(GqlAuthGuard)
-    @Mutation(() => Boolean)
-    async uploadProductImage(@Args('productId') productId: number, @Args({name: 'productImageFile', type: () => GraphQLUpload})
-    {
-        createReadStream,
-        filename
-    }: FileUpload) {
-        return this.photosService.uploadProductImage(productId, {createReadStream, filename});
-    }
+    // @UseGuards(GqlAuthGuard)
+    // @Mutation(() => Boolean)
+    // async uploadProductImage(@Args('productId') productId: number, @Args({name: 'productImageFile', type: () => GraphQLUpload})
+    // {
+    //     createReadStream,
+    //     filename
+    // }: FileUpload) {
+    //     return this.photosService.uploadProductImage(productId, {createReadStream, filename});
+    // }
 
     @UseGuards(GqlAuthGuard)
     @Query(() => String)
