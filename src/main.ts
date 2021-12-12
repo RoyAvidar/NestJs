@@ -10,6 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe()); //global pipe.
   app.useStaticAssets(join(__dirname, '..', 'uploads'));
+  app.useStaticAssets(join(__dirname, '..', 'product-uploads'));
   app.use(graphqlUploadExpress()); //global pipe for uploading files.
   await app.listen(8000);
 }

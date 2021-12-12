@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Order } from "src/entity/order.entity";
 import { Product } from "src/entity/product.entity";
+import { Token } from "src/entity/token.entity";
 import { BaseEntity, BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Cart } from "./cart.entity";
 import * as bcrypt from 'bcrypt';
@@ -47,6 +48,10 @@ export class User extends BaseEntity{
     @OneToOne(type => Cart, Cart => Cart.user)
     @Field(type => Cart)
     cart?: Cart;
+
+    @Field(type => Token)
+    @OneToMany(type => Token, token => token.user)
+    token: Token;
 
     @BeforeInsert()
     async hashPassword() {
