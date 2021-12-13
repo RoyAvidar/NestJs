@@ -11,6 +11,7 @@ import { UpdateCategoryInput } from "./dto/input/update-category.input";
 export class CategoryResolver {
     constructor(private readonly categoryService: CategoriesService) {}
 
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Category)
     createCategory(@Args('createCategoryInput') createCategoryInput: CreateCategoryInput) {
         return this.categoryService.createCategory(createCategoryInput);

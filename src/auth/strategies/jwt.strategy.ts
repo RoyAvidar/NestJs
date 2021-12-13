@@ -12,12 +12,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false, //do not ignore the expiration date on the jwt.
-            secretOrKey: jwtSecret
+            secretOrKey: jwtSecret,
+            passReqToCallback: true,
         });
     }
 
-    async validate(validationPayload: {id: number, sub: string}): Promise<User> {
-        return await this.usersService.getUserById(validationPayload.id);
+    async validate(validationPayload: {id: number, sub: string}) {
+        console.log(validationPayload);
+        return {user:  await this.usersService.getUserById(validationPayload.id), token: validationPayload.id};
     }
 
     //  we could do a database lookup in our validate() method to extract more information about the user,

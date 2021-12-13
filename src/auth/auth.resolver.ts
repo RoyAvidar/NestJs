@@ -1,9 +1,11 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { AuthService } from "./auth.service";
 import { User } from "src/entity/user.entity";
+import { Token } from "src/entity/token.entity";
 import { CreateUserInput } from "src/users/dto/input/create-user.input";
 import { GqlAuthGuard } from "./guards/gql-auth.guard";
-import { GQLCURRENTUSER } from "src/decorators/user.decorator";
+import { GQLCURRENTTOKEN, GQLCURRENTUSER } from "src/decorators/user.decorator";
+import { UseGuards } from "@nestjs/common";
 
 @Resolver()
 export class AuthResolver {
@@ -33,6 +35,12 @@ export class AuthResolver {
     @Query(() => Number)
     getExpireDate(@Args('token') token: string) {
         return this.authService.getExpireDate(token);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
+    logout(@GQLCURRENTUSER() user, @GQLCURRENTTOKEN() token) {
+        return this.authService.logout(user, token);
     }
 
     // @Query (() => User)
