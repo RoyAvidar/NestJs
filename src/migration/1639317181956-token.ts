@@ -10,13 +10,9 @@ export class token1639317181956 implements MigrationInterface {
                     name: "tokenId",
                     type: "bigInt",
                     isGenerated: true,
-                    generationStrategy: "increment",
+                    generationStrategy: "uuid",
                     isPrimary: true,
                     unsigned: true,
-                },
-                {
-                    name: "tokenString",
-                    type: "varchar"
                 },
                 {
                     name: "expireDate",

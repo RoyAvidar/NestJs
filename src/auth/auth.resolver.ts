@@ -17,6 +17,12 @@ export class AuthResolver {
         return this.authService.login(userName, userPassword);
     }  //written like a regular controller in expressJs.
 
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
+    logout(@GQLCURRENTUSER() user, @GQLCURRENTTOKEN() token) {
+        return this.authService.logout(user, token);
+    }
+
     @Mutation(() => User)
     signUp(@Args('createUserInput') createUserInput: CreateUserInput) {
         return this.authService.signUp(createUserInput);
@@ -36,15 +42,4 @@ export class AuthResolver {
     getExpireDate(@Args('token') token: string) {
         return this.authService.getExpireDate(token);
     }
-
-    @UseGuards(GqlAuthGuard)
-    @Mutation(() => Boolean)
-    logout(@GQLCURRENTUSER() user, @GQLCURRENTTOKEN() token) {
-        return this.authService.logout(user, token);
-    }
-
-    // @Query (() => User)
-    // getUser(@Args('userId') userId: string) {
-    //     return this.authService.getUser(userId);
-    // }
 }

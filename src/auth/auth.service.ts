@@ -45,7 +45,7 @@ export class AuthService {
         if (isMatch) {
             // if (user.userName == userName && user.userPassword == userPassword) {
                 const token = this.jwtService.sign(payload);
-                const dbToken = this.tokensRepository.create({tokenString: token, expireDate: payload.expire, user: user});
+                const dbToken = this.tokensRepository.create({expireDate: payload.expire, user: user});
                 await this.tokensRepository.save(dbToken);
                 return token;
             // } 

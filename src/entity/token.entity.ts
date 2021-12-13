@@ -12,10 +12,6 @@ export class Token {
 
     @Column()
     @Field()
-    tokenString: string;
-
-    @Column()
-    @Field()
     @IsDate()
     expireDate: Date;
 
