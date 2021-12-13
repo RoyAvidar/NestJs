@@ -32,21 +32,23 @@ export class AuthService {
         
     }
 
+    //need to change the way this function generates a token and saves it.
     async login(userName: string, userPassword: string) {
         const expireDate = new Date();
-        expireDate.setHours(+1);
+        expireDate.setDate(+1);
+        // console.log(expireDate);
         const user = await this.usersService.getUserByName(userName);
+        const dbToken = this.tokensRepository.create({expireDate: expireDate, user: user});
+        await this.tokensRepository.save(dbToken);
         const payload = {
-            id: user.userId,
+            id: dbToken.user.userId,
             sub: userPassword,
-            expire: expireDate,
+            expire: dbToken.expireDate,
         };
         const isMatch = await bcrypt.compare(userPassword, user.userPassword);
         if (isMatch) {
             // if (user.userName == userName && user.userPassword == userPassword) {
                 const token = this.jwtService.sign(payload);
-                const dbToken = this.tokensRepository.create({expireDate: payload.expire, user: user});
-                await this.tokensRepository.save(dbToken);
                 return token;
             // } 
         } else {
