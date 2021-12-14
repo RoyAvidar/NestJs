@@ -35,15 +35,12 @@ export class AuthService {
     //need to change the way this function generates a token and saves it.
     async login(userName: string, userPassword: string) {
         const expireDate = new Date();
-        expireDate.setDate(+1);
+        expireDate.setDate(expireDate.getDate() + 1);
         // console.log(expireDate);
         const user = await this.usersService.getUserByName(userName);
-        const dbToken = this.tokensRepository.create({expireDate: expireDate, user: user});
-        await this.tokensRepository.save(dbToken);
+        const dbToken = await this.tokensRepository.save({expireDate: expireDate, user: user});
         const payload = {
-            id: dbToken.user.userId,
-            sub: userPassword,
-            expire: dbToken.expireDate,
+            token: dbToken.tokenId,
         };
         const isMatch = await bcrypt.compare(userPassword, user.userPassword);
         if (isMatch) {
@@ -57,10 +54,9 @@ export class AuthService {
     }
 
     async logout(user: User, token: Token): Promise<Boolean> {
-        console.log(token);
         const realUser = await this.usersService.getUserById(user.userId);
-        if (user.userId == realUser.userId && realUser.userId == token.user.userId) {
-            await this.tokensRepository.delete(token.tokenId);
+        if (user.userId == realUser.userId) {
+            await this.tokensRepository.delete(token);
             return true;
         } else {
             throw new Error('An Error Occurred');

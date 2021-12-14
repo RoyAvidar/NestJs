@@ -37,6 +37,11 @@ export class PhotosService {
         return true;
     }
 
+    async deleteFile(user: User): Promise<Boolean> {
+        const realUser = await this.userRepository.findOneOrFail(user.userId);
+        return true;
+    }
+
     async getProfilePic(user: User): Promise<string> {
         const realUser = await this.userRepository.findOneOrFail(user.userId);
         return realUser.userProfilePic;
