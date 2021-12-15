@@ -22,6 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(validationPayload: {token: string}) {
+        console.log(validationPayload);
         const token = await this.tokenRepo.findOne(validationPayload.token, {relations: ["user"]});
         return {user: token.user, token: token.tokenId};
     }

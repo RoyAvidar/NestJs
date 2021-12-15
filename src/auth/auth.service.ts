@@ -41,6 +41,7 @@ export class AuthService {
         const dbToken = await this.tokensRepository.save({expireDate: expireDate, user: user});
         const payload = {
             token: dbToken.tokenId,
+            expireDate: dbToken.expireDate
         };
         const isMatch = await bcrypt.compare(userPassword, user.userPassword);
         if (isMatch) {
@@ -81,11 +82,9 @@ export class AuthService {
     }
 
    async getExpireDate(token: string): Promise<number> {
-    const decoodedPayload = await this.jwtService.verify(token, {
-        secret: jwtSecret
-    })
-    if (Date.parse(decoodedPayload.expire) >= Date.now()) {
-        return Date.parse(decoodedPayload.expire);
+    const realToken = await this.tokensRepository.findOne(token);
+    if (realToken.expireDate.getTime() >= new Date().getTime()) {
+        return realToken.expireDate.getTime();
     } else {
         throw new Error('Tokens expirey date is over.')
     }

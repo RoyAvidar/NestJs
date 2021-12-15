@@ -38,8 +38,9 @@ export class AuthResolver {
         return this.authService.verifyToken(token);
     }
 
+    @UseGuards(GqlAuthGuard)
     @Query(() => Number)
-    getExpireDate(@Args('token') token: string) {
+    getExpireDate(@GQLCURRENTTOKEN() token) {
         return this.authService.getExpireDate(token);
     }
 }
