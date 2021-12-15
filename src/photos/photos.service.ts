@@ -4,6 +4,8 @@ import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
+import * as fs from 'fs';
+import * as path from 'path';
 import {v4 as uuidv4} from 'uuid';
 import { Product } from 'src/entity/product.entity';
 
@@ -24,7 +26,6 @@ export class PhotosService {
         // if (realUser.userProfilePic != null ) {
         //     return false;
         // // }
-        // console.log("test");
         // set the userProfilePic to the new fileName
         realUser.userProfilePic = newFileName;
         await realUser.save();
@@ -37,8 +38,23 @@ export class PhotosService {
         return true;
     }
 
-    async deleteFile(user: User): Promise<Boolean> {
-        const realUser = await this.userRepository.findOneOrFail(user.userId);
+    async deleteUserProfileImageFile(user: User): Promise<Boolean> {
+        const confirmedUser = await this.userRepository.findOneOrFail(user.userId);
+        fs.readdir(`./uploads/${confirmedUser.userProfilePic}`, (err, files) => {
+            if (err) throw err;
+
+            for (const file of files) {
+                fs.unlink(path.join(`./uploads/`, file), err => {
+                    if (err) throw err;
+                });
+            }
+        });
+        // confirmedUser.userProfilePic = null;
+        // await confirmedUser.save();
+        return true;
+    }
+
+    async deleteProductImageFile(product: Product): Promise<Boolean> {
         return true;
     }
 
