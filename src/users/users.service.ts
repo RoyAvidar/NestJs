@@ -6,14 +6,14 @@ import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { DeleteUserInput } from './dto/input/delete-user.input';
 import * as bcrypt from 'bcrypt';
-// import { Product } from 'src/entity/product.entity';
-// import { ProductsService } from 'src/products/products.service';
+import { PhotosService } from 'src/photos/photos.service';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User)
         private usersRepository: Repository<User>,
+        private photosService: PhotosService,
     ) { }
 
     async createUser(createUserData: CreateUserInput): Promise<User> {

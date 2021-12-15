@@ -32,4 +32,10 @@ export class PhotosResolver {
     async deleteUserProfileImageFile(@GQLCURRENTUSER() user) {
         return this.photosService.deleteUserProfileImageFile(user);
     }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
+    async deleteProductImageFile(@GQLCURRENTUSER() user) {
+        return this.photosService.deleteProductImageFile(user);
+    }
 }

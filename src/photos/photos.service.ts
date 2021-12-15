@@ -14,6 +14,8 @@ export class PhotosService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
+        @InjectRepository(Product)
+        private readonly productRepository: Repository<Product>,
     ) {}
 
     async uploadFile(user: User, {createReadStream, filename}: FileUpload): Promise<Boolean> {
@@ -40,6 +42,9 @@ export class PhotosService {
 
     async deleteUserProfileImageFile(user: User): Promise<Boolean> {
         const confirmedUser = await this.userRepository.findOneOrFail(user.userId);
+        if (!confirmedUser.userProfilePic) {
+            throw new Error('User doesn\'t has a ProfileImage');
+        }
         fs.readdir(`./uploads/${confirmedUser.userProfilePic}`, (err, files) => {
             if (err) throw err;
 
@@ -55,6 +60,19 @@ export class PhotosService {
     }
 
     async deleteProductImageFile(product: Product): Promise<Boolean> {
+        // const confirmedProduct = await this.productRepository.findOneOrFail(product.prodId);
+        // if (confirmedProduct.imageUrl == null) {
+                // return false;
+        // }
+        // fs.readdir(`./uploads/${confirmedProduct.imageUrl}`, (err, files) => {
+        //     if (err) throw err;
+
+        //     for (const file of files) {
+        //         fs.unlink(path.join(`./uploads/`, file), err => {
+        //             if (err) throw err;
+        //         });
+        //     }
+        // });
         return true;
     }
 
