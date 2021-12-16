@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
-import { createWriteStream } from 'fs';
 import * as fs from 'fs';
 import * as path from 'path';
 import {v4 as uuidv4} from 'uuid';
@@ -33,7 +32,7 @@ export class PhotosService {
         await realUser.save();
         await new Promise(async (resolve, reject) => 
             createReadStream()
-                .pipe(createWriteStream(`./uploads/${newFileName}`)) //the new file name with the uuid.png..
+                .pipe(fs.createWriteStream(`./user-uploads/${newFileName}`)) //the new file name with the uuid.png..
                 .on('finish', () => resolve(true))
                 .on('error', () => reject(false))
         );
@@ -45,30 +44,24 @@ export class PhotosService {
         if (!confirmedUser.userProfilePic) {
             throw new Error('User doesn\'t has a ProfileImage');
         }
-        fs.readdir(`./uploads/${confirmedUser.userProfilePic}`, (err, files) => {
+        fs.unlink(path.join(`./user-uploads/`, confirmedUser.userProfilePic), err => {
             if (err) throw err;
-
-            for (const file of files) {
-                fs.unlink(path.join(`./uploads/`, file), err => {
-                    if (err) throw err;
-                });
-            }
         });
-        // confirmedUser.userProfilePic = null;
-        // await confirmedUser.save();
+        confirmedUser.userProfilePic = null;
+        await confirmedUser.save();
         return true;
     }
 
     async deleteProductImageFile(product: Product): Promise<Boolean> {
         // const confirmedProduct = await this.productRepository.findOneOrFail(product.prodId);
-        // if (confirmedProduct.imageUrl == null) {
-                // return false;
+        //  if (!confirmedUser.userProfilePic) {
+            // throw new Error('Product doesn\'t have a ProfileImage');
         // }
-        // fs.readdir(`./uploads/${confirmedProduct.imageUrl}`, (err, files) => {
+        // fs.readdir(`./product-uploads/${confirmedProduct.imageUrl}`, (err, files) => {
         //     if (err) throw err;
 
         //     for (const file of files) {
-        //         fs.unlink(path.join(`./uploads/`, file), err => {
+        //         fs.unlink(path.join(`./product-uploads/`, file), err => {
         //             if (err) throw err;
         //         });
         //     }

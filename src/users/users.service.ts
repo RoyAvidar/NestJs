@@ -64,6 +64,7 @@ export class UsersService {
     }
 
     async deleteUser(user: User): Promise<Boolean> {
+        await this.photosService.deleteUserProfileImageFile(user);
         await this.usersRepository.delete(user.userId);
         return true;
     }
