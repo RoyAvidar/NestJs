@@ -53,19 +53,13 @@ export class PhotosService {
     }
 
     async deleteProductImageFile(product: Product): Promise<Boolean> {
-        // const confirmedProduct = await this.productRepository.findOneOrFail(product.prodId);
-        //  if (!confirmedUser.userProfilePic) {
-            // throw new Error('Product doesn\'t have a ProfileImage');
-        // }
-        // fs.readdir(`./product-uploads/${confirmedProduct.imageUrl}`, (err, files) => {
-        //     if (err) throw err;
-
-        //     for (const file of files) {
-        //         fs.unlink(path.join(`./product-uploads/`, file), err => {
-        //             if (err) throw err;
-        //         });
-        //     }
-        // });
+        const confirmedProduct = await this.productRepository.findOneOrFail(product.productId);
+         if (!confirmedProduct.imageUrl) {
+            throw new Error('Product doesn\'t have an Image');
+        }
+        fs.unlink(path.join(`./product-uploads/`, confirmedProduct.imageUrl), err => {
+                    if (err) throw err;
+        });        
         return true;
     }
 

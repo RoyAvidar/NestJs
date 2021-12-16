@@ -12,6 +12,7 @@ import { UsersService } from 'src/users/users.service';
 import { User } from 'src/entity/user.entity';
 import { CategoriesService } from 'src/categories/categories.service';
 import { createWriteStream } from 'fs';
+import { PhotosService } from 'src/photos/photos.service';
 
 @Injectable()
 export class ProductsService {
@@ -20,6 +21,7 @@ export class ProductsService {
         private productsRepository: Repository<Product>,
         private categoriesService: CategoriesService,
         private usersService: UsersService,
+        private photosService: PhotosService
     ) { }
 
     public getProduct(getProductData: GetProductArgs): Promise<Product> {
@@ -75,6 +77,7 @@ export class ProductsService {
             throw new UnauthorizedException();
         }
         var oldProd = await this.productsRepository.findOneOrFail(deleteProductInput.productId);
+        await this.photosService.deleteProductImageFile(oldProd);
         await this.productsRepository.delete(oldProd);
         return true;
     }
