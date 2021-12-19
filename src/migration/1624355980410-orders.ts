@@ -24,6 +24,12 @@ export class orders1624355980410 implements MigrationInterface {
                     default: "CURRENT_TIMESTAMP"
                 },
                 {
+                    name: "isReady",
+                    type: "tinyint",
+                    length: "1",
+                    default: "0"
+                },
+                {
                     name: "userId",
                     type: "bigInt",
                     unsigned: true

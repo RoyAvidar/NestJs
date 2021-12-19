@@ -34,9 +34,9 @@ export class UsersResolver{
         return this.usersService.getUserById(userId);
     }
 
-    @UseGuards(GqlAuthGuard)
+    // @UseGuards(GqlAuthGuard)
     @Mutation(() => User)
-    createUser(@GQLCURRENTUSER() user, @Args('createUserData') createUserData: CreateUserInput) {
+    createUser(@Args('createUserData') createUserData: CreateUserInput) {
         return this.usersService.createUser(createUserData);
     }
 

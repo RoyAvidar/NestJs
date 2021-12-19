@@ -14,6 +14,7 @@ import { CartService } from './cart.service';
     TypeOrmModule.forFeature([Product, Order, User, Cart]),
     OrdersModule
   ],
-  providers: [CartResolver, CartService, OrdersService]
+  providers: [CartResolver, CartService, OrdersService],
+  exports: [CartService]
 })
 export class CartModule {}

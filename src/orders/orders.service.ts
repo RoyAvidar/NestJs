@@ -45,6 +45,7 @@ export class OrdersService {
         newOrder.products = cart.products;
         newOrder.orderPrice = cart.totalPrice;
         newOrder.createdAt = new Date();
+        newOrder.isReady = false;
         return this.orderRepository.save(newOrder);
     }
 

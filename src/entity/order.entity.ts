@@ -20,6 +20,10 @@ export class Order {
     @Field(type => Int)
     orderPrice: number;
 
+    @Column()
+    @Field(type => Boolean)
+    isReady: boolean;
+
     @ManyToMany(type => Product)
     @Field(type => [Product])
     @JoinTable({

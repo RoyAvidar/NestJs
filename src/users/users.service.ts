@@ -4,9 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
-import { DeleteUserInput } from './dto/input/delete-user.input';
 import * as bcrypt from 'bcrypt';
 import { PhotosService } from 'src/photos/photos.service';
+import { CartService } from 'src/cart/cart.service';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +14,7 @@ export class UsersService {
         @InjectRepository(User)
         private usersRepository: Repository<User>,
         private photosService: PhotosService,
+        private cartService: CartService
     ) { }
 
     async createUser(createUserData: CreateUserInput): Promise<User> {
@@ -22,6 +23,7 @@ export class UsersService {
             throw new NotFoundException("UserName Already Exists.")
         } else {
             const user = this.usersRepository.create(createUserData);
+            const cart = this.cartService.createCart(user);
             return this.usersRepository.save(user);
         }
     }
