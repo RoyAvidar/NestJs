@@ -7,6 +7,7 @@ import { UpdateUserInput } from './dto/input/update-user.input';
 import * as bcrypt from 'bcrypt';
 import { PhotosService } from 'src/photos/photos.service';
 import { CartService } from 'src/cart/cart.service';
+import { Cart } from 'src/entity/cart.entity';
 
 @Injectable()
 export class UsersService {
@@ -14,7 +15,9 @@ export class UsersService {
         @InjectRepository(User)
         private usersRepository: Repository<User>,
         private photosService: PhotosService,
-        private cartService: CartService
+        private cartService: CartService,
+        @InjectRepository(Cart)
+        private cartRepository: Repository<Cart>
     ) { }
 
     async createUser(createUserData: CreateUserInput): Promise<User> {
@@ -22,9 +25,11 @@ export class UsersService {
         if (demi) {
             throw new NotFoundException("UserName Already Exists.")
         } else {
-            const user = this.usersRepository.create(createUserData);
-            const cart = this.cartService.createCart(user);
-            return this.usersRepository.save(user);
+            const user = await this.usersRepository.create(createUserData);
+            this.usersRepository.save(user);
+            console.log(user);
+            await this.cartService.createCart(user);
+            return user;
         }
     }
 
