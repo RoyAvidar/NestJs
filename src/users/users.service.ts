@@ -28,7 +28,10 @@ export class UsersService {
             const user = await this.usersRepository.create(createUserData);
             this.usersRepository.save(user);
             console.log(user);
-            await this.cartService.createCart(user);
+            // const newCart = this.cartRepository.create();
+            // newCart.user = user;
+            // newCart.totalPrice = 0;
+            // this.cartRepository.save(newCart);
             return user;
         }
     }

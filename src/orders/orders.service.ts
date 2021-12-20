@@ -45,7 +45,7 @@ export class OrdersService {
         newOrder.products = cart.products;
         newOrder.orderPrice = cart.totalPrice;
         newOrder.createdAt = new Date();
-        newOrder.isReady = false;
+        // newOrder.isReady = false;
         return this.orderRepository.save(newOrder);
     }
 
@@ -58,5 +58,19 @@ export class OrdersService {
     async getOrderPrice(orderId: number) {
         const order = await this.orderRepository.findOne(orderId);
         return order.orderPrice;
+    }
+
+    async toggleIsReady(user: User, orderId: number): Promise<Boolean> {
+        if (!user.isAdmin) {
+            throw new UnauthorizedException();
+        }
+        const order = await this.orderRepository.findOne(orderId);
+        if (order.orderId == orderId) {
+            order.isReady = true;
+            await order.save();
+            return true;
+        } else {
+            throw new Error("Couldn't find order.");
+        }
     }
 }

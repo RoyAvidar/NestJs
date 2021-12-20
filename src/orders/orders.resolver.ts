@@ -45,4 +45,10 @@ export class OrdersResolver {
     getOrderPrice(@Args('orderId') orderId: number) {
         return this.ordersService.getOrderPrice(orderId);
     }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
+    toggleIsReady(@GQLCURRENTUSER() user, @Args('orderId') orderId: number) {
+        return this.ordersService.toggleIsReady(user, orderId);
+    }
 }

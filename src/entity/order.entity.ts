@@ -2,11 +2,11 @@ import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { IsDate } from "class-validator";
 import { Product } from "src/entity/product.entity";
 import { User } from "src/entity/user.entity";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('orders')
 @ObjectType()
-export class Order {
+export class Order extends BaseEntity{
     @Field()
     @PrimaryGeneratedColumn()
     orderId: number;
@@ -20,7 +20,7 @@ export class Order {
     @Field(type => Int)
     orderPrice: number;
 
-    @Column()
+    @Column({default: false})
     @Field(type => Boolean)
     isReady: boolean;
 
