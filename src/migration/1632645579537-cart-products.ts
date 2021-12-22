@@ -24,6 +24,11 @@ export class cartProducts1632645579537 implements MigrationInterface {
                     type: "bigint",
                     unsigned: true,
                 },
+                {
+                    name: "quantity",
+                    type: "bigint",
+                    unsigned: true
+                }
             ]
         }));
     }

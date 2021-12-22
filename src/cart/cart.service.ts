@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CartProduct } from 'src/entity/cart-product.entity';
 import { Cart } from 'src/entity/cart.entity';
 import { Product } from 'src/entity/product.entity';
 import { User } from 'src/entity/user.entity';
@@ -15,7 +16,9 @@ export class CartService {
         private readonly cartRepository: Repository<Cart>,
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
-        private ordersService: OrdersService
+        private ordersService: OrdersService,
+        @InjectRepository(CartProduct)
+        private readonly cartProductRepository: Repository<CartProduct>
     ) {}
 
     async getCartId(user: User): Promise<number> {
@@ -57,14 +60,20 @@ export class CartService {
 
     // + sign infront of an arg is the same as .toInt();
     async addProductToCart(user: User, addToCartInput: AddToCartInput) {
-        const cart = await this.cartRepository.findOne(addToCartInput.cartId, {relations: ["user", "products"]});
+        const cart = await this.cartRepository.findOne(addToCartInput.cartId, {relations: ["user", "products", "cartProducts"]});
         const prod = await this.productRepository.findOne(addToCartInput.productId);
+        console.log(cart.cartProducts.products);
         if (cart.user.userId != user.userId) {
             throw new UnauthorizedException();
         }
         //if we already have this product in our cart?
-        await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(prod.productId);
-        await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: +cart.itemCount + 1});
+        if (cart.cartProducts.products.some(p => p.productId == prod.productId)) {
+            await this.cartProductRepository.update(cart.cartProducts.id, {quantity: cart.cartProducts.quantity + 1});
+            return true;
+        } else {
+            await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(prod.productId);
+            await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: +cart.itemCount + 1});
+        }
         return true;
     }
 
