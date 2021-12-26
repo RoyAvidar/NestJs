@@ -31,7 +31,7 @@ export class Product extends BaseEntity{
     @JoinColumn({ name: 'categoryId' })
     category: Category;
 
-    @OneToMany(type => CartProduct, cartProducts => cartProducts.products)
+    @OneToMany(type => CartProduct, cartProducts => cartProducts.product)
     @Field(type => CartProduct)
     @JoinColumn({name: 'productId'})
     cartProducts: CartProduct;

@@ -34,7 +34,7 @@ export class Cart {
     itemCount: number;
 
     @OneToMany(type => CartProduct, cartProducts => cartProducts.cart)
-    @Field(type => CartProduct)
+    @Field(type => [CartProduct])
     @JoinColumn({name: 'cartId'})
-    cartProducts: CartProduct
+    cartProducts: CartProduct[]
 }

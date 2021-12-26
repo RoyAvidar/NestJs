@@ -30,7 +30,7 @@ export class CartService {
     }
 
     async getCart(user: User): Promise<Cart> {
-        const cart = await this.cartRepository.findOne({relations: ["products", "user"], where: {user}});
+        const cart = await this.cartRepository.findOne({relations: ["products", "user", "cartProducts", "cartProducts.product"], where: {user}});
         if (cart == null) {
             const newCart = this.cartRepository.create()
             newCart.user = user;
@@ -60,25 +60,29 @@ export class CartService {
 
     // + sign infront of an arg is the same as .toInt();
     async addProductToCart(user: User, addToCartInput: AddToCartInput) {
-        const cart = await this.cartRepository.findOne(addToCartInput.cartId, {relations: ["user", "products", "cartProducts"]});
+        const cart = await this.cartRepository.findOne(addToCartInput.cartId, {relations: ["user", "cartProducts", "cartProducts.product"], where: {user}});
         const prod = await this.productRepository.findOne(addToCartInput.productId);
-        console.log(cart.cartProducts.products);
+        // const cartProducts = await this.cartProductRepository.find({relations: ["cart", "products"]});
         if (cart.user.userId != user.userId) {
             throw new UnauthorizedException();
         }
         //if we already have this product in our cart?
-        if (cart.cartProducts.products.some(p => p.productId == prod.productId)) {
-            await this.cartProductRepository.update(cart.cartProducts.id, {quantity: cart.cartProducts.quantity + 1});
+        console.log(cart.cartProducts);
+        const prodCart = cart.cartProducts.find(cp => cp.product.productId == prod.productId);
+        if (prodCart)  {
+            await this.cartProductRepository.update(prodCart, {quantity: prodCart.quantity + 1});
             return true;
         } else {
-            await this.cartRepository.createQueryBuilder().relation("products").of(cart).add(prod.productId);
+            // create a new product.
             await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: +cart.itemCount + 1});
+            await this.cartProductRepository.update(prodCart, {quantity: prodCart.quantity + 1});
+            await this.cartProductRepository.save(prodCart);
         }
         return true;
     }
 
     async removeProductFromCart(cartId: number, productId: number) {
-        const cart = await this.cartRepository.findOne(cartId, {relations: ["products"]});
+        const cart = await this.cartRepository.findOne(cartId, {relations: ["products", "cartProducts", "cartProducts.product"]});
         if (cart.products.some(p => p.productId == productId)) {
             const prod = await this.productRepository.findOne(productId);
                 //remove all of the entries in the join table

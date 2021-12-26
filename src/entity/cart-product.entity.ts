@@ -10,15 +10,15 @@ export class CartProduct {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(type => Cart)
+    @ManyToOne(type => Cart, cart => cart.cartProducts)
     @Field(type => Cart)
     @JoinColumn({name: 'cartId'})
     cart: Cart;
 
-    @ManyToOne(type => Product)
-    @Field(type => [Product])
+    @ManyToOne(type => Product, product => product.cartProducts)
+    @Field(type => Product)
     @JoinColumn({name: 'productId'})
-    products: Product[];
+    product: Product;
 
     @Column()
     @Field(type => Number)
