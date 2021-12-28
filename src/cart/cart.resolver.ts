@@ -7,6 +7,7 @@ import { CreateOrderInput } from 'src/orders/dto/input/create-order.input';
 import { CartService } from './cart.service';
 import { AddToCartInput } from './dto/input/add-cart.input';
 import { CreateCartInput } from './dto/input/create-cart.input';
+import { RemoveFromCartInput } from './dto/input/remove-cart.input';
 
 @Resolver(() => Cart)
 export class CartResolver {
@@ -44,8 +45,8 @@ export class CartResolver {
 
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    removeProductFromCart(@GQLCURRENTUSER() user, @Args('cartId') cartId: number, @Args('productId') productId: number) {
-        return this.cartService.removeProductFromCart(cartId, productId);
+    removeProductFromCart(@GQLCURRENTUSER() user, @Args('removeFromCartInput') removeFromCartInput: RemoveFromCartInput) {
+        return this.cartService.removeProductFromCart(user, removeFromCartInput);
     }
 
     @UseGuards(GqlAuthGuard)

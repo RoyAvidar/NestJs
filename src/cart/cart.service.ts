@@ -8,6 +8,7 @@ import { CreateOrderInput } from 'src/orders/dto/input/create-order.input';
 import { OrdersService } from 'src/orders/orders.service';
 import { Repository } from 'typeorm';
 import { AddToCartInput } from './dto/input/add-cart.input';
+import { RemoveFromCartInput } from './dto/input/remove-cart.input';
 
 @Injectable()
 export class CartService {
@@ -62,36 +63,51 @@ export class CartService {
     async addProductToCart(user: User, addToCartInput: AddToCartInput) {
         const cart = await this.cartRepository.findOne(addToCartInput.cartId, {relations: ["user", "cartProducts", "cartProducts.product"], where: {user}});
         const prod = await this.productRepository.findOne(addToCartInput.productId);
-        // const cartProducts = await this.cartProductRepository.find({relations: ["cart", "products"]});
         if (cart.user.userId != user.userId) {
             throw new UnauthorizedException();
         }
         //if we already have this product in our cart?
-        console.log(cart.cartProducts);
-        const prodCart = cart.cartProducts.find(cp => cp.product.productId == prod.productId);
-        if (prodCart)  {
-            await this.cartProductRepository.update(prodCart, {quantity: prodCart.quantity + 1});
+        const isProdInCart = cart.cartProducts.find(cp => cp.product.productId == prod.productId);
+        const cartProducts = await this.cartProductRepository.findOne(isProdInCart);
+        console.log(cartProducts);
+        if (isProdInCart && cartProducts)  {
+            await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: +cart.itemCount + 1});
+            await this.cartProductRepository.update(cartProducts.id, {quantity: +cartProducts.quantity + 1});
             return true;
         } else {
             // create a new product.
+            await this.cartProductRepository.save({
+                cart, 
+                product: prod,
+                quantity: 1,
+            });
             await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: +cart.itemCount + 1});
-            await this.cartProductRepository.update(prodCart, {quantity: prodCart.quantity + 1});
-            await this.cartProductRepository.save(prodCart);
         }
         return true;
     }
 
-    async removeProductFromCart(cartId: number, productId: number) {
-        const cart = await this.cartRepository.findOne(cartId, {relations: ["products", "cartProducts", "cartProducts.product"]});
-        if (cart.products.some(p => p.productId == productId)) {
-            const prod = await this.productRepository.findOne(productId);
-                //remove all of the entries in the join table
-                await this.cartRepository.createQueryBuilder().relation("products").of(cart).remove(prod);
-                await this.cartRepository.update(cart.cartId, {totalPrice: 0, itemCount: 0});
-            
-            return true;
+    async removeProductFromCart(user: User, removeFromCartInput: RemoveFromCartInput) {
+        const cart = await this.cartRepository.findOne(removeFromCartInput.cartId, {relations: ["user", "cartProducts", "cartProducts.product"], where: {user}});
+        const prod = await this.productRepository.findOne(removeFromCartInput.productId);
+        if (cart.user.userId != user.userId) {
+            throw new UnauthorizedException();
         }
-        return false;
+        const isProdInCart = cart.cartProducts.find(cp => cp.product.productId == prod.productId);
+        const cartProducts = await this.cartProductRepository.findOne(isProdInCart);
+        console.log(cartProducts);
+        if (isProdInCart && cartProducts) {
+            if (isProdInCart.quantity > 1) {
+                await this.cartRepository.update(cart.cartId, {totalPrice: +cart.totalPrice - +prod.productPrice, itemCount: +cart.itemCount - 1});
+                await this.cartProductRepository.update(cartProducts.id, {quantity: +cartProducts.quantity - 1});
+                return true;
+            } else {
+            await this.cartProductRepository.remove(cartProducts);
+            return true; 
+            }
+        } else {
+            throw new Error("No product found.");
+        }
+       
     }
 
     async cleanCart(cartId: number, user: User) {
