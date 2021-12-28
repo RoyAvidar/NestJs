@@ -69,7 +69,7 @@ export class CartService {
         //if we already have this product in our cart?
         const isProdInCart = cart.cartProducts.find(cp => cp.product.productId == prod.productId);
         const cartProducts = await this.cartProductRepository.findOne(isProdInCart);
-        console.log(cartProducts);
+        // console.log(cartProducts);
         if (isProdInCart && cartProducts)  {
             await this.cartRepository.update(cart.cartId, {totalPrice: +prod.productPrice + +cart.totalPrice, itemCount: +cart.itemCount + 1});
             await this.cartProductRepository.update(cartProducts.id, {quantity: +cartProducts.quantity + 1});
@@ -94,15 +94,16 @@ export class CartService {
         }
         const isProdInCart = cart.cartProducts.find(cp => cp.product.productId == prod.productId);
         const cartProducts = await this.cartProductRepository.findOne(isProdInCart);
-        console.log(cartProducts);
+        // console.log(cartProducts);
         if (isProdInCart && cartProducts) {
             if (isProdInCart.quantity > 1) {
                 await this.cartRepository.update(cart.cartId, {totalPrice: +cart.totalPrice - +prod.productPrice, itemCount: +cart.itemCount - 1});
                 await this.cartProductRepository.update(cartProducts.id, {quantity: +cartProducts.quantity - 1});
                 return true;
             } else {
-            await this.cartProductRepository.remove(cartProducts);
-            return true; 
+                await this.cartRepository.update(cart.cartId, {totalPrice: 0, itemCount: 0});
+                await this.cartProductRepository.remove(cartProducts);
+                return true; 
             }
         } else {
             throw new Error("No product found.");
@@ -111,7 +112,7 @@ export class CartService {
     }
 
     async cleanCart(cartId: number, user: User) {
-        const cart = await this.cartRepository.findOne(cartId, {relations: ["user", "products"]});
+        const cart = await this.cartRepository.findOne(cartId, {relations: ["user", "cartProducts", "cartProducts.product"]});
         if (cart.user.userId != user.userId) {
             throw new UnauthorizedException();
         }
@@ -119,14 +120,15 @@ export class CartService {
             cart.itemCount = 0;
             cart.totalPrice = 0;
             cart.products = [];
+            await this.cartProductRepository.remove(cart.cartProducts);
             this.cartRepository.save(cart);
             return true;
         }
     }
 
     async submitCartToOrder(createOrderInput: CreateOrderInput, user: User) {
-        const cart = await this.cartRepository.findOne(createOrderInput.cartId, {relations: ["user", "products"]});
-        if (cart.products.length <= 0) {
+        const cart = await this.cartRepository.findOne(createOrderInput.cartId, {relations: ["user", "cartProducts", "cartProducts.product"]});
+        if (cart.cartProducts.length <= 0) {
             throw new NotFoundException("Cart is empty, please provide products to cart.");
         }
         if (!user) {
