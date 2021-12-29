@@ -24,6 +24,11 @@ export class productOrders1630406470423 implements MigrationInterface {
                     type: "bigint",
                     unsigned: true,
                 },
+                {
+                    name: "quantity",
+                    type: "bigint",
+                    unsigned: true
+                }
             ]
         }));
     }

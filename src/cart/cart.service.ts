@@ -136,6 +136,7 @@ export class CartService {
         }
         if (this.cleanCart(createOrderInput.cartId, user)) {
             const newOrder = await this.ordersService.createOrder(createOrderInput, user);
+            console.log(newOrder.products);
             return true;
         }
         return false;
