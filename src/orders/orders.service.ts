@@ -23,8 +23,7 @@ export class OrdersService {
     ) {}
     
     async getSingleOrder(getOrderData: GetOrderArgs): Promise<Order> {
-        const order = await this.orderRepository.findOne(getOrderData.orderId, {relations: ["user", "productOrder"]});
-        // console.log(order.productOrder);
+        const order = await this.orderRepository.findOne(getOrderData.orderId, {relations: ["user", "productOrder", "productOrder.product"]});
         return order;
     }
 
