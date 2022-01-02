@@ -23,12 +23,14 @@ export class OrdersService {
     ) {}
     
     async getSingleOrder(getOrderData: GetOrderArgs): Promise<Order> {
-        return this.orderRepository.findOne(getOrderData, {relations: ["products", "user", "productOrder"]});
+        const order = await this.orderRepository.findOne(getOrderData.orderId, {relations: ["user", "productOrder"]});
+        // console.log(order.productOrder);
+        return order;
     }
 
     async getUserOrders(user: User): Promise<Order[]> {
         const userKek = await this.userRepository.findOne(user.userId, {relations: ["orders"]});
-        const orders = await this.orderRepository.findByIds(userKek.orders, {relations: ["products", "productOrder"], order: {createdAt: "DESC"}});
+        const orders = await this.orderRepository.findByIds(userKek.orders, {relations: ["productOrder", "productOrder.product"], order: {createdAt: "DESC"}});
         return orders;
     };
 
@@ -36,7 +38,9 @@ export class OrdersService {
         if (!user.isAdmin) {
             throw new UnauthorizedException();
         }
-        return this.orderRepository.find({relations: ["products", "user", "productOrder"], order: {createdAt: "DESC"}});
+        const orders =  await this.orderRepository.find({relations: ["user", "productOrder", "productOrder.product"], order: {createdAt: "DESC"}});
+        // console.log(orders[0]);
+        return orders;
     }
 
     async createOrder(createOrderInput: CreateOrderInput, user: User): Promise<Order> {

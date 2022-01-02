@@ -25,22 +25,13 @@ export class Order extends BaseEntity{
     @Field(type => Boolean)
     isReady: boolean;
 
-    @ManyToMany(type => Product)
-    @Field(type => [Product])
-    @JoinTable({
-        name: 'product-orders',
-        joinColumn: { name: 'orderId' },
-        inverseJoinColumn: {name: 'productId'}
-    })
-    products: Product[];
-
     @ManyToOne(type => User, user => user.products)
     @Field(type => User)
     @JoinColumn({ name: 'userId' })
     user: User;
 
     @OneToMany(type => ProductOrder, productOrder => productOrder.order)
-    @Field(type => ProductOrder)
-    @JoinColumn({name: "orderId"})
+    @Field(type => [ProductOrder])
+    @JoinColumn({name: 'orderId'})
     productOrder: ProductOrder[];
 }
