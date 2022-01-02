@@ -3,7 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 import { Order } from "./order.entity";
 import { Product } from "./product.entity";
 
-@Entity('product-order')
+@Entity('product-orders')
 @ObjectType()
 export class ProductOrder {
     @Field()

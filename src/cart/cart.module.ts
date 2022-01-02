@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CartProduct } from 'src/entity/cart-product.entity';
 import { Cart } from 'src/entity/cart.entity';
 import { Order } from 'src/entity/order.entity';
+import { ProductOrder } from 'src/entity/product-order.entity';
 import { Product } from 'src/entity/product.entity';
 import { User } from 'src/entity/user.entity';
 import { OrdersModule } from 'src/orders/orders.module';
@@ -12,7 +13,7 @@ import { CartService } from './cart.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Product, Order, User, Cart, CartProduct]),
+    TypeOrmModule.forFeature([Product, Order, User, Cart, CartProduct, ProductOrder]),
     OrdersModule
   ],
   providers: [CartResolver, CartService, OrdersService],

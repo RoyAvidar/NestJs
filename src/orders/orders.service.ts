@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from 'src/entity/cart.entity';
+import { ProductOrder } from 'src/entity/product-order.entity';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { Order } from '../entity/order.entity';
@@ -15,16 +16,19 @@ export class OrdersService {
         @InjectRepository(User)
         private userRepository: Repository<User>,
         @InjectRepository(Cart)
-        private cartRepository: Repository<Cart>
+        private cartRepository: Repository<Cart>,
+        @InjectRepository(ProductOrder)
+        private productOrderRepository: Repository<ProductOrder>
+
     ) {}
     
     async getSingleOrder(getOrderData: GetOrderArgs): Promise<Order> {
-        return this.orderRepository.findOne(getOrderData, {relations: ["products", "user"]});
+        return this.orderRepository.findOne(getOrderData, {relations: ["products", "user", "productOrder"]});
     }
 
     async getUserOrders(user: User): Promise<Order[]> {
         const userKek = await this.userRepository.findOne(user.userId, {relations: ["orders"]});
-        const orders = await this.orderRepository.findByIds(userKek.orders, {relations: ["products"], order: {createdAt: "DESC"}});
+        const orders = await this.orderRepository.findByIds(userKek.orders, {relations: ["products", "productOrder"], order: {createdAt: "DESC"}});
         return orders;
     };
 
@@ -32,7 +36,7 @@ export class OrdersService {
         if (!user.isAdmin) {
             throw new UnauthorizedException();
         }
-        return this.orderRepository.find({relations: ["products", "user"], order: {createdAt: "DESC"}});
+        return this.orderRepository.find({relations: ["products", "user", "productOrder"], order: {createdAt: "DESC"}});
     }
 
     async createOrder(createOrderInput: CreateOrderInput, user: User): Promise<Order> {
@@ -40,13 +44,21 @@ export class OrdersService {
         if (cart.user.userId != user.userId) {
             throw new UnauthorizedException();
         }
-        const newOrder = this.orderRepository.create();
-        newOrder.user = cart.user;
-        newOrder.products = cart.products;
+        let newOrder = this.orderRepository.create();
         newOrder.orderPrice = cart.totalPrice;
         newOrder.createdAt = new Date();
-        // newOrder.isReady = false;
-        return this.orderRepository.save(newOrder);
+        newOrder.user = cart.user;
+        newOrder = await newOrder.save(); 
+        for (const pro of cart.cartProducts) {
+            await this.productOrderRepository.save(
+                {
+                    order: newOrder,
+                    quantity: pro.quantity,
+                    product: pro.product,
+                }
+            );
+        }
+        return newOrder;
     }
 
     async addProductToOrder(orderId: number, productId: number) {
