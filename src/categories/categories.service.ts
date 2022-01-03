@@ -15,6 +15,7 @@ export class CategoriesService {
 
     public createCategory(createCategoryInput: CreateCategoryInput) {
         const newCategory = this.categoryRepository.create(createCategoryInput);
+        // newCategory.categoryIcon = createCategoryInput.categoryIcon;
         return this.categoryRepository.insert(newCategory);
     }
 

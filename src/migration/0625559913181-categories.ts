@@ -18,6 +18,10 @@ export class categories0625559913181 implements MigrationInterface {
                     name: "categoryName",
                     type: "varchar"
                 },
+                {
+                    name: "categoryIcon",
+                    type: "varchar"
+                }
             ],
             
         }))

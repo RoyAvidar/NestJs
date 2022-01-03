@@ -6,4 +6,7 @@ export class CreateCategoryInput {
     @Field()
     @IsNotEmpty()
     categoryName: string;
+
+    @Field()
+    categoryIcon: string;
 }

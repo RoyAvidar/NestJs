@@ -11,4 +11,8 @@ export class Category extends BaseEntity{
     @Column()
     @Field()
     categoryName: string;
+
+    // @Column()
+    // @Field()
+    // categoryIcon: string;
 }
