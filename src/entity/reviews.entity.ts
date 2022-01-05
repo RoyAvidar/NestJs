@@ -7,7 +7,7 @@ import { User } from "./user.entity";
 export class Reviews extends BaseEntity{
     @Field()
     @PrimaryGeneratedColumn()
-    reviewId: string;
+    reviewId: number;
 
     @Column()
     @Field()

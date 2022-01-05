@@ -1,12 +1,13 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Reviews } from "src/entity/reviews.entity";
+import { ReviewsResolver } from "./reviews.resolver";
 import { ReviewsService } from "./reviews.service";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([Reviews]),
     ],
-    providers: [ReviewsService]
+    providers: [ReviewsService, ReviewsResolver]
 })
 export class ReviewsModule{}

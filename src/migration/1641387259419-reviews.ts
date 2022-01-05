@@ -8,9 +8,11 @@ export class reviews1641387259419 implements MigrationInterface {
             columns: [
                 {
                     name: "reviewId",
-                    type: "varchar",
+                    type: "bigInt",
                     isGenerated: true,
                     isPrimary: true,
+                    generationStrategy: "increment",
+                    unsigned: true,
                 },
                 {
                     name: "reviewContent",

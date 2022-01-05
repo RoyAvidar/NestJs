@@ -9,6 +9,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { AuthModule } from './auth/auth.module';
 import { CartModule } from './cart/cart.module';
 import { PhotosModule } from './photos/photos.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PhotosModule } from './photos/photos.module';
     CategoriesModule,
     TypeOrmModule.forRoot(),
     CartModule,
+    ReviewsModule
   ],
   controllers: [],
   providers: [],

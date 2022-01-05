@@ -13,6 +13,9 @@ export class ReviewsService {
     ) {}
 
     async getAllReviews(user: User): Promise<Reviews[]> {
+        if (!user) {
+            throw new UnauthorizedException();
+        }
         const reviews = await this.reviewsRepository.find({relations: ["user"]});
         return reviews;
     }
