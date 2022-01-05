@@ -5,6 +5,7 @@ import { Token } from "src/entity/token.entity";
 import { BaseEntity, BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Cart } from "./cart.entity";
 import * as bcrypt from 'bcrypt';
+import { Reviews } from "./reviews.entity";
 
 @Entity('users')
 @ObjectType()
@@ -52,6 +53,10 @@ export class User extends BaseEntity{
     @Field(type => Token)
     @OneToMany(type => Token, token => token.user)
     token: Token;
+
+    @Field(type => Reviews)
+    @OneToMany(type => Reviews, review => review.user)
+    review: Reviews
 
     @BeforeInsert()
     async hashPassword() {
