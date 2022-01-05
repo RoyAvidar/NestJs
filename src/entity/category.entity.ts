@@ -12,7 +12,7 @@ export class Category extends BaseEntity{
     @Field()
     categoryName: string;
 
-    // @Column()
-    // @Field()
-    // categoryIcon: string;
+    @Column()
+    @Field()
+    categoryIcon: string;
 }

@@ -15,7 +15,6 @@ export class CategoriesService {
 
     public createCategory(createCategoryInput: CreateCategoryInput) {
         const newCategory = this.categoryRepository.create(createCategoryInput);
-        // newCategory.categoryIcon = createCategoryInput.categoryIcon;
         return this.categoryRepository.insert(newCategory);
     }
 
@@ -34,8 +33,9 @@ export class CategoriesService {
             throw new UnauthorizedException();
         }
         var oldCategory = await this.categoryRepository.findOneOrFail(updateCategoryInput.categoryId);
-        if (oldCategory.categoryId == updateCategoryInput.categoryId || oldCategory) {
+        if (oldCategory.categoryId == updateCategoryInput.categoryId) {
             oldCategory.categoryName = updateCategoryInput.categoryName;
+            oldCategory.categoryIcon = updateCategoryInput.categoryIcon;
             await oldCategory.save();
             return true;
         }

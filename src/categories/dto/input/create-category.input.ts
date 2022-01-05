@@ -8,5 +8,6 @@ export class CreateCategoryInput {
     categoryName: string;
 
     @Field()
+    @IsNotEmpty()
     categoryIcon: string;
 }

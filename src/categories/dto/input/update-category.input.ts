@@ -10,4 +10,8 @@ export class UpdateCategoryInput {
     @Field()
     @IsNotEmpty()
     categoryName: string;
+
+    @Field()
+    @IsNotEmpty()
+    categoryIcon: string;
 }
