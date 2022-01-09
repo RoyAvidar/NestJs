@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { CartModule } from './cart/cart.module';
 import { PhotosModule } from './photos/photos.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { BugReportModule } from './bugReport/bugReport.module';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { ReviewsModule } from './reviews/reviews.module';
     CategoriesModule,
     TypeOrmModule.forRoot(),
     CartModule,
-    ReviewsModule
+    ReviewsModule,
+    BugReportModule
   ],
   controllers: [],
   providers: [],
