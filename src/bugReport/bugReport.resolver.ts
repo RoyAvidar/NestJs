@@ -15,7 +15,7 @@ export class BugReportResolver {
             host: 'smtp.gmail.com',
             auth: {
               user: 'roi981av@gmail.com',
-              pass: 'Roi981981av'
+              pass: 'roi981av'
             }
           }));
           
