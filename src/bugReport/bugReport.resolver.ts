@@ -1,39 +1,18 @@
-import { UseGuards } from "@nestjs/common";
+import { UnauthorizedException, UseGuards } from "@nestjs/common";
 import { Resolver, Query, Args } from "@nestjs/graphql";
 import { GqlAuthGuard } from "src/auth/guards/gql-auth.guard";
 import * as nodemailer  from "nodemailer";
+import { GQLCURRENTUSER } from "src/decorators/user.decorator";
+import { BugReportService } from "./bugReport.service";
 var smtpTransport = require('nodemailer-smtp-transport');
 
 @Resolver()
 export class BugReportResolver {
+  constructor(private readonly bugReportService: BugReportService) {}
 
     @UseGuards(GqlAuthGuard)
     @Query(() => Boolean)
-    sendEmail(@Args('content') content:string) {
-        var transporter = nodemailer.createTransport(smtpTransport({
-            service: 'gmail',
-            host: 'smtp.gmail.com',
-            auth: {
-              user: 'roi981av@gmail.com',
-              pass: 'roi981av'
-            }
-          }));
-          
-          var mailOptions = {
-            from: 'roi981av@gmail.com',
-            to: 'roi981av@gmail.com',
-            subject: 'Bug Report',
-            text: content,
-          };
-          
-          transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent: ' + info.response);
-            }
-          });
-          
-          return true;
+    sendEmail(@GQLCURRENTUSER() user, @Args('content') content:string) {
+      return this.bugReportService.sendEmail(user, content);
     }
 }
