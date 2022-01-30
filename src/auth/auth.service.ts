@@ -38,19 +38,22 @@ export class AuthService {
         expireDate.setDate(expireDate.getDate() + 1);
         // console.log(expireDate);
         const user = await this.usersService.getUserByName(userName);
-        const dbToken = await this.tokensRepository.save({expireDate: expireDate, user: user});
-        const payload = {
-            token: dbToken.tokenId,
-            expireDate: dbToken.expireDate
-        };
-        const isMatch = await bcrypt.compare(userPassword, user.userPassword);
-        if (isMatch) {
-            // if (user.userName == userName && user.userPassword == userPassword) {
+        if (!user) {
+            throw new Error('User not found');
+        }
+        if (user.userName == userName) {
+            const dbToken = await this.tokensRepository.save({expireDate: expireDate, user: user});
+            const payload = {
+                token: dbToken.tokenId,
+                expireDate: dbToken.expireDate
+            };
+            const isMatch = await bcrypt.compare(userPassword, user.userPassword);
+            if (isMatch) {
                 const token = this.jwtService.sign(payload);
                 return token;
-            // } 
-        } else {
-            throw new Error('Invalid User Name or User Password');
+            } else {
+                throw new Error('Invalid User Name or User Password');
+            }
         }
     }
 
