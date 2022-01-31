@@ -76,6 +76,23 @@ export class UsersService {
         return this.usersRepository.findOne({where: {userName}});
     }
 
+    async getUserDarkMode(user: User): Promise<Boolean> {
+        var realUser = await this.usersRepository.findOneOrFail(user.userId);
+        return realUser.isDarkMode;
+    }
+
+    async toggleUserDarkMode(user: User): Promise<Boolean> {
+        var realUser = await this.usersRepository.findOneOrFail(user.userId);
+        if (realUser.userId == user.userId) {
+            realUser.isDarkMode = !realUser.isDarkMode;
+            console.log(realUser.isDarkMode);
+            await realUser.save()
+            return realUser.isDarkMode;
+        } else {
+            throw new Error("Couldn't find a user.");
+        }
+    }
+
     async addProductToUser(reqUser: User, productId: string) {
         const user = await this.usersRepository.findOne(reqUser.userId);
         await this.usersRepository.createQueryBuilder().relation("products").of(user).add(productId);

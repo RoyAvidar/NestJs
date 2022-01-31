@@ -17,4 +17,12 @@ export class Reviews extends BaseEntity{
     @Field(type => User)
     @JoinColumn({ name: 'userId' })
     user: User;
+
+    @Field({nullable: true})
+    @Column({default: false})
+    isLike: boolean;
+
+    @Field({nullable: true})
+    @Column({default: false})
+    isDislike: boolean;
 }

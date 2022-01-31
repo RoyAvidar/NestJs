@@ -53,6 +53,18 @@ export class UsersResolver{
     }
 
     @UseGuards(GqlAuthGuard)
+    @Query(() => Boolean)
+    getUserDarkMode(@GQLCURRENTUSER() user) {
+        return this.usersService.getUserDarkMode(user);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
+    toggleUserDarkMode(@GQLCURRENTUSER() user) {
+        return this.usersService.toggleUserDarkMode(user);
+    }
+
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
     deleteUser(@GQLCURRENTUSER() user) {
         return this.usersService.deleteUser(user);

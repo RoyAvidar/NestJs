@@ -33,6 +33,10 @@ export class User extends BaseEntity{
     @Column({default: false})
     isAdmin: boolean;
 
+    @Field({nullable: true})
+    @Column({default: false})
+    isDarkMode: boolean;
+
     @Field(type => [Product], {nullable: true})
     @ManyToMany(type => Product)
     @JoinTable({

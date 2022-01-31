@@ -37,6 +37,12 @@ export class users1624019622613 implements MigrationInterface {
                     length: "1",
                     default: "0"
                 },
+                {
+                    name: "isDarkMode",
+                    type: "tinyint",
+                    length: "1",
+                    default: "0"
+                }
             ],
         }));
     }
