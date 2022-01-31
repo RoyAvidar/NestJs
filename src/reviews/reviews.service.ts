@@ -30,4 +30,54 @@ export class ReviewsService {
         newReview = await newReview.save();
         return newReview;
     }
+
+    async addReviewLike(reviewId: number, reqUser: User): Promise<Boolean> {
+        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user"]});
+        if (review.user.userId == reqUser.userId) {
+            return false;
+        } else {
+            review.isLike += 1;
+            await review.save();
+            return true;
+        }
+    }
+
+    async removeReviewLike(reviewId: number, reqUser: User): Promise<Boolean> {
+        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user"]});
+        if (review.user.userId == reqUser.userId) {
+            return false;
+        } else {
+            if (review.isLike == 0) {
+                return false;
+            }
+            review.isLike -= 1;
+            await review.save();
+            return true;
+        }
+    }
+
+    async addReviewDislike(reviewId: number, reqUser: User): Promise<Boolean> {
+        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user"]});
+        if (review.user.userId == reqUser.userId) {
+            return false;
+        } else {
+            review.isDislike += 1;
+            await review.save();
+            return true;
+        }
+    }
+
+    async removeReviewDislike(reviewId: number, reqUser: User): Promise<Boolean> {
+        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user"]});
+        if (review.user.userId == reqUser.userId) {
+            return false;
+        } else {
+            if (review.isDislike == 0) {
+                return false;
+            }
+            review.isDislike -= 1;
+            await review.save();
+            return true;
+        }
+    }
 }

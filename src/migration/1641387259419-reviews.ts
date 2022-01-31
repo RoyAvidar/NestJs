@@ -25,15 +25,13 @@ export class reviews1641387259419 implements MigrationInterface {
                 },
                 {
                     name: "isLike",
-                    type: "tinyint",
-                    length: "1",
-                    default: "0"
+                    type: "bigint",
+                    unsigned: true,
                 },
                 {
                     name: "isDislike",
-                    type: "tinyint",
-                    length: "1",
-                    default: "0"
+                    type: "bigint",
+                    unsigned: true,
                 }
             ],
             foreignKeys: [

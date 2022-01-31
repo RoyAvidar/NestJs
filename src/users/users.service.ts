@@ -85,7 +85,7 @@ export class UsersService {
         var realUser = await this.usersRepository.findOneOrFail(user.userId);
         if (realUser.userId == user.userId) {
             realUser.isDarkMode = !realUser.isDarkMode;
-            console.log(realUser.isDarkMode);
+            // console.log(realUser.isDarkMode);
             await realUser.save()
             return realUser.isDarkMode;
         } else {

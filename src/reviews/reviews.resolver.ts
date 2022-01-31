@@ -21,4 +21,28 @@ export class ReviewsResolver {
     createReview(@GQLCURRENTUSER() user, @Args('createReviewInput') createReviewInput: CreateReviewInput) {
         return this.reviewsService.createReview(user, createReviewInput);
     }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
+    addReviewLike(@Args('reveiwId') reviewId: number, @GQLCURRENTUSER() user) {
+        return this.reviewsService.addReviewLike(reviewId, user);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
+    removeReviewLike(@Args('reveiwId') reviewId: number, @GQLCURRENTUSER() user) {
+        return this.reviewsService.removeReviewLike(reviewId, user);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
+    addReviewDislike(@Args('reviewId') reviewId: number, @GQLCURRENTUSER() user) {
+        return this.reviewsService.addReviewDislike(reviewId, user);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
+    removeReviewDislike(@Args('reveiwId') reviewId: number, @GQLCURRENTUSER() user) {
+        return this.reviewsService.removeReviewDislike(reviewId, user);
+    }
 }

@@ -19,10 +19,10 @@ export class Reviews extends BaseEntity{
     user: User;
 
     @Field({nullable: true})
-    @Column({default: false})
-    isLike: boolean;
+    @Column()
+    isLike: number;
 
     @Field({nullable: true})
-    @Column({default: false})
-    isDislike: boolean;
+    @Column()
+    isDislike: number;
 }
