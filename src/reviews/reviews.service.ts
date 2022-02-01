@@ -23,6 +23,16 @@ export class ReviewsService {
         return reviews;
     }
 
+    async getReviewLikes(reviewId: number): Promise<number> {
+        const review = await this.reviewsRepository.findOne(reviewId);
+        return review.isLike;
+    }
+
+    async getReviewDisLikes(reviewId: number): Promise<number> {
+        const review = await this.reviewsRepository.findOne(reviewId);
+        return review.isDislike;
+    }
+
     async createReview(user: User, createReviewInput: CreateReviewInput): Promise<Reviews> {
         if (!user) {
             throw new UnauthorizedException();
@@ -35,50 +45,66 @@ export class ReviewsService {
     }
 
     async addReviewLike(reviewId: number, reqUser: User): Promise<Boolean> {
-        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user"]});
+        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user", "userReview", "userReview.review"]});
         if (review.user.userId == reqUser.userId) {
-            return false;
+            throw new Error('You can\'t like/dislike your own reviews..');
         } else {
-            review.isLike += 1;
-            await review.save();
+            let userReview = await this.userReviewRepository.create();
+            await this.userReviewRepository.save({
+                id: userReview.id,
+                likeDislike: true,
+                review: review,
+                user: reqUser,
+            });
+            await this.reviewsRepository.update(review.reviewId, {isLike: +review.isLike + 1});
             return true;
         }
     }
 
     async removeReviewLike(reviewId: number, reqUser: User): Promise<Boolean> {
-        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user"]});
-        if (review.user.userId == reqUser.userId) {
-            return false;
+        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user", "userReview", "userReview.review"]});
+        const userDidLike = review.userReview.find(userLike => userLike.likeDislike == true);
+        const userLikeData = await this.userReviewRepository.findOne(userDidLike);
+        if (review.user.userId == reqUser.userId && userDidLike.likeDislike == false) {
+            throw new Error('You can\'t like/dislike your own reviews..');
         } else {
             if (review.isLike == 0) {
                 return false;
             }
-            review.isLike -= 1;
+            await this.reviewsRepository.update(review.reviewId, {isLike: review.isLike -= 1});
+            await this.userReviewRepository.remove(userLikeData);
             await review.save();
             return true;
         }
     }
 
     async addReviewDislike(reviewId: number, reqUser: User): Promise<Boolean> {
-        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user"]});
+        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user", "userReview", "userReview.review", "userReview.likeDislike"]});
         if (review.user.userId == reqUser.userId) {
             return false;
         } else {
-            review.isDislike += 1;
-            await review.save();
+            let userReview = await this.userReviewRepository.create();
+            userReview.user = reqUser;
+            userReview.review = review;
+            userReview.likeDislike = false;
+            await this.userReviewRepository.save(userReview);
+            await this.reviewsRepository.update(review.reviewId, {isDislike: review.isDislike + 1});
+            await this.reviewsRepository.save(review);
             return true;
         }
     }
 
     async removeReviewDislike(reviewId: number, reqUser: User): Promise<Boolean> {
-        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user"]});
-        if (review.user.userId == reqUser.userId) {
+        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user", "userReview", "userReview.review", "userReview.likeDislike"]});
+        const userDidDislike = review.userReview.find(userLike => userLike.likeDislike == false);
+        if (review.user.userId == reqUser.userId && userDidDislike.likeDislike == true) {
             return false;
         } else {
             if (review.isDislike == 0) {
                 return false;
             }
-            review.isDislike -= 1;
+            await this.reviewsRepository.update(review.reviewId, {isDislike: review.isDislike -= 1});
+            await this.userReviewRepository.remove(userDidDislike);
             await review.save();
             return true;
         }

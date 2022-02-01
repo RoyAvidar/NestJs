@@ -23,6 +23,18 @@ export class ReviewsResolver {
     }
 
     @UseGuards(GqlAuthGuard)
+    @Query(() => Number)
+    getReviewLikes(@Args('reviewId') reviewId: number) {
+        return this.reviewsService.getReviewLikes(reviewId);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => Number)
+    getReviewDisLikes(@Args('reviewId') reviewId: number) {
+        return this.reviewsService.getReviewDisLikes(reviewId);
+    }
+
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
     addReviewLike(@Args('reveiwId') reviewId: number, @GQLCURRENTUSER() user) {
         return this.reviewsService.addReviewLike(reviewId, user);

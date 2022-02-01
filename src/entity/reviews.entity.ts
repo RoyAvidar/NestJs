@@ -30,5 +30,5 @@ export class Reviews extends BaseEntity{
     @Field(type => [UserReview])
     @OneToMany(type => UserReview, userReview => userReview.review)
     @JoinColumn({name: 'reviewId'})
-    userReview: UserReview;
+    userReview: UserReview[];
 }
