@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Reviews } from "src/entity/reviews.entity";
+import { UserReview } from "src/entity/user-review.entity";
 import { User } from "src/entity/user.entity";
 import { Repository } from "typeorm";
 import { CreateReviewInput } from "./dto/create-review.input";
@@ -10,6 +11,8 @@ export class ReviewsService {
     constructor(
         @InjectRepository(Reviews)
         private reviewsRepository: Repository<Reviews>,
+        @InjectRepository(UserReview)
+        private userReviewRepository: Repository<UserReview>
     ) {}
 
     async getAllReviews(user: User): Promise<Reviews[]> {

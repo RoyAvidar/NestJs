@@ -6,6 +6,7 @@ import { BaseEntity, BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyTo
 import { Cart } from "./cart.entity";
 import * as bcrypt from 'bcrypt';
 import { Reviews } from "./reviews.entity";
+import { UserReview } from "./user-review.entity";
 
 @Entity('users')
 @ObjectType()
@@ -61,6 +62,11 @@ export class User extends BaseEntity{
     @Field(type => Reviews)
     @OneToMany(type => Reviews, review => review.user)
     review: Reviews
+
+    @Field(type => UserReview)
+    @OneToMany(type => UserReview, uesrReview => uesrReview.user)
+    @JoinColumn({name: 'userId'})
+    userReview: UserReview;
 
     @BeforeInsert()
     async hashPassword() {

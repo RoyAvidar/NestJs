@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { UserReview } from "./user-review.entity";
 import { User } from "./user.entity";
 
 @Entity('reviews')
@@ -25,4 +26,9 @@ export class Reviews extends BaseEntity{
     @Field({nullable: true})
     @Column()
     isDislike: number;
+
+    @Field(type => [UserReview])
+    @OneToMany(type => UserReview, userReview => userReview.review)
+    @JoinColumn({name: 'reviewId'})
+    userReview: UserReview;
 }
