@@ -36,13 +36,13 @@ export class ReviewsResolver {
 
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    addReviewLike(@Args('reveiwId') reviewId: number, @GQLCURRENTUSER() user) {
+    addReviewLike(@Args('reviewId') reviewId: number, @GQLCURRENTUSER() user) {
         return this.reviewsService.addReviewLike(reviewId, user);
     }
 
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    removeReviewLike(@Args('reveiwId') reviewId: number, @GQLCURRENTUSER() user) {
+    removeReviewLike(@Args('reviewId') reviewId: number, @GQLCURRENTUSER() user) {
         return this.reviewsService.removeReviewLike(reviewId, user);
     }
 
@@ -54,7 +54,7 @@ export class ReviewsResolver {
 
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    removeReviewDislike(@Args('reveiwId') reviewId: number, @GQLCURRENTUSER() user) {
+    removeReviewDislike(@Args('reviewId') reviewId: number, @GQLCURRENTUSER() user) {
         return this.reviewsService.removeReviewDislike(reviewId, user);
     }
 }
