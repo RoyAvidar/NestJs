@@ -21,6 +21,6 @@ export class UserReview {
     review: Reviews;
 
     @Field({nullable: true})
-    @Column(type => Boolean)
+    @Column()
     likeDislike: Boolean;
 }

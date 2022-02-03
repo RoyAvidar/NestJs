@@ -5,6 +5,7 @@ import { UserReview } from "src/entity/user-review.entity";
 import { User } from "src/entity/user.entity";
 import { Repository } from "typeorm";
 import { CreateReviewInput } from "./dto/create-review.input";
+import { UpdateReviewInput } from "./dto/update-review.input";
 
 @Injectable()
 export class ReviewsService {
@@ -44,31 +45,49 @@ export class ReviewsService {
         return newReview;
     }
 
+    async updateMyReview(user: User, updateReviewInput: UpdateReviewInput): Promise<Reviews> {
+        const review = await this.reviewsRepository.findOneOrFail(updateReviewInput.reviewId, {relations: ["user"]});
+        if (review.user.userId == user.userId) {
+            await this.reviewsRepository.update(review.reviewId, {reviewContent: updateReviewInput.reviewContent});
+            return review;
+        } else {
+            throw new Error('You can\'t update or edit another users review..')
+        }
+    }
+
     async addReviewLike(reviewId: number, reqUser: User): Promise<Boolean> {
-        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user", "userReview", "userReview.review"]});
+        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user", "userReview", "userReview.review", "userReview.user"]});
         if (review.user.userId == reqUser.userId) {
             throw new Error('You can\'t like/dislike your own reviews..');
         } else {
-            let userReview = await this.userReviewRepository.create();
-            await this.userReviewRepository.save({
-                id: userReview.id,
-                review: review,
-                user: reqUser,
-                likeDislike: true,
-            });
+            // if (review.userReview[i].user.userId)
+            const userDidLike = review.userReview.find(userLike => userLike.user.userId == reqUser.userId);
+            if (!userDidLike) {
+                let userReview = await this.userReviewRepository.create();
+                userReview.id = userReview.id,
+                userReview.review = review,
+                userReview.user = reqUser,
+                userReview.likeDislike = true,
+                await this.userReviewRepository.save(userReview);
             await this.reviewsRepository.update(review.reviewId, {isLike: +review.isLike + 1});
             return true;
+            } else {
+                throw new Error('You already liked this review.');
+            }
+            
         }
     }
 
     async removeReviewLike(reviewId: number, reqUser: User): Promise<Boolean> {
-        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user", "userReview", "userReview.review"]});
-        const userDidLike = review.userReview.find(userLike => userLike.likeDislike == true);
-        const userLikeData = await this.userReviewRepository.findOne(userDidLike);
-        if (review.user.userId == reqUser.userId && userDidLike.likeDislike == false) {
+        const review = await this.reviewsRepository.findOneOrFail(reviewId, {relations: ["user", "userReview", "userReview.review", "userReview.user"]});
+        const userDidLike = review.userReview.find(userLike => userLike.user.userId == reqUser.userId);
+        const userLikeData = await this.userReviewRepository.findOne(userDidLike, {relations: ["user"]});
+        if (review.user.userId == reqUser.userId) {
             throw new Error('You can\'t like/dislike your own reviews..');
         } else {
-            if (review.isLike == 0) {
+            console.log(userLikeData.likeDislike);
+            // console.log(userLikeData.user.userId);
+            if (review.isLike == 0 || userLikeData.likeDislike == false) {
                 throw new Error('No like was found to remove');
             }
             await this.reviewsRepository.update(review.reviewId, {isLike: review.isLike -= 1});
@@ -83,15 +102,19 @@ export class ReviewsService {
         if (review.user.userId == reqUser.userId) {
             throw new Error('You can\'t like/dislike your own reviews..');
         } else {
-            let userReview = await this.userReviewRepository.create();
-            await this.userReviewRepository.save({
-                id: userReview.id,
-                review: review,
-                user: reqUser,
-                likeDislike: false,
-            });
-            await this.reviewsRepository.update(review.reviewId, {isDislike: review.isDislike + 1});
-            return true;
+            const userDidDisLike = review.userReview.find(userLike => userLike.user.userId == reqUser.userId);
+            if (!userDidDisLike) {
+                let userReview = await this.userReviewRepository.create();
+                userReview.id = userReview.id,
+                userReview.review = review,
+                userReview.user = reqUser,
+                userReview.likeDislike = false,
+                await this.userReviewRepository.save(userReview); 
+                await this.reviewsRepository.update(review.reviewId, {isDislike: review.isDislike + 1});
+                return true;
+            } else {
+                throw new Error('You already liked this review.');
+            }
         }
     }
 

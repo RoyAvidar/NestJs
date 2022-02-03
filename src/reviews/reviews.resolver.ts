@@ -4,6 +4,7 @@ import { GqlAuthGuard } from "src/auth/guards/gql-auth.guard";
 import { GQLCURRENTUSER } from "src/decorators/user.decorator";
 import { Reviews } from "src/entity/reviews.entity";
 import { CreateReviewInput } from "./dto/create-review.input";
+import { UpdateReviewInput } from "./dto/update-review.input";
 import { ReviewsService } from "./reviews.service";
 
 @Resolver(() => Reviews)
@@ -20,6 +21,12 @@ export class ReviewsResolver {
     @Mutation(() => Reviews)
     createReview(@GQLCURRENTUSER() user, @Args('createReviewInput') createReviewInput: CreateReviewInput) {
         return this.reviewsService.createReview(user, createReviewInput);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Reviews)
+    updateReview(@GQLCURRENTUSER() user, @Args('updateReviewInput') updateReviewInput: UpdateReviewInput) {
+        return this.reviewsService.updateMyReview(user, updateReviewInput);
     }
 
     @UseGuards(GqlAuthGuard)
