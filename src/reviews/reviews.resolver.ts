@@ -26,7 +26,7 @@ export class ReviewsResolver {
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Reviews)
     updateReview(@GQLCURRENTUSER() user, @Args('updateReviewInput') updateReviewInput: UpdateReviewInput) {
-        return this.reviewsService.updateMyReview(user, updateReviewInput);
+        return this.reviewsService.updateReviewContent(user, updateReviewInput);
     }
 
     @UseGuards(GqlAuthGuard)

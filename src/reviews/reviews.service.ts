@@ -20,7 +20,7 @@ export class ReviewsService {
         if (!user) {
             throw new UnauthorizedException();
         }
-        const reviews = await this.reviewsRepository.find({relations: ["user", "userReview", "userReview.user"]});
+        const reviews = await this.reviewsRepository.find({relations: ["user", "userReview", "userReview.user", "userReview.review"]});
         return reviews;
     }
 
@@ -45,7 +45,7 @@ export class ReviewsService {
         return newReview;
     }
 
-    async updateMyReview(user: User, updateReviewInput: UpdateReviewInput): Promise<Reviews> {
+    async updateReviewContent(user: User, updateReviewInput: UpdateReviewInput): Promise<Reviews> {
         const review = await this.reviewsRepository.findOneOrFail(updateReviewInput.reviewId, {relations: ["user"]});
         if (review.user.userId == user.userId) {
             await this.reviewsRepository.update(review.reviewId, {reviewContent: updateReviewInput.reviewContent});
