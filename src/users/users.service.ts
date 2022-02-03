@@ -86,7 +86,7 @@ export class UsersService {
         if (realUser.userId == user.userId) {
             realUser.isDarkMode = !realUser.isDarkMode;
             // console.log(realUser.isDarkMode);
-            await realUser.save()
+            await realUser.save();
             return realUser.isDarkMode;
         } else {
             throw new Error("Couldn't find a user.");

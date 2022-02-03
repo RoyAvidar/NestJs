@@ -85,7 +85,7 @@ export class ReviewsService {
         if (review.user.userId == reqUser.userId) {
             throw new Error('You can\'t like/dislike your own reviews..');
         } else {
-            console.log(userLikeData.likeDislike);
+            // console.log(userLikeData.likeDislike);
             // console.log(userLikeData.user.userId);
             if (review.isLike == 0 || userLikeData.likeDislike == false) {
                 throw new Error('No like was found to remove');
