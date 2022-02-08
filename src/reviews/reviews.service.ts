@@ -23,11 +23,19 @@ export class ReviewsService {
         const reviews = await this.reviewsRepository.find({relations: ["user", "userReview", "userReview.user", "userReview.review"]});
         for (const r of reviews) {
             //boolean if the req user did a like/dislike on a review.
-            const didiLike = r.userReview.find(userLike => userLike.user.userId == user.userId);
-            if (didiLike == null) {
-                r['didLike'] = false;
+            const userDidiLikeOrDislike = r.userReview.find(userLike => userLike.user.userId == user.userId);
+            if (userDidiLikeOrDislike == null) {
+                r['userDidLikeOrDislike'] = false;
             } else {
-                r['didLike'] = true;
+                r['userDidLikeOrDislike'] = true;
+                const userDidiLikeOrDislikeData = await this.userReviewRepository.findOne(userDidiLikeOrDislike, {relations: ["user"]});
+                //create new argument in entity & set it to be true/false by userDidiLikeOrDislikeData.likeDislike so that we know exactly
+                //what the user did, so in the end we will change the behaviour of iconButton.
+                if (userDidiLikeOrDislikeData.likeDislike == true) {
+                    r['whatUserActuallyDid'] = true;
+                } else {
+                    r['whatUserActuallyDid'] = false;
+                }
             }
             // r['didLike'] = didiLike;
         }

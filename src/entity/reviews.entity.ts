@@ -33,5 +33,8 @@ export class Reviews extends BaseEntity{
     userReview: UserReview[];
 
     @Field(type => Boolean)
-    didLike: boolean;
+    userDidLikeOrDislike: boolean;
+
+    @Field(type => Boolean)
+    whatUserActuallyDid: boolean;
 }
