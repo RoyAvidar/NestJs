@@ -21,6 +21,16 @@ export class ReviewsService {
             throw new UnauthorizedException();
         }
         const reviews = await this.reviewsRepository.find({relations: ["user", "userReview", "userReview.user", "userReview.review"]});
+        for (const r of reviews) {
+            //boolean if the req user did a like/dislike on a review.
+            const didiLike = r.userReview.find(userLike => userLike.user.userId == user.userId);
+            if (didiLike == null) {
+                r['didLike'] = false;
+            } else {
+                r['didLike'] = true;
+            }
+            // r['didLike'] = didiLike;
+        }
         return reviews;
     }
 

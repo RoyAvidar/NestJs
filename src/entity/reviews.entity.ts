@@ -31,4 +31,7 @@ export class Reviews extends BaseEntity{
     @OneToMany(type => UserReview, userReview => userReview.review)
     @JoinColumn({name: 'reviewId'})
     userReview: UserReview[];
+
+    @Field(type => Boolean)
+    didLike: boolean;
 }
