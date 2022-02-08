@@ -26,6 +26,7 @@ export class ReviewsService {
             const userDidiLikeOrDislike = r.userReview.find(userLike => userLike.user.userId == user.userId);
             if (userDidiLikeOrDislike == null) {
                 r['userDidLikeOrDislike'] = false;
+                r['whatUserActuallyDid'] = null;
             } else {
                 r['userDidLikeOrDislike'] = true;
                 const userDidiLikeOrDislikeData = await this.userReviewRepository.findOne(userDidiLikeOrDislike, {relations: ["user"]});

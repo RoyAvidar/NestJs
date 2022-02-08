@@ -35,6 +35,6 @@ export class Reviews extends BaseEntity{
     @Field(type => Boolean)
     userDidLikeOrDislike: boolean;
 
-    @Field(type => Boolean)
+    @Field({nullable: true})
     whatUserActuallyDid: boolean;
 }
