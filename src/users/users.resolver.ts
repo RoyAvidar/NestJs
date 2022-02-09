@@ -20,6 +20,12 @@ export class UsersResolver{
         return this.usersService.getUser(user);
     }
 
+    @UseGuards(GqlAuthGuard)
+    @Query(() => Number)
+    getUserId(@GQLCURRENTUSER() user) {
+        return this.usersService.getUserId(user);
+    }
+
     // @UseGuards(JwtAuthGuard)
     //check if there is a valid JWT attached to our request and will also go with the strategy and add the payload to req object.
     @UseGuards(GqlAuthGuard)

@@ -30,13 +30,11 @@ export class ReviewsService {
             } else {
                 r['userDidLikeOrDislike'] = true;
                 const userDidiLikeOrDislikeData = await this.userReviewRepository.findOne(userDidiLikeOrDislike, {relations: ["user"]});
-                //create new argument in entity & set it to be true/false by userDidiLikeOrDislikeData.likeDislike so that we know exactly
-                //what the user did, so in the end we will change the behaviour of iconButton.
                 if (userDidiLikeOrDislikeData.likeDislike == true) {
                     r['whatUserActuallyDid'] = true;
                 } else {
                     r['whatUserActuallyDid'] = false;
-                }
+                } // copy this code to the add/removeLike so we set it there insted of reloading the page for the info...
             }
             // r['didLike'] = didiLike;
         }
