@@ -41,19 +41,17 @@ export class AuthService {
         if (!user) {
             throw new Error('User not found');
         }
-        if (user.userName == userName) {
+        const isMatch = await bcrypt.compare(userPassword, user.userPassword);
+        if (user.userName == userName && isMatch) {
             const dbToken = await this.tokensRepository.save({expireDate: expireDate, user: user});
             const payload = {
                 token: dbToken.tokenId,
                 expireDate: dbToken.expireDate
             };
-            const isMatch = await bcrypt.compare(userPassword, user.userPassword);
-            if (isMatch) {
-                const token = this.jwtService.sign(payload);
-                return token;
-            } else {
-                throw new Error('Invalid User Name or User Password');
-            }
+            const token = this.jwtService.sign(payload);
+            return token;
+        } else {
+            throw new Error('Invalid User Name or User Password');
         }
     }
 
