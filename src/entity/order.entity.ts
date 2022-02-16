@@ -25,6 +25,10 @@ export class Order extends BaseEntity{
     @Field(type => Boolean)
     isReady: boolean;
 
+    @Column()
+    @Field()
+    address: string;
+
     @ManyToOne(type => User, user => user.products)
     @Field(type => User)
     @JoinColumn({ name: 'userId' })

@@ -11,6 +11,7 @@ import { CartModule } from './cart/cart.module';
 import { PhotosModule } from './photos/photos.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { BugReportModule } from './bugReport/bugReport.module';
+import { AddressModule } from './address/address.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { BugReportModule } from './bugReport/bugReport.module';
     TypeOrmModule.forRoot(),
     CartModule,
     ReviewsModule,
-    BugReportModule
+    BugReportModule,
+    AddressModule,
   ],
   controllers: [],
   providers: [],

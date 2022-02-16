@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Address } from 'src/entity/address.entity';
 import { Cart } from 'src/entity/cart.entity';
 import { ProductOrder } from 'src/entity/product-order.entity';
 import { User } from 'src/entity/user.entity';
@@ -18,7 +19,9 @@ export class OrdersService {
         @InjectRepository(Cart)
         private cartRepository: Repository<Cart>,
         @InjectRepository(ProductOrder)
-        private productOrderRepository: Repository<ProductOrder>
+        private productOrderRepository: Repository<ProductOrder>,
+        @InjectRepository(Address)
+        private addressRepository: Repository<Address>
 
     ) {}
     
@@ -44,6 +47,7 @@ export class OrdersService {
 
     async createOrder(createOrderInput: CreateOrderInput, user: User): Promise<Order> {
         const cart = await this.cartRepository.findOne(createOrderInput.cartId, {relations: ['user', 'cartProducts', 'cartProducts.product']});
+        const address = await this.addressRepository.findOne(createOrderInput.addressId)
         if (cart.user.userId != user.userId) {
             throw new UnauthorizedException();
         }
@@ -51,6 +55,7 @@ export class OrdersService {
         newOrder.orderPrice = cart.totalPrice;
         newOrder.createdAt = new Date();
         newOrder.user = cart.user;
+        newOrder.address = "City: " + address.city + ", Street: " + address.streetName + ", Number: " + address.streetNumber.toString() + ", Floor: " + address.floorNumber.toString() + ", Apartment: " + address.apartmentNumber.toString();
         newOrder = await newOrder.save(); 
         for (const pro of cart.cartProducts) {
             await this.productOrderRepository.save(

@@ -9,4 +9,8 @@ export class CreateOrderInput {
     @Field(type => Int)
     @IsNotEmpty()
     cartId: number;
+
+    @Field(type => Int)
+    @IsNotEmpty()
+    addressId: number;
 }

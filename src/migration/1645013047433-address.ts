@@ -1,13 +1,13 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class orders1624355980410 implements MigrationInterface {
+export class address1645013047433 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
-            name: "orders",
+            name: "address",
             columns: [
                 {
-                    name: "orderId",
+                    name: "addressId",
                     type: "bigInt",
                     isGenerated: true,
                     generationStrategy: "increment",
@@ -15,23 +15,24 @@ export class orders1624355980410 implements MigrationInterface {
                     unsigned: true,
                 },
                 {
-                    name: "orderPrice",
-                    type: "float"
+                    name: "city",
+                    type: "varchar",
                 },
                 {
-                    name: "createdAt",
-                    type: "datetime",
-                    default: "CURRENT_TIMESTAMP"
+                    name: "streetName",
+                    type: "varchar",
                 },
                 {
-                    name: "isReady",
-                    type: "tinyint",
-                    length: "1",
-                    default: "0"
+                    name: "streetNumber",
+                    type: "bigInt",
                 },
                 {
-                    name: "address",
-                    type: "varchar"
+                    name: "floorNumber",
+                    type: "bigInt",
+                },
+                {
+                    name: "apartmentNumber",
+                    type: "bigInt",
                 },
                 {
                     name: "userId",
@@ -48,11 +49,9 @@ export class orders1624355980410 implements MigrationInterface {
                 },
             ]
         }))
-    
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("orders");
     }
 
 }
