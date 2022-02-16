@@ -52,7 +52,7 @@ export class UsersService {
     }
 
     async getUser(user: User): Promise<User> {
-        return await this.usersRepository.findOne(user.userId, {relations: ["products", "orders", "cart"]});
+        return await this.usersRepository.findOne(user.userId, {relations: ["products", "orders", "cart", "address"]});
     }
 
     async getUserById(userId: number): Promise<User> {
