@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Address } from 'src/entity/address.entity';
 import { CartProduct } from 'src/entity/cart-product.entity';
 import { Cart } from 'src/entity/cart.entity';
 import { Order } from 'src/entity/order.entity';
@@ -13,7 +14,7 @@ import { CartService } from './cart.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Product, Order, User, Cart, CartProduct, ProductOrder]),
+    TypeOrmModule.forFeature([Product, Order, User, Cart, CartProduct, ProductOrder, Address]),
     OrdersModule
   ],
   providers: [CartResolver, CartService, OrdersService],
