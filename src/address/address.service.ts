@@ -15,6 +15,11 @@ export class AddressService {
         private userRepository: Repository<User>,
     ) {}
 
+    async getAddressByID(addressId: number): Promise<Address> {
+        const dbAddress = await this.addressRepository.findOneOrFail(addressId);
+        return dbAddress;
+    }
+
     async getAddressByUser(reqUser: User): Promise<Address[]> {
         const user = await this.userRepository.findOne(reqUser.userId, {relations: ["address"]});
         const addresses = await this.addressRepository.findByIds(user.address);
@@ -63,5 +68,13 @@ export class AddressService {
         const address = await this.addressRepository.findOneOrFail(addressId);
         await this.addressRepository.delete(address);
         return true;
+    }
+
+    addressItemToFront(fromSettings: boolean): boolean {
+        if (fromSettings == true) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

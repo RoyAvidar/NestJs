@@ -12,6 +12,12 @@ export class AddressResolver {
     constructor(private readonly addressService: AddressService) {}
 
     @UseGuards(GqlAuthGuard)
+    @Query(() => Address)
+    getAddressByID(@Args('addressId') addressId: number) {
+        return this.addressService.getAddressByID(addressId);
+    }
+
+    @UseGuards(GqlAuthGuard)
     @Query(() => [Address])
     getAddressByUser(@GQLCURRENTUSER() user) {
         return this.addressService.getAddressByUser(user);
@@ -33,5 +39,11 @@ export class AddressResolver {
     @Mutation(() => Boolean)
     deleteAddress(@GQLCURRENTUSER() user, @Args('addressId') addressId: number) {
         return this.addressService.deleteAddress(user, addressId);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => Boolean)
+    addressItemToFront(@Args('fromSetting') fromSettings: boolean) {
+        return this.addressService.addressItemToFront(fromSettings);
     }
 }
