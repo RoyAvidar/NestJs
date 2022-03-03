@@ -101,7 +101,7 @@ export class CartService {
                 await this.cartProductRepository.update(cartProducts.id, {quantity: +cartProducts.quantity - 1});
                 return true;
             } else {
-                await this.cartRepository.update(cart.cartId, {totalPrice: 0, itemCount: 0});
+                await this.cartRepository.update(cart.cartId, {totalPrice: +cart.totalPrice - +prod.productPrice, itemCount: +cart.itemCount - 1});
                 await this.cartProductRepository.remove(cartProducts);
                 return true; 
             }
