@@ -97,6 +97,20 @@ export class UsersService {
         }
     }
 
+    async toggleUserIsAdmin(userId: number, reqUser: User): Promise<Boolean> {
+        var adminUser = await this.usersRepository.findOneOrFail(reqUser.userId);
+        if (adminUser.isAdmin == true) {
+            var realUser = await this.usersRepository.findOneOrFail(userId);
+            if (adminUser.userId == realUser.userId) {
+                throw new Error("You cannot toggle your own admin status!")
+            }
+            realUser.isAdmin = !realUser.isAdmin;
+            await realUser.save();
+            return realUser.isAdmin;
+        }
+        throw new UnauthorizedException("Only admin can access this query");
+    }
+
     async addProductToUser(reqUser: User, productId: string) {
         const user = await this.usersRepository.findOne(reqUser.userId);
         await this.usersRepository.createQueryBuilder().relation("products").of(user).add(productId);

@@ -72,6 +72,12 @@ export class UsersResolver{
 
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
+    toggleUserIsAdmin(@Args('userId') userId: number, @GQLCURRENTUSER() reqUser) {
+        return this.usersService.toggleUserIsAdmin(userId, reqUser);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
     deleteUser(@GQLCURRENTUSER() user) {
         return this.usersService.deleteUser(user);
     }
