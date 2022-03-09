@@ -41,4 +41,13 @@ export class CategoriesService {
         }
         return false;
     }
+
+    async deleteCategory(user: User, categoryId: string|number): Promise<Boolean> {
+        if (!user.isAdmin) {
+            throw new UnauthorizedException();
+        }
+        var category = await this.categoryRepository.findOneOrFail(categoryId);
+        await this.categoryRepository.delete(category);
+        return true;
+    }
 }

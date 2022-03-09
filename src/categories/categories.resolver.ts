@@ -18,6 +18,12 @@ export class CategoryResolver {
     }
 
     @UseGuards(GqlAuthGuard)
+    @Query(() => Category)
+    getCategory(@Args('categoryId') categoryId: string) {
+        return this.categoryService.getCategory(categoryId);
+    }
+
+    @UseGuards(GqlAuthGuard)
     @Query(() => [Category])
     getCategories(@GQLCURRENTUSER() user): Promise<Category[]> {
         return this.categoryService.getCategories();
@@ -27,5 +33,11 @@ export class CategoryResolver {
     @Mutation(() => Boolean)
     updateCategory(@GQLCURRENTUSER() user, @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput) {
         return this.categoryService.updateCategory(user, updateCategoryInput);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation(() => Boolean)
+    deleteCategory(@GQLCURRENTUSER() user, @Args('categoryId') categoryId: string) {
+        return this.categoryService.deleteCategory(user, categoryId);
     }
 }
