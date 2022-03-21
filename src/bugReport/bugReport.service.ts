@@ -7,10 +7,8 @@ var smtpTransport = require('nodemailer-smtp-transport');
 export class BugReportService {
 
     async sendEmail(user: User, content: string): Promise<Boolean> {
-        if(!user) {
-            throw UnauthorizedException;
-          }
-            var transporter = nodemailer.createTransport(smtpTransport({
+            if(user) {
+              var transporter = nodemailer.createTransport(smtpTransport({
                 service: 'gmail',
                 host: 'smtp.gmail.com',
                 auth: {
@@ -22,7 +20,7 @@ export class BugReportService {
               var mailOptions = {
                 from: 'roi981av@gmail.com',
                 to: 'roi981av@gmail.com',
-                subject: 'Bug Report',
+                subject: 'A Bug Report from the App',
                 text: "A BUG REPORT RECIVED FROM " + user.userName + ":" + content,
               };
               
@@ -33,7 +31,9 @@ export class BugReportService {
                   console.log('Email sent: ' + info.response);
                 }
               });
-              
               return true;
+            } else {
+              throw UnauthorizedException;
+            }
     }
 }
