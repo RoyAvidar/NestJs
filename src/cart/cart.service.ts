@@ -52,6 +52,15 @@ export class CartService {
         }
     }
 
+    async getCartTotalPrice(user: User): Promise<number> {
+        const cart = await this.cartRepository.findOne({relations: ["products", "user"], where: {user}});
+        if (cart == null) {
+            throw new Error("couldn't find a cart");
+        } else {
+            return cart.totalPrice;
+        }
+    }
+
     async createCart(user: User): Promise<Cart> {
         const newCart = this.cartRepository.create();
         newCart.user = user;

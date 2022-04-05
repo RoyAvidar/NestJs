@@ -40,6 +40,12 @@ export class UsersResolver{
         return this.usersService.getUserById(userId);
     }
 
+    @UseGuards(GqlAuthGuard)
+    @Query(() => User)
+    getUserByName(@Args('userName') userName: string) {
+        return this.usersService.getUserByName(userName);
+    }
+
     // @UseGuards(GqlAuthGuard)
     @Mutation(() => User)
     createUser(@Args('createUserData') createUserData: CreateUserInput) {

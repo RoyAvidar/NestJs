@@ -32,6 +32,12 @@ export class CartResolver {
     }
 
     @UseGuards(GqlAuthGuard)
+    @Query(() => Number)
+    getCartTotalPrice(@GQLCURRENTUSER() user) {
+        return this.cartService.getCartTotalPrice(user);
+    }
+
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Cart)
     createCart(@GQLCURRENTUSER() user) {
         return this.cartService.createCart(user);
