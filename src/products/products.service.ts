@@ -31,6 +31,12 @@ export class ProductsService {
     public getProucts(): Promise<Product[]> {
         return this.productsRepository.find({relations: ["category"]}); //SELECT * products
     }
+
+    async getProductsByCategory(categoryId: number): Promise<Product[]> {
+        const category = await this.categoriesService.getCategory(categoryId);
+        const products = await this.productsRepository.find({relations: ["category"], where: {category}}) 
+        return products;
+    }
     
     async createProduct(user : User, createProductInput: CreateProductInput, {createReadStream, filename}: FileUpload): Promise<Product> {
         if (!user.isAdmin) {

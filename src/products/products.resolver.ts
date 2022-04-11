@@ -34,6 +34,12 @@ export class ProductsResolver {
     }
 
     @UseGuards(GqlAuthGuard)
+    @Query(() => [Product])
+    getProductsByCategory(@Args('categoryId') categoryId: number) {
+        return this.productsService.getProductsByCategory(categoryId);
+    }
+
+    @UseGuards(GqlAuthGuard)
     @Mutation(() => Product)
     createProduct(@GQLCURRENTUSER() user, @Args('createProductInput') createProductInput: CreateProductInput, @Args({name: 'file', type: () => GraphQLUpload})
     {

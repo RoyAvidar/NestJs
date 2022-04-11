@@ -77,7 +77,7 @@ export class UsersService {
     }
 
     public getUserByName(userName: string) {
-        return this.usersRepository.findOne({where: {userName}});
+        return this.usersRepository.findOne({where: {userName}, relations: ["orders"]});
     }
 
     async getUserDarkMode(user: User): Promise<Boolean> {
