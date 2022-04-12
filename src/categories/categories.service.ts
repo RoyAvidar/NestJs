@@ -13,9 +13,10 @@ export class CategoriesService {
         private categoryRepository: Repository<Category>,
     ) {}
 
-    public createCategory(createCategoryInput: CreateCategoryInput) {
+    async createCategory(createCategoryInput: CreateCategoryInput): Promise<Category> {
         const newCategory = this.categoryRepository.create(createCategoryInput);
-        return this.categoryRepository.insert(newCategory);
+        await this.categoryRepository.insert(newCategory);
+        return newCategory;
     }
 
     async getCategory(categoryId: string|number): Promise<Category> {
