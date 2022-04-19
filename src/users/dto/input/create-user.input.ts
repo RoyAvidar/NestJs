@@ -9,6 +9,11 @@ export class CreateUserInput {
     userName: string;
 
     @Field()
+    @IsAlpha()
+    @IsNotEmpty()
+    userLastName: string;
+
+    @Field()
     @IsNotEmpty()
     userPassword: string;
 

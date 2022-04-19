@@ -29,8 +29,8 @@ export class Address extends BaseEntity {
     @Column()
     apartmentNumber: number;
     
-    @ManyToOne(type => User, user => user.address)
     @Field(type => User)
+    @ManyToOne(type => User, user => user.address, {onDelete: "CASCADE"})
     @JoinColumn({ name: 'userId' })
     user: User;
 }

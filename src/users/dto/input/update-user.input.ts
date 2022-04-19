@@ -10,6 +10,11 @@ export class UpdateUserInput {
     userName: string;
 
     @Field()
+    @IsAlpha()
+    @IsNotEmpty()
+    userLastName: string;
+
+    @Field()
     @IsNotEmpty()
     userPhone: string;
 

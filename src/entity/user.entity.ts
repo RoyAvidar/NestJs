@@ -19,6 +19,10 @@ export class User extends BaseEntity{
     @Field()
     @Column()
     userName: string;
+
+    @Field()
+    @Column()
+    userLastName: string;
     
     @Column()
     userPassword: string;
@@ -65,7 +69,7 @@ export class User extends BaseEntity{
     review: Reviews;
 
     @Field(type => [Address], {nullable: true})
-    @OneToMany(type => Address, address => address.user)
+    @OneToMany(type => Address, address => address.user, {onDelete: "CASCADE"})
     address?: Address[];
 
     @Field(type => UserReview)
