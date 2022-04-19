@@ -33,6 +33,7 @@ export class UsersService {
         var oldUser = await this.usersRepository.findOneOrFail(user.userId);
         if (oldUser.userId == user.userId && oldUser) {
             oldUser.userName = updateUserData.userName;
+            oldUser.userLastName = updateUserData.userLastName;
             oldUser.userPhone = updateUserData.userPhone;
             return await oldUser.save();
         }
