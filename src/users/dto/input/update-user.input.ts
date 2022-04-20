@@ -16,6 +16,10 @@ export class UpdateUserInput {
 
     @Field()
     @IsNotEmpty()
+    userEmail: string;
+
+    @Field()
+    @IsNotEmpty()
     userPhone: string;
 
 }

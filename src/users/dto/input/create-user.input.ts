@@ -15,6 +15,10 @@ export class CreateUserInput {
 
     @Field()
     @IsNotEmpty()
+    userEmail: string;
+
+    @Field()
+    @IsNotEmpty()
     userPassword: string;
 
     @Field()

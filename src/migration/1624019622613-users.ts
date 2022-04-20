@@ -23,6 +23,10 @@ export class users1624019622613 implements MigrationInterface {
                     type: "varchar",
                 },
                 {
+                    name: "userEmail",
+                    type: "varchar",
+                },
+                {
                     name: "userPassword",
                     type: "varchar",
                 },

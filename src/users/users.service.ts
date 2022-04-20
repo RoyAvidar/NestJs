@@ -18,9 +18,9 @@ export class UsersService {
     ) { }
 
     async createUser(createUserData: CreateUserInput): Promise<User> {
-        const demi = await this.usersRepository.findOne(createUserData.userName);
+        const demi = await this.usersRepository.findOne(createUserData.userEmail);
         if (demi) {
-            throw new NotFoundException("UserName Already Exists.")
+            throw new NotFoundException("Email Already Exists.")
         } else {
             let user = await this.usersRepository.create(createUserData);
             user = await this.usersRepository.save(user);
@@ -34,6 +34,7 @@ export class UsersService {
         if (oldUser.userId == user.userId && oldUser) {
             oldUser.userName = updateUserData.userName;
             oldUser.userLastName = updateUserData.userLastName;
+            oldUser.userEmail = updateUserData.userEmail;
             oldUser.userPhone = updateUserData.userPhone;
             return await oldUser.save();
         }
