@@ -33,7 +33,8 @@ export class products1624022131515 implements MigrationInterface {
                 {
                     name: "categoryId",
                     type: "bigInt", 
-                    unsigned: true
+                    unsigned: true,
+                    isNullable: true,
                 },
             ],
             foreignKeys: [
@@ -41,7 +42,7 @@ export class products1624022131515 implements MigrationInterface {
                     columnNames: ["categoryId"],
                     referencedColumnNames: ["categoryId"],
                     referencedTableName: "categories",
-                    onDelete: "CASCADE",
+                    onDelete: "SET NULL",
                 },
                 
             ],

@@ -20,8 +20,8 @@ export class BugReportService {
               var mailOptions = {
                 from: 'roi981av@gmail.com',
                 to: 'roi981av@gmail.com',
-                subject: 'A Bug Report from the App',
-                text: "A BUG REPORT RECIVED FROM " + user.userName + ":" + content,
+                subject: 'A bug report from the App',
+                text: "A BUG REPORT RECIVED FROM " + user.userName + ": " + content,
               };
               
               transporter.sendMail(mailOptions, function(error, info){
