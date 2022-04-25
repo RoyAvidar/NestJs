@@ -46,7 +46,7 @@ export class OrdersService {
     }
 
     async createOrder(createOrderInput: CreateOrderInput, user: User): Promise<Order> {
-        const cart = await this.cartRepository.findOne(createOrderInput.cartId, {relations: ['user', 'cartProducts', 'cartProducts.product']});
+        const cart = await this.cartRepository.findOne(createOrderInput.cartId, {relations: ["user", "cartProducts", "cartProducts.product"]});
         const address = await this.addressRepository.findOne(createOrderInput.addressId)
         if (cart.user.userId != user.userId) {
             throw new UnauthorizedException();
