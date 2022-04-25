@@ -8,6 +8,8 @@ import { Repository } from 'typeorm';
 import { Order } from '../entity/order.entity';
 import { GetOrderArgs } from './dto/args/get-order.args';
 import { CreateOrderInput } from './dto/input/create-order.input';
+import * as nodemailer  from "nodemailer";
+var smtpTransport = require('nodemailer-smtp-transport');
 
 @Injectable()
 export class OrdersService {
@@ -93,6 +95,36 @@ export class OrdersService {
             return true;
         } else {
             throw new Error("Couldn't find order.");
+        }
+    }
+
+    async sendConfirmOrderEmail(user: User, order: Order): Promise<Boolean> {
+        if (user) {
+            var transporter = nodemailer.createTransport(smtpTransport({
+                service: 'gmail',
+                host: 'smtp.gmail.com',
+                auth: {
+                  user: 'roi981av@gmail.com',
+                  pass: 'roi981av'
+                }
+              }));
+            
+            var mailOptions = {
+                from: 'roi981av@gmail.com',
+                to: user.userEmail,
+                subject: 'An order has been recived at '  + order.createdAt + 'number: ' + order.orderId,
+                text: "Hello " + user.userName + " your order is on the way, here are some details about it: " + order.address,
+            };
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ' + info.response);
+                }
+            });
+            return true;
+        } else {
+            throw UnauthorizedException;
         }
     }
 }

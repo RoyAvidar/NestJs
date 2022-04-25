@@ -6,7 +6,7 @@ var smtpTransport = require('nodemailer-smtp-transport');
 @Injectable()
 export class BugReportService {
 
-    async sendEmail(user: User, content: string): Promise<Boolean> {
+    async sendBugReportEmail(user: User, content: string): Promise<Boolean> {
             if(user) {
               var transporter = nodemailer.createTransport(smtpTransport({
                 service: 'gmail',
@@ -35,5 +35,5 @@ export class BugReportService {
             } else {
               throw UnauthorizedException;
             }
-    }
+  }
 }

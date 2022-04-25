@@ -13,6 +13,6 @@ export class BugReportResolver {
     @UseGuards(GqlAuthGuard)
     @Query(() => Boolean)
     sendEmail(@GQLCURRENTUSER() user, @Args('content') content:string) {
-      return this.bugReportService.sendEmail(user, content);
+      return this.bugReportService.sendBugReportEmail(user, content);
     }
 }
