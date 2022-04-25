@@ -25,6 +25,7 @@ export class users1624019622613 implements MigrationInterface {
                 {
                     name: "userEmail",
                     type: "varchar",
+                    isUnique: true
                 },
                 {
                     name: "userPassword",
@@ -33,7 +34,6 @@ export class users1624019622613 implements MigrationInterface {
                 {
                     name: "userPhone",
                     type: "varchar",
-                    isUnique: true
                 },
                 {
                     name: "userProfilePic",

@@ -19,8 +19,8 @@ export class UsersService {
 
     async createUser(createUserData: CreateUserInput): Promise<User> {
         const demi = await this.usersRepository.findOne(createUserData.userEmail);
-        if (demi) {
-            throw new NotFoundException("Email Already Exists.")
+        if (demi != null) {
+            throw new Error("Email Already Exists. Try to login or another mail.")
         } else {
             let user = await this.usersRepository.create(createUserData);
             user = await this.usersRepository.save(user);
