@@ -56,15 +56,17 @@ export class OrdersService {
         newOrder.createdAt = new Date();
         newOrder.user = cart.user;
         newOrder.address = "City: " + address.city + ", Street: " + address.streetName + ", Number: " + address.streetNumber.toString() + ", Floor: " + address.floorNumber.toString() + ", Apartment: " + address.apartmentNumber.toString();
-        newOrder = await newOrder.save(); 
+        newOrder.productOrder = []; 
+        newOrder = await newOrder.save();
         for (const pro of cart.cartProducts) {
-            await this.productOrderRepository.save(
-                {
+            let prodOrd = await this.productOrderRepository.save(
+            {
                     order: newOrder,
                     quantity: pro.quantity,
                     product: pro.product,
                 }
             );
+            newOrder.productOrder.push(prodOrd);
         }
         return newOrder;
     }
