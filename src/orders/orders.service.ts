@@ -98,7 +98,8 @@ export class OrdersService {
         }
     }
 
-    async sendConfirmOrderEmail(user: User, order: Order): Promise<Boolean> {
+    async sendConfirmOrderEmail(user: User, orderId: number): Promise<Boolean> {
+        const order = await this.orderRepository.findOneOrFail(orderId);
         if (user) {
             var transporter = nodemailer.createTransport(smtpTransport({
                 service: 'gmail',
@@ -113,7 +114,7 @@ export class OrdersService {
                 from: 'roi981av@gmail.com',
                 to: user.userEmail,
                 subject: 'An order has been recived at '  + order.createdAt + 'number: ' + order.orderId,
-                text: "Hello " + user.userName + " your order is on the way, here are some details about it: " + order.address,
+                text: "Hello " + user.userName + " your order is on the way, here are some details about it: " + " Address:" + order.address + ", Total price:" + order.orderPrice + ", Products:" + order.productOrder,
             };
             transporter.sendMail(mailOptions, function(error, info){
                 if (error) {

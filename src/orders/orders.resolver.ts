@@ -51,4 +51,10 @@ export class OrdersResolver {
     toggleIsReady(@GQLCURRENTUSER() user, @Args('orderId') orderId: number) {
         return this.ordersService.toggleIsReady(user, orderId);
     }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => Boolean)
+    sendConfirmOrderEmail(@GQLCURRENTUSER() user, @Args('orderId') orderId: number) {
+        return this.ordersService.sendConfirmOrderEmail(user, orderId);
+    }
 }
