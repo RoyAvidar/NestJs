@@ -99,7 +99,12 @@ export class OrdersService {
     }
 
     async sendConfirmOrderEmail(user: User, orderId: number): Promise<Boolean> {
-        const order = await this.orderRepository.findOneOrFail(orderId);
+        const order = await this.orderRepository.findOneOrFail(orderId, {relations: ['productOrder', 'productOrder.product', 'user']});
+        let mailContent = "Hello " + user.userName + " your order is on the way, here are some details about it: " + "<br>" + ", Total price:" + order.orderPrice;
+        for (const prod of order.productOrder) {
+         mailContent += ", Products: " + prod.product.productName + "<br>" + ", Quantity: " + prod.quantity;   
+        }
+        mailContent += " Address:" + order.address + "<br>" + "Received at: " + order.createdAt + " Thank you for your purches, from blabla.";
         if (user) {
             var transporter = nodemailer.createTransport(smtpTransport({
                 service: 'gmail',
@@ -113,12 +118,13 @@ export class OrdersService {
             var mailOptions = {
                 from: 'roi981av@gmail.com',
                 to: user.userEmail,
-                subject: 'An order has been recived at '  + order.createdAt + 'number: ' + order.orderId,
-                text: "Hello " + user.userName + " your order is on the way, here are some details about it: " + " Address:" + order.address + ", Total price:" + order.orderPrice + ", Products:" + order.productOrder,
+                subject: 'Your order is on the way! order number: ' + order.orderId,
+                text: mailContent,
             };
             transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
                   console.log(error);
+                  return false;
                 } else {
                   console.log('Email sent: ' + info.response);
                 }
