@@ -100,7 +100,7 @@ export class OrdersService {
 
     async sendConfirmOrderEmail(user: User, orderId: number): Promise<Boolean> {
         const order = await this.orderRepository.findOneOrFail(orderId, {relations: ['productOrder', 'productOrder.product', 'user']});
-        let mailContent = "Hello " + user.userName + " your order is on the way, here are some details about it: " + "<br>" + ", Total price:" + order.orderPrice;
+        let mailContent = "Hello " + user.userName + " your order is on the way, here are some details about it: " + "</br>" + ", Total price:" + order.orderPrice;
         for (const prod of order.productOrder) {
          mailContent += ", Products: " + prod.product.productName + "<br>" + ", Quantity: " + prod.quantity;   
         }
