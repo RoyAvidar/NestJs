@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CartModule } from 'src/cart/cart.module';
 import { Cart } from 'src/entity/cart.entity';
 import { Product } from 'src/entity/product.entity';
+import { Token } from 'src/entity/token.entity';
 import { PhotosModule } from 'src/photos/photos.module';
 import { PhotosService } from 'src/photos/photos.service';
 import { User } from '../entity/user.entity';
@@ -12,7 +13,7 @@ import { UsersService } from './users.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Product, Cart]),
+    TypeOrmModule.forFeature([User, Product, Cart, Token]),
     PhotosModule,
     CartModule
     // PassportModule.register({ defaultStrategy: 'jwt' })

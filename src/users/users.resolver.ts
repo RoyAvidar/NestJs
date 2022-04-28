@@ -8,7 +8,7 @@ import { UsersService } from "./users.service";
 import { UnauthorizedException, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { GqlAuthGuard } from "src/auth/guards/gql-auth.guard";
-import { GQLCURRENTUSER } from "src/decorators/user.decorator";
+import { GQLCURRENTTOKEN, GQLCURRENTUSER } from "src/decorators/user.decorator";
 
 @Resolver(() => User)
 export class UsersResolver{
@@ -84,8 +84,8 @@ export class UsersResolver{
 
     @UseGuards(GqlAuthGuard)
     @Mutation(() => Boolean)
-    deleteUser(@GQLCURRENTUSER() user) {
-        return this.usersService.deleteUser(user);
+    deleteUser(@GQLCURRENTUSER() user, @GQLCURRENTTOKEN() token) {
+        return this.usersService.deleteUser(user, token);
     }
 
     @UseGuards(GqlAuthGuard)

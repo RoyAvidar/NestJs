@@ -7,6 +7,7 @@ import { UpdateUserInput } from './dto/input/update-user.input';
 import * as bcrypt from 'bcrypt';
 import { PhotosService } from 'src/photos/photos.service';
 import { CartService } from 'src/cart/cart.service';
+import { Token } from 'src/entity/token.entity';
 
 @Injectable()
 export class UsersService {
@@ -15,6 +16,8 @@ export class UsersService {
         private usersRepository: Repository<User>,
         private photosService: PhotosService,
         private cartService: CartService,
+        @InjectRepository(Token)
+        private tokensRepository: Repository<Token>,
     ) { }
 
     async createUser(createUserData: CreateUserInput): Promise<User> {
@@ -72,10 +75,16 @@ export class UsersService {
         return this.usersRepository.find({relations: ["products", "orders"]});
     }
 
-    async deleteUser(user: User): Promise<Boolean> {
-        await this.photosService.deleteUserProfileImageFile(user);
-        await this.usersRepository.delete(user.userId);
-        return true;
+    async deleteUser(user: User, token: Token): Promise<Boolean> {
+        if (token && user) {
+            await this.tokensRepository.delete(token);
+            if (user.userProfilePic != "") {
+                await this.photosService.deleteUserProfileImageFile(user);
+            }
+            await this.usersRepository.delete(user.userId);
+            return true;
+        }
+        return false;
     }
 
     public getUserByName(userName: string) {
