@@ -9,6 +9,7 @@ import { Order } from '../entity/order.entity';
 import { GetOrderArgs } from './dto/args/get-order.args';
 import { CreateOrderInput } from './dto/input/create-order.input';
 import * as nodemailer  from "nodemailer";
+import { Product } from 'src/entity/product.entity';
 var smtpTransport = require('nodemailer-smtp-transport');
 
 @Injectable()
@@ -45,6 +46,24 @@ export class OrdersService {
         const orders =  await this.orderRepository.find({relations: ["user", "productOrder", "productOrder.product"], order: {createdAt: "DESC"}});
         // console.log(orders[0]);
         return orders;
+    }
+
+    async getOrderProducts(user: User): Promise<Product[]> {
+        let productsFromOrders = [];
+        if (!user.isAdmin) {
+            throw new UnauthorizedException();
+        }
+        const orders = await this.orderRepository.find({relations: ["productOrder", "productOrder.product"],});
+        //for each order get the products ids and return them.
+        orders.forEach(ord => {
+            ord.productOrder.forEach(prodOrd => {
+                productsFromOrders.push(prodOrd.product);
+                // productsFromOrders.sort()
+                // productsFromOrders.add(prodOrd.product);
+                // productsFromOrders.map(); ?
+            });
+        });
+        return productsFromOrders;
     }
 
     async createOrder(createOrderInput: CreateOrderInput, user: User): Promise<Order> {

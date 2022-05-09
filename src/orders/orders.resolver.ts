@@ -6,6 +6,7 @@ import { CreateOrderInput } from "./dto/input/create-order.input";
 import { GqlAuthGuard } from "src/auth/guards/gql-auth.guard";
 import { UseGuards } from "@nestjs/common";
 import { GQLCURRENTUSER } from "src/decorators/user.decorator";
+import { Product } from "src/entity/product.entity";
 
 @Resolver(() => Order)
 export class OrdersResolver {
@@ -27,6 +28,12 @@ export class OrdersResolver {
     @Query(() => [Order], {name: 'orders', nullable: 'items'})
     getOrders(@GQLCURRENTUSER() user): Promise<Order[]> {
         return this.ordersService.getOrders(user);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Query(() => [Product])
+    getOrderProducts(@GQLCURRENTUSER() user): Promise<Product[]> {
+        return this.ordersService.getOrderProducts(user);
     }
 
     @UseGuards(GqlAuthGuard)
