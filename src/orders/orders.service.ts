@@ -48,17 +48,17 @@ export class OrdersService {
         return orders;
     }
 
-    async getOrderProducts(user: User): Promise<Product[]> {
+    async getOrderProducts(user: User): Promise<ProductOrder[]> {
         let productsFromOrders = [];
         if (!user.isAdmin) {
             throw new UnauthorizedException();
         }
-        const orders = await this.orderRepository.find({relations: ["productOrder", "productOrder.product"],});
-        //for each order get the products ids and return them.
+        const orders = await this.orderRepository.find({relations: ["productOrder", "productOrder.product", "productOrder.order"],});
         orders.forEach(ord => {
-            // console.log(ord.productOrder[0].product);
+            // need to change this forEach and use the ord.productOrder.quantity variable to get accurate result. 
             ord.productOrder.forEach(prodOrd => {
-                productsFromOrders.push(prodOrd.product);
+                console.log(prodOrd.order);
+                productsFromOrders.push(prodOrd);
             });
         });
         return productsFromOrders;
