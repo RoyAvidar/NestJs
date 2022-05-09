@@ -56,11 +56,9 @@ export class OrdersService {
         const orders = await this.orderRepository.find({relations: ["productOrder", "productOrder.product"],});
         //for each order get the products ids and return them.
         orders.forEach(ord => {
+            // console.log(ord.productOrder[0].product);
             ord.productOrder.forEach(prodOrd => {
                 productsFromOrders.push(prodOrd.product);
-                // productsFromOrders.sort()
-                // productsFromOrders.add(prodOrd.product);
-                // productsFromOrders.map(); ?
             });
         });
         return productsFromOrders;
