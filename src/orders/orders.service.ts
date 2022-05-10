@@ -57,7 +57,7 @@ export class OrdersService {
         orders.forEach(ord => {
             // need to change this forEach and use the ord.productOrder.quantity variable to get accurate result. 
             ord.productOrder.forEach(prodOrd => {
-                console.log(prodOrd.order);
+                // console.log(prodOrd);
                 productsFromOrders.push(prodOrd);
             });
         });
